@@ -1,0 +1,21 @@
+[submodule "Tests/UnitTester"]
+	path = Tests/UnitTester
+	url = git://github.com/anutron/mootools-unittester.git
+[submodule "assets/core"]
+	path = assets/core
+	url = git://github.com/mootools/mootools-core.git
+[submodule "asset/touch"]
+	path = asset/touch
+	url = git://github.com/kamicane/mootools-touch.git
+[submodule "asset/color"]
+	path = asset/color
+	url = git://github.com/kamicane/mootools-color.git
+[submodule "assets/color"]
+	path = assets/color
+	url = git://github.com/kamicane/mootools-color.git
+[submodule "assets/touch"]
+	path = assets/touch
+	url = git://github.com/kamicane/mootools-touch.git
+[submodule "assets/slick"]
+	path = assets/slick
+	url = git://github.com/subtleGradient/slick.git
