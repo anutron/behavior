@@ -8,7 +8,7 @@
 		},
 		
 		"ART.Widget": {
-			"deps": ["ART"],
+			"deps": ["ART", "Class.Extras", "Element"],
 			"desc": "Barebones ART Widget."
 		}
 
@@ -17,7 +17,7 @@
 	"Paint": {
 		
 		"ART.Adapter": {
-			"deps": ["ART"],
+			"deps": ["ART", "Class.Extras"],
 			"desc": "ART Graphic Adapter."
 		},
 		
@@ -34,6 +34,10 @@
 		"ART.Shape": {
 			"deps": ["ART.Paint"],
 			"desc": "Adds some shapes, and implements the shape method to ART.Paint."
+		},
+		
+		"ART.Sheet": {
+			"deps": ["slickparser"]
 		},
 		
 		"ART.Text": {
@@ -60,12 +64,12 @@
 	"Widgets": {
 		
 		"ART.Widget.Button": {
-			"deps": ["ART.Widget", "ART.Text"],
+			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color"],
 			"desc": "Button widget."
 		},
 		
 		"ART.Widget.Window": {
-			"deps": ["ART.Widget", "ART.Text"],
+			"deps": ["ART.Widget.Button", "Fx.Morph"],
 			"desc": "Window widget."
 		}
 		
