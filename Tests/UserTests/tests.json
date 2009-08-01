@@ -1,5 +1,6 @@
 {
 	"Widgets": {
-		"ART.Widget.Window": ['all']
+		"ART.Widget.Button": ["all"],
+		"ART.Widget.Window": ["all"]
 	}
 }
