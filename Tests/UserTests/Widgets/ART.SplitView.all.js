@@ -10,23 +10,21 @@
 					'content-overflow': 'hidden'
 				});
 
-				window.split = new ART.SplitView({resizable: true});
+				var split = new ART.SplitView({resizable: true});
 				split.setLeftContent($$('.some-content')[0].clone());
 				split.setRightContent($$('.some-content')[0].clone());
 
-				window.w = new ART.Window({
+				var w = new ART.Window({
 					caption: 'This is the caption', 
+					content: $(split),
 					className: 'split', 
 					onResize: function(w, h){
 						split.resize(w, h);
+					},
+					inject: {
+						target: 'container'
 					}
 				});
-
-				$(w).inject('container');
-
-				$(w).setStyles({'top': 40, 'left': 40});
-
-				w.setContent(split);
 
 				split.setParent(w);
 			}
