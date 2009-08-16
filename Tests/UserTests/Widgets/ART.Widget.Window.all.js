@@ -17,7 +17,7 @@
 					'min-width': 200,
 				});
 				
-				window.w = new ART.Widget.Window({
+				window.w = new ART.Window({
 					caption: 'This is the caption',
 					content: $$('.some-content')[0].clone(),
 					inject: {
@@ -43,7 +43,7 @@
 					'min-width': 200,
 				});
 				var makeWindow = function() {
-					var w = new ART.Widget.Window({caption: 'This is the caption'});
+					var w = new ART.Window({caption: 'This is the caption'});
 
 					$(w).inject('container');
 

@@ -10,11 +10,11 @@
 					'content-overflow': 'hidden'
 				});
 
-				window.split = new ART.Widget.SplitView({resizable: true});
+				window.split = new ART.SplitView({resizable: true});
 				split.setLeftContent($$('.some-content')[0].clone());
 				split.setRightContent($$('.some-content')[0].clone());
 
-				window.w = new ART.Widget.Window({
+				window.w = new ART.Window({
 					caption: 'This is the caption', 
 					className: 'split', 
 					onResize: function(w, h){
@@ -32,5 +32,5 @@
 			}
 		}
 	],
-	otherScripts: ['ART.Widget.Window', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
+	otherScripts: ['ART.Window', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
 }

@@ -63,13 +63,18 @@
 	
 	"Widgets": {
 		
-		"ART.Widget.Button": {
+		"ART.Button": {
 			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color"],
 			"desc": "Button widget."
 		},
 		
-		"ART.Widget.Window": {
-			"deps": ["ART.Widget.Button", "Fx.Morph"],
+		"ART.SplitView": {
+			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "touch", "Fx", "Fx.Tween"],
+			"desc": "Window widget."
+		},
+
+		"ART.Window": {
+			"deps": ["ART.Button", "Fx.Tween", "Fx.Morph", "IframeShim", "Element.Position"],
 			"desc": "Window widget."
 		}
 		
