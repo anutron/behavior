@@ -5,6 +5,7 @@ var UnitTester = {
 	ready: function(){
 		var sources = {
 			core: '../assets/core',
+			more: '../assets/more',
 			color: '../assets/color',
 			touch: '../assets/touch',
 			slick: '../assets/slick',

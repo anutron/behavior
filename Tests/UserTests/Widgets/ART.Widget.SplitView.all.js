@@ -10,9 +10,11 @@
 					'content-overflow': 'hidden'
 				});
 
-				var split = new ART.Widget.SplitView({resizable: true});
+				window.split = new ART.Widget.SplitView({resizable: true});
+				split.setLeftContent($$('.some-content')[0].clone());
+				split.setRightContent($$('.some-content')[0].clone());
 
-				var w = new ART.Widget.Window({
+				window.w = new ART.Widget.Window({
 					caption: 'This is the caption', 
 					className: 'split', 
 					onResize: function(w, h){
@@ -27,23 +29,8 @@
 				w.setContent(split);
 
 				split.setParent(w);
-
-				split.setLeftContent($$('.some-content')[0].clone());
-				split.setRightContent($$('.some-content')[0].clone());
-
-				w.addEvent('close', function(){
-					w.destroy();
-				});
-
-				w.addEvent('minimize', function(){
-					w.resize(100, 100);
-				});
-
-				w.addEvent('maximize', function(){
-					w.resize(250, 300);
-				});
 			}
 		}
 	],
-	otherScripts: ['touch', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
+	otherScripts: ['ART.Widget.Window', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
 }

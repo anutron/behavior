@@ -17,24 +17,12 @@
 					'min-width': 200,
 				});
 				
-				var w = new ART.Widget.Window({caption: 'This is the caption'});
-
-				$(w).inject('container');
-
-				$(w).setStyles({'top': 40, 'left': 0});
-
-				w.setContent($$('.some-content')[0].clone());
-
-				w.addEvent('close', function(){
-					w.destroy();
-				});
-
-				w.addEvent('minimize', function(){
-					w.resize(100, 100);
-				});
-
-				w.addEvent('maximize', function(){
-					w.resize(250, 300);
+				window.w = new ART.Widget.Window({
+					caption: 'This is the caption',
+					content: $$('.some-content')[0].clone(),
+					inject: {
+						target: 'container'
+					}
 				});
 			}
 		},
