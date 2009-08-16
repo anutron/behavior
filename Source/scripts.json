@@ -59,7 +59,14 @@
 			"desc": "Bold version of the Moderna Font."
 		}
 		
-	}, 
+	},
+	
+	"Utilities": {
+		"Stacker": {
+			"deps": ["Class", "Element.Event", "Element.Style"],
+			"desc": "A z-index manager."
+		}
+	},
 	
 	"Widgets": {
 		
@@ -73,9 +80,14 @@
 			"desc": "Window widget."
 		},
 
+		"ART.StickyWin": {
+			"deps": ["ART.Widget", "Fx.Tween", "IframeShim", "Element.Position",  "Stacker", "touch"],
+			"desc": "Basic Window widget."
+		},
+
 		"ART.Window": {
-			"deps": ["ART.Button", "Fx.Tween", "Fx.Morph", "IframeShim", "Element.Position"],
-			"desc": "Window widget."
+			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph"],
+			"desc": "Stylized window widget."
 		}
 		
 	}

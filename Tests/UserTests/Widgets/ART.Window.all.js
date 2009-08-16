@@ -5,7 +5,6 @@
 			description: "Makes a window that you can drag around and stuff.",
 			verify: "Can you move the window around and resize it?",
 			before: function(){
-				
 				ART.Sheet.defineStyle('window', {
 					'height': 200,
 					'width': 250,
@@ -16,7 +15,6 @@
 					'min-height': 100,
 					'min-width': 200,
 				});
-				
 				window.w = new ART.Window({
 					caption: 'This is the caption',
 					content: $$('.some-content')[0].clone(),
@@ -43,24 +41,14 @@
 					'min-width': 200,
 				});
 				var makeWindow = function() {
-					var w = new ART.Window({caption: 'This is the caption'});
-
-					$(w).inject('container');
-
-					$(w).setStyles({'top': 40, 'left': 0});
-
-					w.setContent($$('.some-content')[0].clone());
-
-					w.addEvent('close', function(){
-						w.destroy();
-					});
-
-					w.addEvent('minimize', function(){
-						w.resize(100, 100);
-					});
-
-					w.addEvent('maximize', function(){
-						w.resize(250, 300);
+					new ART.Window({
+						caption: 'This is the caption',
+						content: $$('.some-content')[0].clone(),
+						inject: {
+							target: 'container'
+						},
+						top: 40,
+						left: 0
 					});
 				};
 				(5).times(makeWindow);
