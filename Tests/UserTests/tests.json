@@ -1,6 +1,7 @@
 {
 	"Widgets": {
 		"ART.Widget.Button": ["all"],
+		"ART.Widget.SplitView": ["all"],
 		"ART.Widget.Window": ["all"]
 	}
 }
