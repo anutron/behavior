@@ -101,12 +101,18 @@ ART.Adapter = new Class({
 	
 	/* by methods */
 	
-	moveBy: function(vector){
-		return this.moveTo({x: this.now.x + vector.x, y: this.now.y + vector.y});
+	moveBy: function(){
+		$A(arguments).each(function(vector){
+			this.moveTo({x: this.now.x + vector.x, y: this.now.y + vector.y});
+		}, this);
+		return this;
 	},
 	
-	lineBy: function(vector){
-		return this.lineTo({x: this.now.x + vector.x, y: this.now.y + vector.y});
+	lineBy: function(){
+		$A(arguments).each(function(vector){
+			this.lineTo({x: this.now.x + vector.x, y: this.now.y + vector.y});
+		}, this);
+		return this;
 	},
 	
 	bezierBy: function(c1, c2, end){
