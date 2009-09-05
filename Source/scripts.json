@@ -74,7 +74,12 @@
 			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color"],
 			"desc": "Button widget."
 		},
-		
+
+		"ART.Button.Nav": {
+			"deps": ["ART.Button"],
+			"desc": "Button widget with left and right arrows."
+		},
+
 		"ART.SplitView": {
 			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "touch", "Fx", "Fx.Tween"],
 			"desc": "Window widget."
