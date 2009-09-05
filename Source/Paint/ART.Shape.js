@@ -90,33 +90,26 @@ ART.Paint.defineShapes({
 			z;
 		switch(direction) {
 			case 'left':
-				this.shift({x: 0, y: y/2}).lineBy(
-					{x: x, y: -y/2},
-					{x: 0, y: y},
-					{x: -x, y: -y/2}
-				);
+				this.shift({x: 0, y: y/2})
+					.lineBy({x: x, y: -y/2})
+					.lineBy({x: 0, y: y})
+					.lineBy({x: -x, y: -y/2});
 				break;
 			case 'up':
 				this.shift({x: x/2, y: 0});
-				this.lineBy(
-					{x: x/2, y: y},
-					{x: -x, y: 0},
-					{x: x/2, y: -y}
-				);
+				this.lineBy({x: x/2, y: y})
+					.lineBy({x: -x, y: 0})
+					.lineBy({x: x/2, y: -y});
 				break;
 			case 'down':
-				this.lineBy(
-					{x: x, y: 0},
-					{x: -x/2, y: y},
-					{x: -x/2, y: -y}
-				);
+				this.lineBy({x: x, y: 0})
+					.lineBy({x: -x/2, y: y})
+					.lineBy({x: -x/2, y: -y});
 				break;
 			default: //right
-				this.lineBy(
-					{x: x, y: y/2},
-					{x: -x, y: y/2},
-					{x: 0, y: y}
-				);
+				this.lineBy({x: x, y: y/2})
+					.lineBy({x: -x, y: y/2})
+					.lineBy({x: 0, y: y});
 				break;
 		}
 	}
