@@ -31,6 +31,10 @@ ART.Paint.lookupShape = function(name){
 
 ART.Paint.implement({
 
+	getXY: function(size) {
+		return $type(size) == "number" ? { x: size, y: size } : size;
+	},
+
 	shape: function(shape){
 		var args = Array.slice(arguments, 1);
 		if (typeof shape == 'string') shape = ART.Paint.lookupShape(shape.camelCase());
@@ -47,10 +51,12 @@ ART.Paint.implement({
 ART.Paint.defineShapes({
 
 	rectangle: function(end){
+		end = this.getXY(end);
 		this.lineBy({x: end.x, y: 0}).lineBy({x: 0, y: end.y}).lineBy({x: -end.x, y: 0}).lineBy({x: 0, y: -end.y});
 	},
 	
 	ellipse: function(end){
+		end = this.getXY(end);
 		var radius = {x: end.x / 2, y: end.y / 2};
 		this.moveBy({x: 0, y: radius.y});
 		this.roundCapLeftBy({x: radius.x, y: -radius.y}).roundCapRightBy({x: radius.x, y: radius.y});
@@ -59,6 +65,7 @@ ART.Paint.defineShapes({
 	},
 	
 	roundedRectangle: function(end, radius){
+		end = this.getXY(end);
 		if (radius == null) radius = [5, 5, 5, 5];
 		if (typeof radius == 'number') radius = [radius, radius, radius, radius];
 		
@@ -85,9 +92,9 @@ ART.Paint.defineShapes({
 	},
 
 	triangle: function(size, direction){
+		size = this.getXY(size);
 		var x = size.x,
-			y = size.y,
-			z;
+			y = size.y;
 		switch(direction) {
 			case 'left':
 				this.shift({x: 0, y: y/2})
@@ -109,7 +116,7 @@ ART.Paint.defineShapes({
 			default: //right
 				this.lineBy({x: x, y: y/2})
 					.lineBy({x: -x, y: y/2})
-					.lineBy({x: 0, y: y});
+					.lineBy({x: 0, y: -y});
 				break;
 		}
 	}
@@ -119,16 +126,19 @@ ART.Paint.defineShapes({
 // And some extra glyphs
 
 ART.Paint.defineShape('horizontal-pill', function(size){
+	size = this.getXY(size);
 	var r = (size.y / 2);
 	this.shape('rounded-rectangle', {x: size.x, y: size.y}, r);
 });
 
 ART.Paint.defineShape('vertical-pill', function(size){
+	size = this.getXY(size);
 	var r = (size.x / 2);
 	this.shape('rounded-rectangle', {x: size.x, y: size.y}, r);
 });
 
 ART.Paint.defineShape('plus-icon', function(size){
+	size = this.getXY(size);
 	this.moveBy({x: 0, y: (size.y / 2)});
 	this.lineBy({x: size.x, y: 0});
 	this.moveBy({x: -(size.x / 2), y: -(size.y / 2)});
@@ -136,16 +146,19 @@ ART.Paint.defineShape('plus-icon', function(size){
 });
 
 ART.Paint.defineShape('resize-icon', function(size){
+	size = this.getXY(size);
 	this.moveBy({x: size.x, y: 0});
 	this.lineBy({x: -size.x, y: size.y});
 });
 
 ART.Paint.defineShape('minus-icon', function(size){
+	size = this.getXY(size);
 	this.moveBy({x: 0, y: (size.y / 2)});
 	this.lineBy({x: size.x, y: 0});
 });
 
 ART.Paint.defineShape('search-icon', function(size){
+	size = this.getXY(size);
 	ratio = 0.8;
 	var max = ratio, min = 1 - ratio;
 	this.shape('ellipse', {x: size.x * max, y: size.y * max});
@@ -155,8 +168,38 @@ ART.Paint.defineShape('search-icon', function(size){
 });
 
 ART.Paint.defineShape('close-icon', function(size){
+	size = this.getXY(size);
 	this.moveBy({x: size.x, y: 0});
 	this.lineBy({x: -size.x, y: size.y});
 	this.moveBy({x: 0, y: -size.y});
 	this.lineBy({x: size.x, y: size.y});
+});
+
+ART.Paint.defineShape('refresh', function(size, options){
+	size = this.getXY(size);
+
+	options = $merge({
+		stroke: {
+			x: size.x / 12,
+			y: size.y / 12
+		}
+	}, options);
+
+	var rad = {
+		x: size.x / 4,
+		y: size.y / 4
+	};
+
+	var stroke = this.getXY(options.stroke);
+
+	this.roundCapRightBy({x: -rad.x, y: rad.y});
+	this.roundCapLeftBy({x: rad.x, y: rad.x});
+	this.roundCapRightBy({x: rad.x, y: -rad.x});
+	this.lineBy({x: -stroke.x, y: 0});
+	this.roundCapLeftBy({x: -rad.x + stroke.y, y: size.y/4 - stroke.y});
+	this.roundCapRightBy({x: -rad.x + stroke.y, y: - size.y/4 + stroke.y});
+	this.roundCapLeftBy({x: rad.x - stroke.y, y: - size.y/4 + stroke.y});
+
+	this.moveBy({x: 0, y: (-stroke.y - rad.y) / 2});
+	this.shape('triangle', {x: rad.x, y:rad.y}, 'right');
 });
