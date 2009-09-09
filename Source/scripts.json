@@ -69,6 +69,11 @@
 	},
 	
 	"Widgets": {
+
+		"ART.Browser": {
+			"deps": ["ART.Window", "ART.History"],
+			"desc": "A Window with basic navigation controls."
+		},
 		
 		"ART.Button": {
 			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "MgOpen.Moderna", "MgOpen.Moderna.Bold"],
@@ -78,6 +83,11 @@
 		"ART.Button.Nav": {
 			"deps": ["ART.Button"],
 			"desc": "Button widget with left and right arrows."
+		},
+
+		"ART.History": {
+			"deps": ["ART.Button.Nav", "touch", "Keyboard", "Element.Dimensions"],
+			"desc": "A history UI widget."
 		},
 
 		"ART.SplitView": {

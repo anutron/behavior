@@ -1,7 +1,9 @@
 {
 	"Widgets": {
+		"ART.Browser": ["all"],
 		"ART.Button": ["all"],
 		"ART.Button.Nav": ["all"],
+		"ART.History": ["all"],
 		"ART.SplitView": ["all"],
 		"ART.Window": ["all"]
 	}
