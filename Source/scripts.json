@@ -8,7 +8,7 @@
 		},
 		
 		"ART.Widget": {
-			"deps": ["ART", "Class.Extras", "Element"],
+			"deps": ["ART", "Keyboard"],
 			"desc": "Barebones ART Widget."
 		}
 
@@ -86,7 +86,7 @@
 		},
 
 		"ART.History": {
-			"deps": ["ART.Button.Nav", "touch", "Keyboard", "Element.Dimensions"],
+			"deps": ["ART.Button.Nav", "touch", "Element.Dimensions", "Element.Forms"],
 			"desc": "A history UI widget."
 		},
 
