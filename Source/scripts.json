@@ -103,7 +103,18 @@
 		"ART.Window": {
 			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph", "MgOpen.Moderna", "MgOpen.Moderna.Bold"],
 			"desc": "Stylized window widget."
+		},
+
+		"ART.Alerts": {
+			"deps": ["ART.Window"],
+			"desc": "Stylized window widget."
+		},
+
+		"ART.SolidWindow": {
+			"deps": ["ART.Window"],
+			"desc": "Stylized solid window widget."
 		}
+
 		
 	}
 

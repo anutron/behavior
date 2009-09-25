@@ -4,7 +4,9 @@
 		"ART.Button": ["all"],
 		"ART.Button.Nav": ["all"],
 		"ART.History": ["all"],
+		"ART.Alerts": ["all"],
 		"ART.SplitView": ["all"],
-		"ART.Window": ["all"]
+		"ART.SolidWindow": ["all"],
+		"ART.Window": ["all"],
 	}
 }

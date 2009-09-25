@@ -56,5 +56,5 @@
 			}
 		}
 	],
-	otherScripts: ['touch', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
+	otherScripts: ['Selectors']
 }
