@@ -23,7 +23,6 @@
 					]
 				});
 				$(h).inject('container');
-				h.resize();
 			}
 		}
 	],
