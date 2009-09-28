@@ -23,10 +23,10 @@
 					},
 					inject: {
 						target: 'container'
-					}
+					},
+					parentWidget: w
 				});
 
-				split.setParent(w);
 			}
 		}
 	],

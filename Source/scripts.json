@@ -76,7 +76,7 @@
 		},
 		
 		"ART.Button": {
-			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "MgOpen.Moderna", "MgOpen.Moderna.Bold"],
+			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "MgOpen.Moderna", "MgOpen.Moderna.Bold", "touch"],
 			"desc": "Button widget."
 		},
 
@@ -86,7 +86,7 @@
 		},
 
 		"ART.History": {
-			"deps": ["ART.Button.Nav", "touch", "Element.Dimensions", "Element.Forms"],
+			"deps": ["ART.Button.Nav", "Element.Dimensions", "Element.Forms"],
 			"desc": "A history UI widget."
 		},
 
