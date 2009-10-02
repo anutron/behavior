@@ -99,7 +99,7 @@
 		},
 
 		"ART.StickyWin": {
-			"deps": ["ART.Widget", "Fx.Tween", "IframeShim", "Element.Position",  "Stacker", "touch"],
+			"deps": ["ART.Widget", "Fx.Tween", "IframeShim", "Element.Position",  "Stacker", "touch", "Mask"],
 			"desc": "Basic Window widget."
 		},
 
