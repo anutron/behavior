@@ -13,7 +13,7 @@
 					'max-width': 390,
 
 					'min-height': 100,
-					'min-width': 200,
+					'min-width': 200
 				});
 				window.w = new ART.Window({
 					caption: 'This is the caption',
@@ -38,7 +38,7 @@
 					'max-width': 390,
 
 					'min-height': 100,
-					'min-width': 200,
+					'min-width': 200
 				});
 				var makeWindow = function() {
 					new ART.Window({
@@ -46,13 +46,36 @@
 						content: $$('.some-content')[0].clone(),
 						inject: {
 							target: 'container'
-						},
-						top: 40,
-						left: 0
+						}
 					});
 				};
 				(5).times(makeWindow);
 				ART.WM.cascade(true, 0, 40);
+			}
+		},
+		{
+			title: "Makes a Modal Window",
+			description: "Makes a modal window with a layer just below it. The window closes when the layer is clicked.",
+			verify: "Is there a layer below the window? Does the window close when you click the layer?",
+			before: function(){
+				ART.Sheet.defineStyle('window', {
+					'height': 200,
+					'width': 250,
+
+					'max-height': 440,
+					'max-width': 390,
+
+					'min-height': 100,
+					'min-width': 200
+				});
+				window.w = new ART.Window({
+					caption: 'This is the caption',
+					content: $$('.some-content')[0].clone(),
+					inject: {
+						target: 'container'
+					},
+					mask: true
+				});
 			}
 		}
 	],
