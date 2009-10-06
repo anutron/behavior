@@ -4,7 +4,7 @@
 		"ART.Button": ["all"],
 		"ART.Button.Nav": ["all"],
 		"ART.History": ["all"],
-		"ART.Alerts": ["all"],
+		"ART.Alerts": ["basic", "windows"],
 		"ART.SplitView": ["all"],
 		"ART.SolidWindow": ["all"],
 		"ART.Window": ["all"],
