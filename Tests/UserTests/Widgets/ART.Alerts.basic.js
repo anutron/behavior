@@ -24,7 +24,7 @@
 			before: function(){
 				ART.confirm('This is the caption', 'Would you like a cookie?',
 					function(){
-						dbug.log('closed');
+						dbug.log('confirmed');
 					},
 					{
 						inject: {
