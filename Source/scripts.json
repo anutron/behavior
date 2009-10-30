@@ -89,7 +89,7 @@
 		},
 
 		"ART.History": {
-			"deps": ["ART.Button.Nav", "Element.Dimensions", "Element.Forms"],
+			"deps": ["ART.Button.Nav", "Element.Dimensions", "Element.Forms", "Element.Shortcuts"],
 			"desc": "A history UI widget."
 		},
 

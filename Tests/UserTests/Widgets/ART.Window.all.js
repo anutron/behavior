@@ -50,7 +50,7 @@
 					});
 				};
 				(5).times(makeWindow);
-				ART.WM.cascade(true, 0, 40);
+				ART.StickyWin.DefaultManager.cascade();
 			}
 		},
 		{
