@@ -16,3 +16,6 @@
 [submodule "assets/more"]
 	path = assets/more
 	url = git://github.com/mootools/mootools-more.git
+[submodule "ART"]
+	path = ART
+	url = git@github.com:kamicane/art.git
