@@ -2,11 +2,6 @@
 
 	"Base": {
 
-		"ART": {
-			"deps": [],
-			"desc": "The base ART Class."
-		},
-		
 		"ART.Widget": {
 			"deps": ["ART", "Keyboard", "Event.Latch"],
 			"desc": "Barebones ART Widget."
@@ -16,51 +11,17 @@
 
 	"Paint": {
 		
-		"ART.Adapter": {
-			"deps": ["ART", "Class.Extras"],
-			"desc": "ART Graphic Adapter."
-		},
-		
-		"ART.Adapter.Canvas": {
-			"deps": ["ART.Adapter"],
-			"desc": "Adds Canvas support to ART.Adapter."
-		},
-		
-		"ART.Paint": {
-			"deps": ["ART.Adapter.Canvas"],
-			"desc": "Public Class for painting stuff. Extends ART.Adapter."
-		},
-		
-		"ART.Shape": {
-			"deps": ["ART.Paint"],
-			"desc": "Adds some shapes, and implements the shape method to ART.Paint."
-		},
-		
 		"ART.Sheet": {
 			"deps": ["slickparser"]
 		},
 		
-		"ART.Text": {
-			"deps": ["ART.Paint"],
+		"ART.Glyphs": {
+			"deps": ["ART"],
 			"desc": "Adds font drawing support (thanks to Cufón), and implements the text method to ART.Paint."
 		}
 
 	},
 
-	"Fonts": {
-		
-		"MgOpen.Moderna": {
-			"deps": ["ART.Text"],
-			"desc": "Open source font to use with ART.Paint."
-		},
-		
-		"MgOpen.Moderna.Bold": {
-			"deps": ["ART.Text"],
-			"desc": "Bold version of the Moderna Font."
-		}
-		
-	},
-	
 	"Utilities": {
 		"Event.Latch": {
 			"deps": ["Class.Extras", "Element.Event", "Class.Refactor"]
@@ -79,7 +40,7 @@
 		},
 		
 		"ART.Button": {
-			"deps": ["ART.Widget", "ART.Shape", "ART.Text", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "MgOpen.Moderna", "MgOpen.Moderna.Bold", "touch"],
+			"deps": ["ART.Widget", "ART.SVG", "ART.VML", "ART.Shapes", "ART.Path", "ART.Font", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "Moderna", "Moderna.Bold", "touch"],
 			"desc": "Button widget."
 		},
 
@@ -104,7 +65,7 @@
 		},
 
 		"ART.Window": {
-			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph", "MgOpen.Moderna", "MgOpen.Moderna.Bold"],
+			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph", "Moderna", "Moderna.Bold"],
 			"desc": "Stylized window widget."
 		},
 
