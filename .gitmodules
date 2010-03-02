@@ -4,9 +4,6 @@
 [submodule "assets/core"]
 	path = assets/core
 	url = git://github.com/mootools/mootools-core.git
-[submodule "assets/color/Source/color"]
-	path = assets/color/Source/color
-	url = git://github.com/kamicane/mootools-color.git
 [submodule "assets/touch/Source/touch"]
 	path = assets/touch/Source/touch
 	url = git://github.com/anutron/mootools-touch.git
@@ -18,4 +15,13 @@
 	url = git://github.com/mootools/mootools-more.git
 [submodule "ART"]
 	path = ART
-	url = git@github.com:kamicane/art.git
+	url = git://github.com/kamicane/art.git
+[submodule "assets/mootools-color"]
+	path = assets/mootools-color
+	url = git://github.com/anutron/mootools-color.git
+[submodule "assets/mootools-table"]
+	path = assets/mootools-table
+	url = git://github.com/anutron/mootools-table.git
+[submodule "assets/art"]
+	path = assets/art
+	url = git://github.com/anutron/art.git
