@@ -40,7 +40,7 @@
 		},
 		
 		"ART.Button": {
-			"deps": ["ART.Widget", "ART.SVG", "ART.VML", "ART.Shapes", "ART.Path", "ART.Font", "ART.Sheet", "Element.Event", "Element.Style", "Moderna", "Moderna.Bold", "touch"],
+			"deps": ["ART.Widget", "ART.SVG", "ART.VML", "ART.Shapes", "ART.Path", "ART.Font", "ART.Sheet", "Element.Event", "Element.Style", "Moderna", "Moderna.Bold", "Touch"],
 			"desc": "Button widget."
 		},
 
@@ -55,12 +55,12 @@
 		},
 
 		"ART.SplitView": {
-			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "touch", "Fx", "Fx.Tween"],
+			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "Touch", "Fx", "Fx.Tween"],
 			"desc": "Window widget."
 		},
 
 		"ART.StickyWin": {
-			"deps": ["ART.Widget", "Fx.Tween", "IframeShim", "Element.Position",  "Stacker", "touch", "Mask"],
+			"deps": ["ART.Widget", "Fx.Tween", "IframeShim", "Element.Position",  "Stacker", "Touch", "Mask"],
 			"desc": "Basic Window widget."
 		},
 

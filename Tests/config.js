@@ -8,7 +8,7 @@ var UnitTester = {
 			more: '../assets/more/Source/scripts.json',
 			color: '../assets/mootools-color/scripts.json',
 			table: '../assets/mootools-table/scripts.json',
-			touch: '../assets/touch/Source/scripts.json',
+			touch: '../assets/touch/scripts.json',
 			slick: '../assets/slick/Source/scripts.json',
 			art: '../assets/art/scripts.json',
 			widgets: '../Source/scripts.json'

@@ -10,5 +10,5 @@
 			}
 		}
 	],
-	otherScripts: ['touch', 'Moderna', 'Moderna.Bold', 'Selectors']
+	otherScripts: ['Moderna', 'Moderna.Bold', 'Selectors']
 }
