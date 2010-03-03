@@ -40,7 +40,7 @@
 		},
 		
 		"ART.Button": {
-			"deps": ["ART.Widget", "ART.SVG", "ART.VML", "ART.Shapes", "ART.Path", "ART.Font", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "Moderna", "Moderna.Bold", "touch"],
+			"deps": ["ART.Widget", "ART.SVG", "ART.VML", "ART.Shapes", "ART.Path", "ART.Font", "ART.Sheet", "Element.Event", "Element.Style", "Moderna", "Moderna.Bold", "touch"],
 			"desc": "Button widget."
 		},
 
@@ -50,12 +50,12 @@
 		},
 
 		"ART.History": {
-			"deps": ["ART.Button.Nav", "Element.Dimensions", "Element.Forms", "Element.Shortcuts"],
+			"deps": ["ART.Button.Nav", "Element.Dimensions", "Element.Forms", "Element.Shortcuts", "ART.Glyphs"],
 			"desc": "A history UI widget."
 		},
 
 		"ART.SplitView": {
-			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "mootools-color", "touch", "Fx", "Fx.Tween"],
+			"deps": ["ART.Widget", "ART.Sheet", "Element.Event", "Element.Style", "touch", "Fx", "Fx.Tween"],
 			"desc": "Window widget."
 		},
 
@@ -65,7 +65,7 @@
 		},
 
 		"ART.Window": {
-			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph", "Moderna", "Moderna.Bold"],
+			"deps": ["ART.Button", "ART.StickyWin", "Fx.Morph", "Moderna", "Moderna.Bold", "ART.Glyphs"],
 			"desc": "Stylized window widget."
 		},
 

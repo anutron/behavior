@@ -30,5 +30,5 @@
 			}
 		}
 	],
-	otherScripts: ['ART.Window', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
+	otherScripts: ['ART.Window', 'Moderna', 'Moderna.Bold', 'Selectors']
 }

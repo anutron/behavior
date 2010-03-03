@@ -27,5 +27,5 @@
 			}
 		}
 	],
-	otherScripts: ['touch', 'MgOpen.Moderna', 'MgOpen.Moderna.Bold', 'Selectors']
+	otherScripts: ['touch', 'Moderna', 'Moderna.Bold', 'Selectors']
 }
