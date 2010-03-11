@@ -5,7 +5,9 @@
 			description: "Makes a button that you can click and stuff.",
 			verify: "Does the button exist?",
 			before: function(){
-				var b = new ART.Browser();
+				var b = new ART.Browser({
+					caption: 'this is a browser window'
+				});
 				$(b).inject('container');
 			}
 		}
