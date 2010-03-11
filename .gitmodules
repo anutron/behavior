@@ -24,4 +24,4 @@
 	url = git://github.com/anutron/art.git
 [submodule "assets/touch"]
 	path = assets/touch
-	url = git@github.com:anutron/mootools-touch.git
+	url = http://github.com/anutron/mootools-touch.git
