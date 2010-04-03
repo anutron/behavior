@@ -12,7 +12,7 @@
 	"Paint": {
 		
 		"ART.Sheet": {
-			"deps": ["slickparser"]
+			"deps": ["ART", "slickparser"]
 		},
 		
 		"ART.Glyphs": {
@@ -27,7 +27,7 @@
 			"deps": ["Class.Extras", "Element.Event", "Class.Refactor"]
 		},
 		"Stacker": {
-			"deps": ["Class", "Element.Event", "Element.Style"],
+			"deps": ["Class.Extras", "Element.Event", "Element.Style"],
 			"desc": "A z-index manager."
 		}
 	},
