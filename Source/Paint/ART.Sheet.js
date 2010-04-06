@@ -37,16 +37,10 @@ ART.Sheet = {};
 		return specificity;
 	};
 
-	ART.Sheet.defineStyle = function(selectors, style){
-		SubtleSlickParse(selectors).each(function(selector){
-			var rule = {
-				'specificity': getSpecificity(selector),
-				'selector': parseSelector(selector),
-				'style': {}
-			};
-			for (var p in style) rule.style[p.camelCase()] = style[p];
-			rules.push(rule);
-		});
+	ART.Sheet.defineStyle = function(selectors, style, cssStyle){
+		createRules(selectors, style, rules);
+		if (cssStyle) createRules(selectors, cssStyle, cssRules);
+		return this;
 	};
 
 	var containsAll = function(self, other){
@@ -56,13 +50,30 @@ ART.Sheet = {};
 	};
 
 	ART.Sheet.lookupStyle = function(selector){
+		return getStyles(selector, rules);
+	};
+	
+	
+	var createRules = function(selectors, style, where){
+		SubtleSlickParse(selectors).each(function(selector){
+			var rule = {
+				'specificity': getSpecificity(selector),
+				'selector': parseSelector(selector),
+				'style': {}
+			};
+			for (var p in style) rule.style[p.camelCase()] = style[p];
+			where.push(rule);
+		});
+	};
+	
+	var getStyles = function(selector, where) {
 		var style = {};
-		rules.sort(function(a, b){
+		where.sort(function(a, b){
 			return a.specificity - b.specificity;
 		});
 
 		selector = parseSelector(SubtleSlickParse(selector)[0]);
-		rules.each(function(rule){
+		where.each(function(rule){
 			var i = rule.selector.length - 1, j = selector.length - 1;
 			if (!containsAll(selector[j], rule.selector[i])) return;
 			while (i-- > 0){
@@ -73,7 +84,24 @@ ART.Sheet = {};
 			}
 			$mixin(style, rule.style);
 		});
+		if (Browser.Engine.trident) {
+			for (prop in style) {
+				var val = style[prop];
+				if (val.isColor) {
+					style[prop] = val.toRGB();
+				}
+			}
+		}
 		return style;
+	};
+	
+	var cssRules = [];
+	ART.Sheet.defineCSS = function(selector, style){
+		createRules(selector, style, cssRules)
+	};
+
+	ART.Sheet.lookupCSS = function(selector){
+		return getStyles(selector, cssRules);
 	};
 
 })();
