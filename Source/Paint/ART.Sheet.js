@@ -87,7 +87,7 @@ ART.Sheet = {};
 		if (Browser.Engine.trident) {
 			for (prop in style) {
 				var val = style[prop];
-				if (val.isColor) {
+				if (val && val.isColor) {
 					style[prop] = val.toRGB();
 				}
 			}
@@ -97,7 +97,7 @@ ART.Sheet = {};
 	
 	var cssRules = [];
 	ART.Sheet.defineCSS = function(selector, style){
-		createRules(selector, style, cssRules)
+		createRules(selector, style, cssRules);
 	};
 
 	ART.Sheet.lookupCSS = function(selector){
