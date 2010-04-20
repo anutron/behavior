@@ -1,8 +1,9 @@
 /*
-Script: ART.Glyphs.js
-
-License:
-	MIT-style license.
+---
+name: ART.Glyphs
+description: A collection of illustrations for ART.
+provides: ART.Glyphs
+...
 */
 
 ART.Glyphs = {
