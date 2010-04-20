@@ -11,7 +11,7 @@ ART.Sheet = {
 
 	define: function(name, properties, namespace){
 		UI.Sheet.define(name, properties, namespace);
-		ART.widgets.each(function(widget){
+		UI.widgets.each(function(uid, widget){
 			widget.deferDraw();
 		});
 	},
