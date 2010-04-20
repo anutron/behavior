@@ -1,0 +1,31 @@
+name: "Widgets"
+
+web: "[mootools.net](http://mootools.net)"
+
+description: "User Interface Widgets for MooTools ART"
+
+license: "[MIT License](http://mootools.net/license.txt)"
+
+copyright: "&copy; [MooTools](http://mootools.net)"
+
+authors: "[The MooTools development team](http://mootools.net/developers)"
+
+sources:
+  - "Source/UI/UI.js"
+  - "Source/UI/UI.Sheet.js"
+  - "Source/UI/UI.Widget.js"
+  - "Source/Base/ART.Widget.js"
+  - "Source/Base/ART.Widget.Keyboard.js"
+  - "Source/Utilities/Event.Latch.js"
+  - "Source/Utilities/Stacker.js"
+  - "Source/Paint/ART.Sheet.js"
+  - "Source/Paint/ART.Glyphs.js"
+  - "Source/Widgets/ART.Alerts.js"
+  - "Source/Widgets/ART.Browser.js"
+  - "Source/Widgets/ART.Button.js"
+  - "Source/Widgets/ART.Button.Nav.js"
+  - "Source/Widgets/ART.History.js"
+  - "Source/Widgets/ART.SolidWindow.js"
+  - "Source/Widgets/ART.SplitView.js"
+  - "Source/Widgets/ART.StickyWin.js"
+  - "Source/Widgets/ART.Window.js"
