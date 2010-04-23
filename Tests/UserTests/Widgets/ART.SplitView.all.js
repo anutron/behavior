@@ -23,8 +23,7 @@
 					},
 					inject: {
 						target: 'container'
-					},
-					parentWidget: w
+					}
 				});
 
 			}
