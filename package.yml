@@ -23,6 +23,8 @@ sources:
   - "Source/Widgets/ART.Alerts.js"
   - "Source/Widgets/ART.Browser.js"
   - "Source/Widgets/ART.Button.js"
+  - "Source/Widgets/ART.Input.js"
+  - "Source/Widgets/ART.Search.js"
   - "Source/Widgets/ART.History.js"
   - "Source/Widgets/ART.SolidWindow.js"
   - "Source/Widgets/ART.SplitView.js"
