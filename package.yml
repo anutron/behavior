@@ -20,6 +20,7 @@ sources:
   - "Source/Utilities/Event.Latch.js"
   - "Source/Utilities/Stacker.js"
   - "Source/Illustrations/ART.Glyphs.js"
+  - "Source/Widgets/ART.Box.js"
   - "Source/Widgets/ART.Alerts.js"
   - "Source/Widgets/ART.Browser.js"
   - "Source/Widgets/ART.Button.js"
