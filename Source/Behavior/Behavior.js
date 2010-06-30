@@ -172,14 +172,11 @@ Behavior.Filter = new Class({
 
 	//pass in an object with the following properties:
 	//name - the name of this filter
-	//selector - a CSS selector that will return any elements inside this element
-	//           that should have this filter applied
 	//attach - a function that applies the filter to the given element
 	//stringMatch - a fast match for excluding filters; inspects the element's innerHTML
 	//           for the presence of this string and exits if its not found; optional
 	initialize: function(options){
 		this.name = options.name;
-		this.selector = options.selector;
 		this.attach = options.attach;
 		this.stringMatch = options.stringMatch;
 		this._marks = new Table();
@@ -203,7 +200,10 @@ Behavior.Filter = new Class({
 	//given an element, returns the children that match the selector for this filter
 	select: function(container){
 		if (this.stringMatch && !container.innerHTML.contains(this.stringMatch)) return [];
-		return container.getElements(this.selector);
+		return container.getElements('[data-filters*=' + this.name + ']').filter(function(element){
+			//have to run this filter in case the name of this filter is a substring of another
+			return element.get('data', 'filters').split(',').contains(this.name);
+		});
 	},
 
 	//stores a garbage collection pointer for a specific element
@@ -238,3 +238,6 @@ Selectors.Pseudo.hasBehaviors = function(){
 };
 
 })();
+
+//allows for selectors like $$('[data-foo-bar]'); TODO: Note that it'll be in Moo 1.3; remove then.
+Selectors.RegExps.combined = (/\.([\w-]+)|\[([\w-]+)(?:([!*^$~|]?=)(["']?)([^\4]*?)\4)?\]|:([\w-]+)(?:\(["']?(.*?)?["']?\)|$)/g);
