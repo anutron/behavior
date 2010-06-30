@@ -2,7 +2,7 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element, /ART.Window, /Element.Data, Table/Table]
+requires: [Core/Class.Extras, Core/Element, Core/Selectors, /ART.Window, /Element.Data, Table/Table]
 provides: [Behavior]
 ...
 */
@@ -98,7 +98,7 @@ this.Behavior = new Class({
 	//force - apply the behavior to each element it matches, even if it was previously applied
 	applyBehavior: function(behavior, meta, force){
 		//get the elements that match
-		var matches = behavior.match(this.element).filter(function(el){
+		var matches = behavior.select(this.element).filter(function(el){
 			//get the filters already applied to this element
 			var applied = getApplied(el);
 			//if this filter is not yet applied to the element, or we are forcing the filter
@@ -106,7 +106,7 @@ this.Behavior = new Class({
 				//if it was previously applied, garbage collect it
 				if (applied[behavior.name]) applied[behavior.name].sweep(el);
 				//apply the filter
-				behavior.attach(el, meta);
+				behavior.attach(el, this.element, meta);
 				//and mark it as having been previously applied
 				applied[behavior.name] = behavior;
 			}
@@ -196,7 +196,7 @@ Behavior.Filter = new Class({
 	//globally registers this filter on the Behavior namespace
 	//overwrite - (boolean) force this filter to register even if one with the same name exists
 	global: function(overwrite){
-		Behavior.register(this.name, this, overwrite);
+		Behavior.registerGlobal(this.name, this, overwrite);
 		return this;
 	},
 
@@ -223,14 +223,17 @@ Behavior.Filter = new Class({
 	//garbage collect a specific element
 	sweep: function(element){
 		var marks = this._marks.get(element);
-		if (marks) marks.each(function(fn){ fn(); });
+		if (marks) {
+			marks.each(function(fn){ fn(); });
+			this._marks.set(element, []);
+		}
 		return this;
 	}
 
 });
 
 //a selector to find all elements that have behaviors applied to them.
-Selectors.Psuedo.hasBehaviors = function(){
+Selectors.Pseudo.hasBehaviors = function(){
 	return !!getApplied(this);
 };
 
