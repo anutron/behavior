@@ -25,6 +25,8 @@ this.Behavior = new Class({
 		getWidget: $empty,
 		//behaviors to apply on startup; optional
 		behaviors: null,
+		//apply behaviors on startup?
+		applyNow: true,
 		//default error behavior when a filter cannot be applied
 		onError: function(){
 			if (window.console && console.warn) console.warn.apply(console, arguments);
@@ -41,6 +43,7 @@ this.Behavior = new Class({
 		this.element = $(element);
 		this.setOptions(options);
 		if (this.options.behaviors) this.use(this.options.behaviors);
+		if (this.options.applyNow) this.applyBehaviors();
 	},
 
 	toElement: function(){
@@ -71,57 +74,46 @@ this.Behavior = new Class({
 		this.fireEvent('resize', [w, h]);
 	},
 
-	_behaviors: {},
-
-	//given a list of behaviors to use (an array of strings; a single string is also acceptable)
-	//lookup that name against registered behaviors and mark them for use against this element
-	use: function(names){
-		$splat(names).each(function(name){
-			var behavior = this.lookup(name);
-			//if there is no behavior by this name, fail quietly
-			if (behavior) this._behaviors[name] = behavior;
-			else this.fireEvent('error', ["there is no behavior registered with the name ", name]);
+	//applies all the behavior filters for an element
+	//force is passed through to applyBehavior (see it for docs)
+	applyBehaviors: function(force){
+		this.element.getElements('[data-filters]').each(function(element){
+			element.get('data', 'filters').split(',').each(function(name){
+				var behavior = this.getBehavior(name.trim());
+				if (!behavior) this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
+				else this.applyBehavior(element, behavior, force);
+			}, this);
 		}, this);
-		return this;
-	},
-
-	//applies all the registered behaviors
-	//meta and force are passed through to applyBehavior (see it for docs)
-	applyBehaviors: function(meta, force){
-		for (name in this._behaviors) this.applyBehavior(this._behaviors[name], meta, force);
 		return this;
 	},
 	
 	//applies a specific behavior to the element
+	//element - the element to which to apply the behavior
 	//behavior - a specific behavior filter, typically one registered with this instance or registered globally
-	//meta - an object of key/value pairs you wish to pass to all filter
 	//force - apply the behavior to each element it matches, even if it was previously applied
-	applyBehavior: function(behavior, meta, force){
-		//get the elements that match
-		var matches = behavior.select(this.element).filter(function(el){
-			//get the filters already applied to this element
-			var applied = getApplied(el);
-			//if this filter is not yet applied to the element, or we are forcing the filter
-			if (!applied[behavior.name] || force) {
-				//if it was previously applied, garbage collect it
-				if (applied[behavior.name]) applied[behavior.name].sweep(el);
-				//apply the filter
-				behavior.attach(el, this.element, meta);
-				//and mark it as having been previously applied
-				applied[behavior.name] = behavior;
-			}
-		}, this);
+	applyBehavior: function(element, behavior, force){
+		//get the filters already applied to this element
+		var applied = getApplied(element);
+		//if this filter is not yet applied to the element, or we are forcing the filter
+		if (!applied[behavior.name] || force) {
+			//if it was previously applied, garbage collect it
+			if (applied[behavior.name]) applied[behavior.name].sweep(element);
+			//apply the filter
+			behavior.attach(element, this.element);
+			//and mark it as having been previously applied
+			applied[behavior.name] = behavior;
+		}
 	},
 
 	//given a name, returns a registered behavior
-	lookup: function(name){
+	getBehavior: function(name){
 		return this._registered[name] || Behavior._registered[name];
 	},
 
 	//garbage collects all applied filters for this element and its children
 	sweep:function(element, ignoreChildren){
 		var applied = getApplied(element);
-		for (behavior in this._behaviors) {
+		for (behavior in applied) {
 			if (applied[behavior]) {
 				applied[behavior].sweep(element);
 			}
@@ -173,12 +165,9 @@ Behavior.Filter = new Class({
 	//pass in an object with the following properties:
 	//name - the name of this filter
 	//attach - a function that applies the filter to the given element
-	//stringMatch - a fast match for excluding filters; inspects the element's innerHTML
-	//           for the presence of this string and exits if its not found; optional
 	initialize: function(options){
 		this.name = options.name;
 		this.attach = options.attach;
-		this.stringMatch = options.stringMatch;
 		this._marks = new Table();
 	},
 
@@ -195,15 +184,6 @@ Behavior.Filter = new Class({
 	global: function(overwrite){
 		Behavior.registerGlobal(this.name, this, overwrite);
 		return this;
-	},
-
-	//given an element, returns the children that match the selector for this filter
-	select: function(container){
-		if (this.stringMatch && !container.innerHTML.contains(this.stringMatch)) return [];
-		return container.getElements('[data-filters*=' + this.name + ']').filter(function(element){
-			//have to run this filter in case the name of this filter is a substring of another
-			return element.get('data', 'filters').split(',').contains(this.name);
-		});
 	},
 
 	//stores a garbage collection pointer for a specific element
@@ -234,7 +214,7 @@ Behavior.Filter = new Class({
 
 //a selector to find all elements that have behaviors applied to them.
 Selectors.Pseudo.hasBehaviors = function(){
-	return !!getApplied(this);
+	return !!this.retrieve('_appliedBehaviors');
 };
 
 })();

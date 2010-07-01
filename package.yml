@@ -33,4 +33,5 @@ sources:
   - "Source/Widgets/ART.Window.js"
   - "Source/Behavior/Behavior.js"
   - "Source/Behavior/Behavior.OverText.js"
+  - "Source/Behavior/Behavior.ArtInput.js"
   - "Source/Element/Element.Data.js"
