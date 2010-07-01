@@ -21,10 +21,6 @@ this.Behavior = new Class({
 	Implements: [Options, Events, ART.WindowTools],
 
 	options: {
-		//method to return the widget this behavior is bound to; optional
-		getWidget: $empty,
-		//behaviors to apply on startup; optional
-		behaviors: null,
 		//apply behaviors on startup?
 		applyNow: true,
 		//default error behavior when a filter cannot be applied
@@ -42,7 +38,6 @@ this.Behavior = new Class({
 	initialize: function(element, options){
 		this.element = $(element);
 		this.setOptions(options);
-		if (this.options.behaviors) this.use(this.options.behaviors);
 		if (this.options.applyNow) this.applyBehaviors();
 	},
 
@@ -58,14 +53,12 @@ this.Behavior = new Class({
 	show: function(){
 		this.element.fireEvent('show');
 		this.fireEvent('show');
-		this.isVisible = true;
 	},
 
 	//the element is hidden
 	hide: function(){
 		this.element.fireEvent('hide');
 		this.fireEvent('hide');
-		this.isVisible = true;
 	},
 
 	//the element's dimensions are now the specified width and height
