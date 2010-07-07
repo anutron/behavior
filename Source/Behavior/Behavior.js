@@ -29,7 +29,7 @@ provides: [Behavior]
 		},
 
 		initialize: function(element, options){
-			this.element = $(element);
+			this.element = document.id(element);
 			this.setOptions(options);
 			if (this.options.applyNow) this.apply();
 		},
@@ -61,13 +61,14 @@ provides: [Behavior]
 		},
 
 		//Applies all the behavior filters for an element.
-		//force is passed through to _applyBehavior (see it for docs)
-		apply: function(force){
-			this.element.getElements('[data-filters]').each(function(element){
+		//container - (element; optional) an optional element to apply the filters registered with this Behavior instance to.
+		//force - (boolean; optional) passed through to applyBehavior (see it for docs)
+		apply: function(container, force){
+			document.id(container || this.element).getElements('[data-filters]').each(function(element){
 				element.get('data', 'filters').split(',').each(function(name){
 					var behavior = this.getBehavior(name.trim());
 					if (!behavior) this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
-					else this._applyBehavior(element, behavior, force);
+					else this.applyBehavior(element, behavior, force);
 				}, this);
 			}, this);
 			return this;
@@ -75,9 +76,9 @@ provides: [Behavior]
 
 		//Applies a specific behavior to a specific element.
 		//element - the element to which to apply the behavior
-		//behavior - a specific behavior filter, typically one registered with this instance or registered globally
-		//force - apply the behavior to each element it matches, even if it was previously applied
-		_applyBehavior: function(element, behavior, force){
+		//behavior - (object) a specific behavior filter, typically one registered with this instance or registered globally.
+		//force - (boolean; optional) apply the behavior to each element it matches, even if it was previously applied. Defaults to *false*.
+		applyBehavior: function(element, behavior, force){
 			//get the filters already applied to this element
 			var applied = getApplied(element);
 			//if this filter is not yet applied to the element, or we are forcing the filter
@@ -96,8 +97,12 @@ provides: [Behavior]
 			return this._registered[name] || Behavior._registered[name];
 		},
 
-		//Garbage collects all applied filters for this element and its children.
-		cleanup:function(element, ignoreChildren){
+		//Garbage collects all applied filters for an element and its children.
+		//element - (*element*; optional) container to cleanup; if not specified, defaults to this.element
+		//ignoreChildren - (*boolean*; optional) if *true* only the element will be cleaned, otherwise the element and all the
+		//          children with filters applied will be cleaned. Defaults to *false*.
+		cleanup: function(element, ignoreChildren){
+			element = document.id(element || this.element);
 			var applied = getApplied(element);
 			for (behavior in applied) {
 				applied[behavior].cleanup(element);
@@ -123,19 +128,35 @@ provides: [Behavior]
 	};
 	//Overwrites a filter.
 	var overwrite = function(name, behavior){
-		return register(name, behavior, true);
+		return register.apply(this, [name, behavior, true]);
 	};
+	
+	var addFilter = function(name, fn, overwrite){
+		if (overwrite) overwrite.apply(this, [name, new Behavior.Filter(name, fn)]);
+		else register.apply(this, [name, new Behavior.Filter(name, fn)]);
+	};
+	
+	var addFilters = function(obj, overwrite) {
+		for (var name in obj) {
+			addFilter.apply(this, [name, new Behavior.Filter(name, fn), overwrite]);
+		}
+	};
+	
 	//Add methods to the Behavior namespace for global registration.
 	$extend(Behavior, {
 		_registered: {},
 		registerGlobal: register,
-		overwriteGlobal: overwrite
+		overwriteGlobal: overwrite,
+		addGlobalFilter: addFilter,
+		addGlobalFilters: addFilters
 	});
 	//Add methods to the Behavior class for instance registration.
 	Behavior.implement({
 		_registered: {},
 		register: register,
-		overwrite: overwrite
+		overwrite: overwrite,
+		addFilter: addFilter,
+		addFilters: addFilters
 	});
 
 	//This class is an actual filter that, given an element, alters it with specific behaviors.
@@ -181,21 +202,6 @@ provides: [Behavior]
 				this._marks.erase(element);
 			}
 			return this;
-		},
-
-		//Register this filter with a specific behavior.
-		//behavior - an instance of Behavior
-		//overwrite - (boolean) force this filter to register even if one with the same name exists
-		register: function(behavior, overwrite){
-			behavior.register(this.name, this, overwrite);
-			return this;
-		},
-
-		//Globally registers this filter on the Behavior namespace.
-		//overwrite - (boolean) force this filter to register even if one with the same name exists
-		global: function(overwrite){
-			Behavior.registerGlobal(this.name, this, overwrite);
-			return this;
 		}
 
 	});
@@ -208,3 +214,26 @@ provides: [Behavior]
 Selectors.Pseudo.hasBehaviors = function(){
 	return !!this.retrieve('_appliedBehaviors');
 };
+
+
+Element.implement({
+
+	addDataFilter: function(name){
+		this.set('data', 'filters', this.getDataFilters().include(name).join(','));
+	},
+
+	removeDataFilter: function(name){
+		this.set('data', 'filters', this.getDataFilters().erase(name).join(','));
+	},
+
+	getDataFilters: function(){
+		var filters = this.get('data', 'filters');
+		if (!filters) return [];
+		return filters.split(',').map(String.trim);
+	},
+
+	hasDataFilter: function(name){
+		return this.getDataFilters().contains(name);
+	}
+
+});
