@@ -14,13 +14,13 @@ provides: [Behavior]
 		Implements: [Options, Events],
 
 		options: {
-			//apply behaviors on startup?
+			//apply behaviors on instantiation?
 			applyNow: true,
 			//default error behavior when a filter cannot be applied
 			onError: function(){
 				if (window.console && console.warn) console.warn.apply(console, arguments);
 			}
-			//components that have a Behavior instance (like an ART.Window)
+			//Components that have a Behavior instance (like an ART.Window)
 			//call these events to tell filters that need to know that the state
 			//has changed:
 			// onResize: $empty, //the element's dimensions have changed
@@ -38,9 +38,9 @@ provides: [Behavior]
 			return this.element;
 		},
 
-		//these methods don't change the element's state but rather are used
+		//These methods don't change the element's state but rather are used
 		//to tell filters that need to adapt to the new element state that
-		//it has changed
+		//it has changed.
 	
 		//the element is now visible
 		show: function(){
@@ -60,7 +60,7 @@ provides: [Behavior]
 			this.fireEvent('resize', [w, h]);
 		},
 
-		//applies all the behavior filters for an element
+		//Applies all the behavior filters for an element.
 		//force is passed through to _applyBehavior (see it for docs)
 		apply: function(force){
 			this.element.getElements('[data-filters]').each(function(element){
@@ -73,7 +73,7 @@ provides: [Behavior]
 			return this;
 		},
 
-		//applies a specific behavior to a specific element
+		//Applies a specific behavior to a specific element.
 		//element - the element to which to apply the behavior
 		//behavior - a specific behavior filter, typically one registered with this instance or registered globally
 		//force - apply the behavior to each element it matches, even if it was previously applied
@@ -83,7 +83,7 @@ provides: [Behavior]
 			//if this filter is not yet applied to the element, or we are forcing the filter
 			if (!applied[behavior.name] || force) {
 				//if it was previously applied, garbage collect it
-				if (applied[behavior.name]) applied[behavior.name].sweep(element);
+				if (applied[behavior.name]) applied[behavior.name].cleanup(element);
 				//apply the filter
 				behavior.attach(element, this.element);
 				//and mark it as having been previously applied
@@ -96,24 +96,24 @@ provides: [Behavior]
 			return this._registered[name] || Behavior._registered[name];
 		},
 
-		//garbage collects all applied filters for this element and its children
-		sweep:function(element, ignoreChildren){
+		//Garbage collects all applied filters for this element and its children.
+		cleanup:function(element, ignoreChildren){
 			var applied = getApplied(element);
 			for (behavior in applied) {
-				applied[behavior].sweep(element);
+				applied[behavior].cleanup(element);
 				delete applied[behavior];
 			}
-			if (!ignoreChildren) element.getElements(':hasBehaviors').each(this.sweep, this);
+			if (!ignoreChildren) element.getElements(':hasBehaviors').each(this.cleanup, this);
 		}
 
 	});
 
-	//returns the applied behaviors for an element
+	//Returns the applied behaviors for an element.
 	var getApplied = function(el){
 		return el.retrieve('_appliedBehaviors', {});
 	};
 
-	//registers a behavior filter
+	//Registers a behavior filter.
 	//name - the name of the filter
 	//behavior - an instance of Behavior.Filter
 	//overwrite - (boolean) if true, will overwrite existing filter if one exists; defaults to false
@@ -121,30 +121,30 @@ provides: [Behavior]
 		if (!this._registered[name] || overwrite) this._registered[name] = behavior;
 		return this;
 	};
-	//overwrites a filter
+	//Overwrites a filter.
 	var overwrite = function(name, behavior){
 		return register(name, behavior, true);
 	};
-	//add methods to the Behavior namespace for global registration
+	//Add methods to the Behavior namespace for global registration.
 	$extend(Behavior, {
 		_registered: {},
 		registerGlobal: register,
 		overwriteGlobal: overwrite
 	});
-	//add methods to the Behavior class for instance registration
+	//Add methods to the Behavior class for instance registration.
 	Behavior.implement({
 		_registered: {},
 		register: register,
 		overwrite: overwrite
 	});
 
-	//this class is an actual filter that, given an element, alters it with specific behaviors
+	//This class is an actual filter that, given an element, alters it with specific behaviors.
 	Behavior.Filter = new Class({
 
-		//implements window tools for filters that integrate with ART.Window
+		//Filter implements window tools for filters that integrate with ART.Window.
 		Implements: [ART.WindowTools],
 
-		//pass in an object with the following properties:
+		//Pass in an object with the following properties:
 		//name - the name of this filter
 		//attacher - a function that applies the filter to the given element
 		initialize: function(name, attacher){
@@ -153,13 +153,18 @@ provides: [Behavior]
 			this._marks = new Table();
 		},
 
-		//stores a garbage collection pointer for a specific element
-		//example: if your filter enhances all the inputs in the container
-		//you might have a function that removes that enhancement for garbage collection
-		//you would mark each input matched with its own cleanup function
-		//NOTE: this MUST be an element returned by the select method above (it is passed
-		//      to the filter)
-		mark: function(element, fn){
+		//Stores a garbage collection pointer for a specific element.
+		//Example: if your filter enhances all the inputs in the container
+		//you might have a function that removes that enhancement for garbage collection.
+		//You would mark each input matched with its own cleanup function.
+		//NOTE: this MUST be the element passed to the filter - the element with this filters
+		//      name in its data-filter property. I.E.:
+		//<form data-filter="FormValidator">
+		//  <input type="text" name="email"/>
+		//</form>
+		//If this filter is FormValidator, you can mark the form for cleanup, but not, for example
+		//the input. Only elements that match this filter can be marked.
+		markForCleanup: function(element, fn){
 			var marks = this._marks.get(element);
 			if (!marks) marks = [];
 			marks.include(fn);
@@ -167,8 +172,9 @@ provides: [Behavior]
 			return this;
 		},
 
-		//garbage collect a specific element
-		sweep: function(element){
+		//Garbage collect a specific element.
+		//NOTE: this should be an element that has a data-filter property that matches this filter.
+		cleanup: function(element){
 			var marks = this._marks.get(element);
 			if (marks) {
 				marks.each(function(fn){ fn(); });
@@ -177,7 +183,7 @@ provides: [Behavior]
 			return this;
 		},
 
-		//register this filter with a specific behavior
+		//Register this filter with a specific behavior.
 		//behavior - an instance of Behavior
 		//overwrite - (boolean) force this filter to register even if one with the same name exists
 		register: function(behavior, overwrite){
@@ -185,18 +191,11 @@ provides: [Behavior]
 			return this;
 		},
 
-		//globally registers this filter on the Behavior namespace
+		//Globally registers this filter on the Behavior namespace.
 		//overwrite - (boolean) force this filter to register even if one with the same name exists
 		global: function(overwrite){
 			Behavior.registerGlobal(this.name, this, overwrite);
 			return this;
-		},
-
-		//for use in the filter's attach method
-		//returns the parent widget, if there is one
-		getWidget: function(){
-			var parent = this.getParent(':widget');
-			return parent ? parent.get('widget') : null;
 		}
 
 	});
@@ -209,6 +208,3 @@ provides: [Behavior]
 Selectors.Pseudo.hasBehaviors = function(){
 	return !!this.retrieve('_appliedBehaviors');
 };
-
-//allows for selectors like $$('[data-foo-bar]'); TODO: Note that it'll be in Moo 1.3; remove then.
-Selectors.RegExps.combined = (/\.([\w-]+)|\[([\w-]+)(?:([!*^$~|]?=)(["']?)([^\4]*?)\4)?\]|:([\w-]+)(?:\(["']?(.*?)?["']?\)|$)/g);
