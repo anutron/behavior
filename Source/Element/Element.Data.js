@@ -31,7 +31,7 @@ script: Element.Data.js
 			var value = this.get('data-' + name);
 			if (value) {
 				return value;
-			} else if (default_value){
+			} else if (default_value != null){
 				this.setData(name, default_value);
 				return default_value;
 			}
