@@ -14,8 +14,6 @@ provides: [Behavior]
 		Implements: [Options, Events],
 
 		options: {
-			//apply behaviors on instantiation?
-			applyNow: true,
 			//default error behavior when a filter cannot be applied
 			onError: function(){
 				if (window.console && console.warn) console.warn.apply(console, arguments);
@@ -33,30 +31,29 @@ provides: [Behavior]
 			this._eventMethods = {};
 			var self = this;
 			var passEvent = function(method) {
-				self.eventMethods[method] = function(name, fn) {
+				self._eventMethods[method] = function(name, fn) {
 					self[method](name, fn);
-					return self.eventMethods;
+					return self._eventMethods;
 				};
 			};
 			['addEvent', 'removeEvent', 'addEvents', 'removeEvents'].each(passEvent);
-			if (this.options.applyNow) this.apply();
 		},
 
 		//These methods don't change the element's state but rather are used
 		//to tell filters that need to adapt to the new element state that
 		//it has changed.
 		show: function(){
-			this.fireEvent('show');
+			return this.fireEvent('show');
 		},
 
 		//the element is hidden
 		hide: function(){
-			this.fireEvent('hide');
+			return this.fireEvent('hide');
 		},
 
 		//the element's dimensions are now the specified width and height
 		resize: function(w, h){
-			this.fireEvent('resize', [w, h]);
+			return this.fireEvent('resize', [w, h]);
 		},
 
 		//Applies all the behavior filters for an element.
@@ -90,6 +87,7 @@ provides: [Behavior]
 				//and mark it as having been previously applied
 				applied[behavior.name] = behavior;
 			}
+			return this;
 		},
 
 		//given a name, returns a registered behavior
@@ -109,6 +107,7 @@ provides: [Behavior]
 				delete applied[behavior];
 			}
 			if (!ignoreChildren) element.getElements(':hasBehaviors').each(this.cleanup, this);
+			return this;
 		}
 
 	});
@@ -123,12 +122,12 @@ provides: [Behavior]
 	//behavior - an instance of Behavior.Filter
 	//overwrite - (boolean) if true, will overwrite existing filter if one exists; defaults to false.
 	var addFilter = function(name, fn, overwrite){
-		if (!this._registered[name] || overwrite) this._registered[name] = behavior;
+		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
 	};
 	
 	var addFilters = function(obj, overwrite) {
 		for (var name in obj) {
-			addFilter.apply(this, [name, new Behavior.Filter(name, fn), overwrite]);
+			addFilter.apply(this, [name, obj[name], overwrite]);
 		}
 	};
 	
