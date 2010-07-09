@@ -39,4 +39,5 @@ sources:
   - "Source/Behavior/Behavior.js"
   - "Source/Behavior/Behavior.OverText.js"
   - "Source/Behavior/Behavior.ArtInput.js"
+  - "Source/Behavior/Behavior.ArtButton.js"
   - "Source/Element/Element.Data.js"
