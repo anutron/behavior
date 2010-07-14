@@ -1,0 +1,20 @@
+<div>
+	<p>
+		The input below should have some text on top of it that goes away when you click it and enter a value. The text should be red.
+	</p>
+	<input type="text" data-filters="OverText" title="this is the overtext text..."/>
+</div>
+<script src="/depender/build?require=Widgets/Behavior.OverText"></script>
+<script>
+(function(){
+	Behavior.addGlobalPlugin('OverText', 'OverTextRed', function(element, events){
+		var ot = element.retrieve('OverText');
+		ot.text.setStyle('color', 'red');
+	});
+	
+	var b = window.b = new Behavior().apply(document.body);
+	(function(){
+		b.show();
+	}).delay(10);
+})();
+</script>

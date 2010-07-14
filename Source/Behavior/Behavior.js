@@ -86,6 +86,13 @@ provides: [Behavior]
 				behavior.attach(element, this._eventMethods);
 				//and mark it as having been previously applied
 				applied[behavior.name] = behavior;
+				//apply all the plugins for this filter
+				var plugins = this.getPlugins(behavior.name);
+				if (plugins) {
+					for (name in plugins) {
+						this.applyBehavior(element, plugins[name], force);
+					}
+				}
 			}
 			return this;
 		},
@@ -93,6 +100,10 @@ provides: [Behavior]
 		//given a name, returns a registered behavior
 		getBehavior: function(name){
 			return this._registered[name] || Behavior._registered[name];
+		},
+
+		getPlugins: function(name){
+			return this._plugins[name] || Behavior._plugins[name];
 		},
 
 		//Garbage collects all applied filters for an element and its children.
@@ -119,7 +130,7 @@ provides: [Behavior]
 
 	//Registers a behavior filter.
 	//name - the name of the filter
-	//behavior - an instance of Behavior.Filter
+	//fn - a function that applies the filter to the given element
 	//overwrite - (boolean) if true, will overwrite existing filter if one exists; defaults to false.
 	var addFilter = function(name, fn, overwrite){
 		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
@@ -131,17 +142,38 @@ provides: [Behavior]
 		}
 	};
 	
+	//Registers a behavior plugin
+	//filterName - (*string*) the filter (or plugin) this is a plugin for
+	//name - (*string*) the name of this plugin
+	//attacher - a function that applies the filter to the given element
+	var addPlugin = function(filterName, name, attacher, overwrite) {
+		if (!this._plugins[filterName]) this._plugins[filterName] = {};
+		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, attacher);
+	};
+	
+	var addPlugins = function(obj, overwrite) {
+		for (name in obj) {
+			addPlugin.apply(this, [obj[name].fitlerName, obj[name].name, obj[name].attacher], overwrite);
+		}
+	};
+	
 	//Add methods to the Behavior namespace for global registration.
 	$extend(Behavior, {
 		_registered: {},
+		_plugins: {},
 		addGlobalFilter: addFilter,
-		addGlobalFilters: addFilters
+		addGlobalFilters: addFilters,
+		addGlobalPlugin: addPlugin,
+		addGlobalPlugins: addPlugins
 	});
 	//Add methods to the Behavior class for instance registration.
 	Behavior.implement({
 		_registered: {},
+		_plugins: {},
 		addFilter: addFilter,
-		addFilters: addFilters
+		addFilters: addFilters,
+		addPlugin: addPlugin,
+		addPlugins: addPlugins
 	});
 
 	//This class is an actual filter that, given an element, alters it with specific behaviors.
