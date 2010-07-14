@@ -29,14 +29,26 @@ provides: [Behavior]
 		initialize: function(options){
 			this.setOptions(options);
 			this._eventMethods = {};
+			this.passMethods(['addEvent', 'removeEvent', 'addEvents', 'removeEvents']);
+		},
+		
+		//pass a method pointer through to a filter
+		//by default the methods for add/remove events are passed to the filter
+		//pointed to this instance of behavior. you could use this to pass along
+		//other methods to your filters. For example, a method to close a popup
+		//for filters presented inside popups.
+		passMethod: function(method, to){
 			var self = this;
-			var passEvent = function(method) {
-				self._eventMethods[method] = function(name, fn) {
-					self[method](name, fn);
-					return self._eventMethods;
-				};
+			this._passedMethods[method] = function() {
+				to[method].apply(to, arguments);
+				return self._passedMethods;
 			};
-			['addEvent', 'removeEvent', 'addEvents', 'removeEvents'].each(passEvent);
+		},
+
+		passMethods: function(methods){
+			methods.each(function(method){
+				this.passMethod(method, this);
+			}, this);
 		},
 
 		//These methods don't change the element's state but rather are used
