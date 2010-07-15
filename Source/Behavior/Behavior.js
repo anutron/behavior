@@ -28,7 +28,6 @@ provides: [Behavior]
 
 		initialize: function(options){
 			this.setOptions(options);
-			this._eventMethods = {};
 			this.passMethods(['addEvent', 'removeEvent', 'addEvents', 'removeEvents']);
 		},
 		
@@ -39,6 +38,7 @@ provides: [Behavior]
 		//for filters presented inside popups.
 		passMethod: function(method, to){
 			var self = this;
+			this._passedMethods = {};
 			this._passedMethods[method] = function() {
 				to[method].apply(to, arguments);
 				return self._passedMethods;
@@ -95,7 +95,7 @@ provides: [Behavior]
 				//if it was previously applied, garbage collect it
 				if (applied[behavior.name]) applied[behavior.name].cleanup(element);
 				//apply the filter
-				behavior.attach(element, this._eventMethods);
+				behavior.attach(element, this._passedMethods);
 				//and mark it as having been previously applied
 				applied[behavior.name] = behavior;
 				//apply all the plugins for this filter
