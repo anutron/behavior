@@ -28,7 +28,12 @@ provides: [Behavior]
 
 		initialize: function(options){
 			this.setOptions(options);
-			this.passMethods(['addEvent', 'removeEvent', 'addEvents', 'removeEvents']);
+			this.passMethods({
+				addEvent: this.addEvent.bind(this), 
+				removeEvent: this.removeEvent.bind(this),
+				addEvents: this.addEvents.bind(this), 
+				removeEvents: this.removeEvents.bind(this)
+			});
 		},
 		
 		//pass a method pointer through to a filter
@@ -37,18 +42,18 @@ provides: [Behavior]
 		//other methods to your filters. For example, a method to close a popup
 		//for filters presented inside popups.
 		_passedMethods: {},
-		passMethod: function(method, to){
+		passMethod: function(method, fn){
 			var self = this;
-			this._passedMethods[method] = function() {
-				to[method].apply(to, arguments);
+			this._passedMethods[method] = function(){
+				fn.apply(this, arguments);
 				return self._passedMethods;
 			};
 		},
 
 		passMethods: function(methods){
-			methods.each(function(method){
-				this.passMethod(method, this);
-			}, this);
+			for (method in methods) {
+				this.passMethod(method, methods[method]);
+			}
 		},
 
 		//These methods don't change the element's state but rather are used
