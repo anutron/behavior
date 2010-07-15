@@ -36,9 +36,9 @@ provides: [Behavior]
 		//pointed to this instance of behavior. you could use this to pass along
 		//other methods to your filters. For example, a method to close a popup
 		//for filters presented inside popups.
+		_passedMethods: {},
 		passMethod: function(method, to){
 			var self = this;
-			this._passedMethods = {};
 			this._passedMethods[method] = function() {
 				to[method].apply(to, arguments);
 				return self._passedMethods;
