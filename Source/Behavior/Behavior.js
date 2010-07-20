@@ -33,7 +33,7 @@ provides: [Behavior]
 				removeEvent: this.removeEvent.bind(this),
 				addEvents: this.addEvents.bind(this), 
 				removeEvents: this.removeEvents.bind(this),
-                                getCurrentSize: function() { return this.currentSize; }.bind(this)
+				getCurrentSize: function() { return this.currentSize; }.bind(this)
 			});
 		},
 		
@@ -71,7 +71,7 @@ provides: [Behavior]
 
 		//the element's dimensions are now the specified width and height
 		resize: function(x, y){
-                        this.currentSize = {x: x, y: y};
+			this.currentSize = {x: x, y: y};
 			return this.fireEvent('resize', [x, y]);
 		},
 
