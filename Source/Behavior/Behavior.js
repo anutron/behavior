@@ -126,7 +126,7 @@ provides: [Behavior]
 		//Garbage collects all applied filters for an element and its children.
 		//element - (*element*) container to cleanup
 		//ignoreChildren - (*boolean*; optional) if *true* only the element will be cleaned, otherwise the element and all the
-		//          children with filters applied will be cleaned. Defaults to *false*.
+		//	  children with filters applied will be cleaned. Defaults to *false*.
 		cleanup: function(element, ignoreChildren){
 			element = document.id(element);
 			var applied = getApplied(element);
