@@ -33,7 +33,9 @@ provides: [Behavior]
 				removeEvent: this.removeEvent.bind(this),
 				addEvents: this.addEvents.bind(this), 
 				removeEvents: this.removeEvents.bind(this),
-				getCurrentSize: function() { return this.currentSize; }.bind(this),
+				//this doesn't really stand up; the container is variable - one behavior instance
+				//can handle numerous containers... TODO: revisit
+				getContainerSize: function() { return this.currentSize; },
 				error: function(){ this.fireEvent('error', arguments); }
 			});
 		},
