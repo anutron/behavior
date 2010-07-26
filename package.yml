@@ -44,4 +44,3 @@ sources:
   - "Source/Behavior/Behavior.FormValidator.js"
   - "Source/Behavior/Behavior.OverText.js"
   - "Source/Behavior/Behavior.SplitView.js"
-  - "Source/Behavior/Behavior.Tips.js"
