@@ -46,8 +46,7 @@ provides: [Behavior]
 		passMethod: function(method, fn){
 			var self = this;
 			this._passedMethods[method] = function(){
-				fn.apply(this, arguments);
-				return self._passedMethods;
+				return fn.apply(this, arguments);
 			};
 		},
 
