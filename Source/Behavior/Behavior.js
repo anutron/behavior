@@ -33,7 +33,8 @@ provides: [Behavior]
 				removeEvent: this.removeEvent.bind(this),
 				addEvents: this.addEvents.bind(this), 
 				removeEvents: this.removeEvents.bind(this),
-				getCurrentSize: function() { return this.currentSize; }.bind(this)
+				getCurrentSize: function() { return this.currentSize; }.bind(this),
+				error: function(){ this.fireEvent('error', arguments); }
 			});
 		},
 		
