@@ -257,11 +257,11 @@ Selectors.Pseudo.hasBehaviors = function(){
 Element.implement({
 
 	addDataFilter: function(name){
-		this.set('data', 'filters', this.getDataFilters().include(name).join(','));
+		return this.set('data', 'filters', this.getDataFilters().include(name).join(','));
 	},
 
 	removeDataFilter: function(name){
-		this.set('data', 'filters', this.getDataFilters().erase(name).join(','));
+		return this.set('data', 'filters', this.getDataFilters().erase(name).join(','));
 	},
 
 	getDataFilters: function(){
