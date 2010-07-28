@@ -35,8 +35,8 @@ provides: [Behavior]
 				removeEvents: this.removeEvents.bind(this),
 				//this doesn't really stand up; the container is variable - one behavior instance
 				//can handle numerous containers... TODO: revisit
-				getContainerSize: function() { return this.currentSize; },
-				error: function(){ this.fireEvent('error', arguments); }
+				getContainerSize: function() { return this.currentSize; }.bind(this),
+				error: function(){ this.fireEvent('error', arguments); }.bind(this)
 			});
 		},
 		
