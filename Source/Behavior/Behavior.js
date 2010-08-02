@@ -250,7 +250,7 @@ provides: [Behavior]
 
 //a selector to find all elements that have behaviors applied to them.
 Selectors.Pseudo.hasBehaviors = function(){
-	return !!this.retrieve('_appliedBehaviors');
+	return !!Element.retrieve(this,'_appliedBehaviors');
 };
 
 
