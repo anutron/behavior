@@ -17,13 +17,10 @@ provides: [Behavior]
 			//default error behavior when a filter cannot be applied
 			onError: function(){
 				if (window.console && console.warn){
-                                        if(console.warn.apply) {
-                                                 console.warn.apply(console, arguments);
-                                        } else {
-                                                console.warn($A(arguments).join(' '));
-                                        }
-                                }	
-                        }
+					if(console.warn.apply) console.warn.apply(console, arguments);
+					else console.warn($A(arguments).join(' '));
+				}
+			}
 			//Components that have a Behavior instance (like an ART.Window)
 			//call these events to tell filters that need to know that the state
 			//has changed:
@@ -256,7 +253,7 @@ provides: [Behavior]
 
 //a selector to find all elements that have behaviors applied to them.
 Selectors.Pseudo.hasBehaviors = function(){
-	return !!Element.retrieve(this,'_appliedBehaviors');
+	return !!Element.retrieve(this, '_appliedBehaviors');
 };
 
 
