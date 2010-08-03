@@ -16,8 +16,14 @@ provides: [Behavior]
 		options: {
 			//default error behavior when a filter cannot be applied
 			onError: function(){
-				if (window.console && console.warn) console.warn.apply(console, arguments);
-			}
+				if (window.console && console.warn){
+                                        if(console.warn.apply) {
+                                                 console.warn.apply(console, arguments);
+                                        } else {
+                                                console.warn($A(arguments).join(' '));
+                                        }
+                                }	
+                        }
 			//Components that have a Behavior instance (like an ART.Window)
 			//call these events to tell filters that need to know that the state
 			//has changed:
