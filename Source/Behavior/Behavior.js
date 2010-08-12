@@ -14,6 +14,10 @@ provides: [Behavior]
 		Implements: [Options, Events],
 
 		options: {
+			//by default, errors thrown by filters are caught; the onError event is fired.
+			//set this to *true* to NOT catch these errors to allow them to be handled by the browser.
+			// breakOnErrors: false,
+
 			//default error behavior when a filter cannot be applied
 			onError: function(){
 				if (window.console && console.warn){
@@ -99,23 +103,34 @@ provides: [Behavior]
 		//behavior - (object) a specific behavior filter, typically one registered with this instance or registered globally.
 		//force - (boolean; optional) apply the behavior to each element it matches, even if it was previously applied. Defaults to *false*.
 		applyBehavior: function(element, behavior, force){
-			element = document.id(element);
-			//get the filters already applied to this element
-			var applied = getApplied(element);
-			//if this filter is not yet applied to the element, or we are forcing the filter
-			if (!applied[behavior.name] || force) {
-				//if it was previously applied, garbage collect it
-				if (applied[behavior.name]) applied[behavior.name].cleanup(element);
-				//apply the filter
-				behavior.attach(element, this._passedMethods);
-				//and mark it as having been previously applied
-				applied[behavior.name] = behavior;
-				//apply all the plugins for this filter
-				var plugins = this.getPlugins(behavior.name);
-				if (plugins) {
-					for (name in plugins) {
-						this.applyBehavior(element, plugins[name], force);
+			var run = function(){
+				element = document.id(element);
+				//get the filters already applied to this element
+				var applied = getApplied(element);
+				//if this filter is not yet applied to the element, or we are forcing the filter
+				if (!applied[behavior.name] || force) {
+					//if it was previously applied, garbage collect it
+					if (applied[behavior.name]) applied[behavior.name].cleanup(element);
+					//apply the filter
+					behavior.attach(element, this._passedMethods);
+					//and mark it as having been previously applied
+					applied[behavior.name] = behavior;
+					//apply all the plugins for this filter
+					var plugins = this.getPlugins(behavior.name);
+					if (plugins) {
+						for (name in plugins) {
+							this.applyBehavior(element, plugins[name], force);
+						}
 					}
+				}
+			}.bind(this);
+			if (this.options.breakOnErrors) {
+				run();
+			} else {
+				try {
+					run();
+				} catch (e) {
+					this.fireEvent('error', ['Could not apply the behavior ' + behavior.name, e]);
 				}
 			}
 			return this;
