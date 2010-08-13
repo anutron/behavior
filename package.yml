@@ -38,6 +38,7 @@ sources:
   - "Source/Widgets/ART.Popup.js"
   - "Source/Widgets/ART.Window.js"
   - "Source/Behavior/Behavior.js"
+  - "Source/Behavior/Behavior.Accordion.js"
   - "Source/Behavior/Behavior.ArtButton.js"
   - "Source/Behavior/Behavior.ArtInput.js"
   - "Source/Behavior/Behavior.FormRequest.js"
