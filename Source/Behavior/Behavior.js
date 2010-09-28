@@ -89,7 +89,7 @@ provides: [DashSelectors, Behavior]
 		//force - (boolean; optional) passed through to applyBehavior (see it for docs)
 		apply: function(container, force){
 			document.id(container).getElements('[data-filters]').each(function(element){
-				element.get('data', 'filters').split(',').each(function(name){
+				element.getData('filters').split(',').each(function(name){
 					var behavior = this.getBehavior(name.trim());
 					if (!behavior) this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
 					else this.applyBehavior(element, behavior, force);
@@ -283,7 +283,7 @@ Element.implement({
 	},
 
 	getDataFilters: function(){
-		var filters = this.get('data', 'filters');
+		var filters = this.getData('filters');
 		if (!filters) return [];
 		return filters.split(',').map(String.trim);
 	},

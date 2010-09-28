@@ -67,6 +67,7 @@ script: Element.Data.js
 
 	});
 
+	//these are all essentially deprecated
 	Element.Properties.data = {
 
 		set: function(name, value, encode){
@@ -74,7 +75,11 @@ script: Element.Data.js
 			else return this.setData(name, value);
 		},
 
-		get: function(name, decode, default_value, strict){
+		get: function(name){
+			//deprecated arguments
+			var decode = arguments[1],
+			    default_value = arguments[2],
+			    strict = arguments[3];
 			if (decode) return this.getJSONData(name, default_value, strict);
 			else return this.getData(name, default_value);
 		},
