@@ -1,3 +1,3 @@
-# MooTools A.R.T.
+# Behavior
 
-Vector-based drawing for widgets, icons, and all that stuff. Pre-alpha.
+Auto-instantiates widgets/classes based on parsed, declarative HTML.

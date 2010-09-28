@@ -1,14 +1,14 @@
 name: "Behavior"
 
-web: "[mootools.net](http://mootools.net)"
+web: "[clientcide.com](http://clientcide.com)"
 
-description: "Auto-instantiates widgets/classes based on parsed, declarative HTML."
+description: "Behavior filters for MooTools More"
 
-license: "[MIT License](http://mootools.net/license.txt)"
+license: "MIT License"
 
-copyright: "&copy; [MooTools](http://mootools.net)"
+copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 
-authors: "[The MooTools development team](http://mootools.net/developers)"
+authors: "[Aaron Newton](http://clientcide.com)"
 
 sources:
   - "Source/Element/Element.Data.js"
