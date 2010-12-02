@@ -58,12 +58,14 @@ provides: [DashSelectors, Behavior]
 			this._passedMethods[method] = function(){
 				return fn.apply(this, arguments);
 			};
+			return this;
 		},
 
 		passMethods: function(methods){
 			for (method in methods) {
 				this.passMethod(method, methods[method]);
 			}
+			return this;
 		},
 
 		//These methods don't change the element's state but rather are used
@@ -86,13 +88,13 @@ provides: [DashSelectors, Behavior]
 
 		//Applies all the behavior filters for an element.
 		//container - (element) an element to apply the filters registered with this Behavior instance to.
-		//force - (boolean; optional) passed through to applyBehavior (see it for docs)
+		//force - (boolean; optional) passed through to applyFilter (see it for docs)
 		apply: function(container, force){
 			document.id(container).getElements('[data-filters]').each(function(element){
 				element.getData('filters').split(',').each(function(name){
-					var behavior = this.getBehavior(name.trim());
+					var behavior = this.getFilter(name.trim());
 					if (!behavior) this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
-					else this.applyBehavior(element, behavior, force);
+					else this.applyFilter(element, behavior, force);
 				}, this);
 			}, this);
 			return this;
@@ -100,26 +102,26 @@ provides: [DashSelectors, Behavior]
 
 		//Applies a specific behavior to a specific element.
 		//element - the element to which to apply the behavior
-		//behavior - (object) a specific behavior filter, typically one registered with this instance or registered globally.
+		//filter - (object) a specific behavior filter, typically one registered with this instance or registered globally.
 		//force - (boolean; optional) apply the behavior to each element it matches, even if it was previously applied. Defaults to *false*.
-		applyBehavior: function(element, behavior, force){
+		applyFilter: function(element, filter, force){
 			var run = function(){
 				element = document.id(element);
 				//get the filters already applied to this element
 				var applied = getApplied(element);
 				//if this filter is not yet applied to the element, or we are forcing the filter
-				if (!applied[behavior.name] || force) {
+				if (!applied[filter.name] || force) {
 					//if it was previously applied, garbage collect it
-					if (applied[behavior.name]) applied[behavior.name].cleanup(element);
+					if (applied[filter.name]) applied[filter.name].cleanup(element);
 					//apply the filter
-					behavior.attach(element, this._passedMethods);
+					filter.attach(element, this._passedMethods);
 					//and mark it as having been previously applied
-					applied[behavior.name] = behavior;
+					applied[filter.name] = filter;
 					//apply all the plugins for this filter
-					var plugins = this.getPlugins(behavior.name);
+					var plugins = this.getPlugins(filter.name);
 					if (plugins) {
 						for (name in plugins) {
-							this.applyBehavior(element, plugins[name], force);
+							this.applyFilter(element, plugins[name], force);
 						}
 					}
 				}
@@ -137,7 +139,7 @@ provides: [DashSelectors, Behavior]
 		},
 
 		//given a name, returns a registered behavior
-		getBehavior: function(name){
+		getFilter: function(name){
 			return this._registered[name] || Behavior._registered[name];
 		},
 

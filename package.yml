@@ -11,5 +11,5 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 authors: "[Aaron Newton](http://clientcide.com)"
 
 sources:
-  - "Source/Element/Element.Data.js"
-  - "Source/Behavior/Behavior.js"
+  - "Source/Element.Data.js"
+  - "Source/Behavior.js"
