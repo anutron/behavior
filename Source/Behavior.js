@@ -132,7 +132,7 @@ provides: [DashSelectors, Behavior]
 				try {
 					run();
 				} catch (e) {
-					this.fireEvent('error', ['Could not apply the behavior ' + behavior.name, e]);
+					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
 				}
 			}
 			return this;
