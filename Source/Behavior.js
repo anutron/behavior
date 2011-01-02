@@ -2,7 +2,7 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element, Core/Selectors, Widgets/ART.Window, /Element.Data, More/Table]
+requires: [Core/Class.Extras, Core/Element, Core/Selectors, /Element.Data, More/Table]
 provides: [DashSelectors, Behavior]
 ...
 */
@@ -219,9 +219,6 @@ provides: [DashSelectors, Behavior]
 
 	//This class is an actual filter that, given an element, alters it with specific behaviors.
 	Behavior.Filter = new Class({
-
-		//Filter implements window tools for filters that integrate with ART.Window.
-		Implements: [ART.WindowTools],
 
 		//Pass in an object with the following properties:
 		//name - the name of this filter
