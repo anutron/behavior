@@ -22,7 +22,7 @@ provides: [DashSelectors, Behavior]
 			onError: function(){
 				if (window.console && console.warn){
 					if(console.warn.apply) console.warn.apply(console, arguments);
-					else console.warn($A(arguments).join(' '));
+					else console.warn(Array.from(arguments).join(' '));
 				}
 			}
 			//Components that have a Behavior instance (like an ART.Window)
@@ -201,7 +201,7 @@ provides: [DashSelectors, Behavior]
 	};
 	
 	//Add methods to the Behavior namespace for global registration.
-	$extend(Behavior, {
+	Object.append(Behavior, {
 		_registered: {},
 		_plugins: {},
 		addGlobalFilter: addFilter,
@@ -268,9 +268,9 @@ provides: [DashSelectors, Behavior]
 
 
 //a selector to find all elements that have behaviors applied to them.
-Selectors.Pseudo.hasBehaviors = function(){
+Slick.definePseudo('hasBehaviors', function(){
 	return !!Element.retrieve(this, '_appliedBehaviors');
-};
+});
 
 
 Element.implement({
