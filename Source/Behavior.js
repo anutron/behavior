@@ -64,7 +64,7 @@ provides: [DashSelectors, Behavior]
 		},
 
 		passMethods: function(methods){
-			for (method in methods) {
+			for (var method in methods) {
 				this.passMethod(method, methods[method]);
 			}
 			return this;
@@ -122,7 +122,7 @@ provides: [DashSelectors, Behavior]
 					//apply all the plugins for this filter
 					var plugins = this.getPlugins(filter.name);
 					if (plugins) {
-						for (name in plugins) {
+						for (var name in plugins) {
 							this.applyFilter(element, plugins[name], force);
 						}
 					}
@@ -156,7 +156,7 @@ provides: [DashSelectors, Behavior]
 		cleanup: function(element, ignoreChildren){
 			element = document.id(element);
 			var applied = getApplied(element);
-			for (behavior in applied) {
+			for (var behavior in applied) {
 				applied[behavior].cleanup(element);
 				delete applied[behavior];
 			}
@@ -195,7 +195,7 @@ provides: [DashSelectors, Behavior]
 	};
 	
 	var addPlugins = function(obj, overwrite) {
-		for (name in obj) {
+		for (var name in obj) {
 			addPlugin.apply(this, [obj[name].fitlerName, obj[name].name, obj[name].attacher], overwrite);
 		}
 	};
