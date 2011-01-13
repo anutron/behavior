@@ -43,6 +43,7 @@ provides: [DashSelectors, Behavior]
 				fireEvent: this.fireEvent.bind(this),
 				applyFilters: this.apply.bind(this),
 				applyFilter: this.applyFilter.bind(this),
+				getContentElement: $lambda(this.options.container || document.body),
 				//this doesn't really stand up; the container is variable - one behavior instance
 				//can handle numerous containers... TODO: revisit
 				getContainerSize: function() { return this.currentSize; }.bind(this),
