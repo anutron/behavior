@@ -40,8 +40,9 @@ provides: [DashSelectors, Behavior]
 				removeEvent: this.removeEvent.bind(this),
 				addEvents: this.addEvents.bind(this), 
 				removeEvents: this.removeEvents.bind(this),
-				applyBehaviors: this.apply.bind(this),
-				applyBehavior: this.applyBehavior.bind(this),
+				fireEvent: this.fireEvent.bind(this),
+				applyFilters: this.apply.bind(this),
+				applyFilter: this.applyFilter.bind(this),
 				//this doesn't really stand up; the container is variable - one behavior instance
 				//can handle numerous containers... TODO: revisit
 				getContainerSize: function() { return this.currentSize; }.bind(this),
@@ -263,7 +264,6 @@ provides: [DashSelectors, Behavior]
 
 	});
 
-
 })();
 
 
@@ -276,11 +276,11 @@ Slick.definePseudo('hasBehaviors', function(){
 Element.implement({
 
 	addDataFilter: function(name){
-		return this.set('data', 'filters', this.getDataFilters().include(name).join(','));
+		return this.setData('filters', this.getDataFilters().include(name).join(','));
 	},
 
 	removeDataFilter: function(name){
-		return this.set('data', 'filters', this.getDataFilters().erase(name).join(','));
+		return this.setData('filters', this.getDataFilters().erase(name).join(','));
 	},
 
 	getDataFilters: function(){
