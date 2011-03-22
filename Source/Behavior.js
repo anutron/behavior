@@ -9,6 +9,8 @@ provides: [Behavior]
 
 (function(){
 
+	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
+
 	this.Behavior = new Class({
 
 		Implements: [Options, Events],
@@ -96,7 +98,7 @@ provides: [Behavior]
 		apply: function(container, force){
 			document.id(container).getElements('[data-filters]').each(function(element){
 				var plugins = [];
-				element.getData('filters').split(',').each(function(name){
+				element.getDataFilters().each(function(name){
 					var behavior = this.getFilter(name.trim());
 					if (!behavior) {
 						this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
@@ -288,17 +290,17 @@ Slick.definePseudo('hasBehaviors', function(){
 Element.implement({
 
 	addDataFilter: function(name){
-		return this.setData('filters', this.getDataFilters().include(name).join(','));
+		return this.setData('filters', this.getDataFilters().include(name).join(' '));
 	},
 
 	removeDataFilter: function(name){
-		return this.setData('filters', this.getDataFilters().erase(name).join(','));
+		return this.setData('filters', this.getDataFilters().erase(name).join(' '));
 	},
 
 	getDataFilters: function(){
 		var filters = this.getData('filters');
 		if (!filters) return [];
-		return filters.split(',').map(String.trim);
+		return filters.trim().split(spaceOrCommaRegex).map(String.trim);
 	},
 
 	hasDataFilter: function(name){
