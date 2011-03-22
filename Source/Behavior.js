@@ -95,11 +95,16 @@ provides: [Behavior]
 		//force - (boolean; optional) passed through to applyFilter (see it for docs)
 		apply: function(container, force){
 			document.id(container).getElements('[data-filters]').each(function(element){
+				var plugins = [];
 				element.getData('filters').split(',').each(function(name){
 					var behavior = this.getFilter(name.trim());
-					if (!behavior) this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
-					else this.applyFilter(element, behavior, force);
+					if (!behavior) {
+						this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
+					} else {
+						plugins.extend(this.applyFilter(element, behavior, force, true));
+					}
 				}, this);
+				plugins.each(function(plugin){ plugin(); });
 			}, this);
 			return this;
 		},
@@ -108,7 +113,9 @@ provides: [Behavior]
 		//element - the element to which to apply the behavior
 		//filter - (object) a specific behavior filter, typically one registered with this instance or registered globally.
 		//force - (boolean; optional) apply the behavior to each element it matches, even if it was previously applied. Defaults to *false*.
-		applyFilter: function(element, filter, force){
+		//returnPlugins - (boolean; optional) if true, plugins are not rendered but instead returned as an array of functions
+		applyFilter: function(element, filter, force, returnPlugins){
+			var pluginsToReturn = [];
 			var run = function(){
 				element = document.id(element);
 				//get the filters already applied to this element
@@ -125,7 +132,11 @@ provides: [Behavior]
 					var plugins = this.getPlugins(filter.name);
 					if (plugins) {
 						for (var name in plugins) {
-							this.applyFilter(element, plugins[name], force);
+							if (returnPlugins) {
+								pluginsToReturn.push(this.applyFilter.pass([element, plugins[name], force], this));
+							} else {
+								this.applyFilter(element, plugins[name], force);
+							}
 						}
 					}
 				}
@@ -139,7 +150,7 @@ provides: [Behavior]
 					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
 				}
 			}
-			return this;
+			return returnPlugins ? pluginsToReturn : this;
 		},
 
 		//given a name, returns a registered behavior
