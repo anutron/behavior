@@ -279,36 +279,37 @@ provides: [DashSelectors, Behavior]
 	});
 
 
+	//a selector to find all elements that have behaviors applied to them.
+	Selectors.Pseudo.hasBehaviors = function(){
+		return !!Element.retrieve(this, '_appliedBehaviors');
+	};
+
+
+	Element.implement({
+
+		addDataFilter: function(name){
+			return this.set('data', 'filters', this.getDataFilters().include(name).join(' '));
+		},
+
+		removeDataFilter: function(name){
+			return this.set('data', 'filters', this.getDataFilters().erase(name).join(' '));
+		},
+
+		getDataFilters: function(){
+			var filters = this.getData('filters');
+			if (!filters) return [];
+			return filters.trim().split(spaceOrCommaRegex);
+		},
+
+		hasDataFilter: function(name){
+			return this.getDataFilters().contains(name);
+		}
+
+	});
+
+
 })();
 
-
-//a selector to find all elements that have behaviors applied to them.
-Selectors.Pseudo.hasBehaviors = function(){
-	return !!Element.retrieve(this, '_appliedBehaviors');
-};
-
-
-Element.implement({
-
-	addDataFilter: function(name){
-		return this.set('data', 'filters', this.getDataFilters().include(name).join(' '));
-	},
-
-	removeDataFilter: function(name){
-		return this.set('data', 'filters', this.getDataFilters().erase(name).join(' '));
-	},
-
-	getDataFilters: function(){
-		var filters = this.getData('filters');
-		if (!filters) return [];
-		return filters.trim().split(spaceOrCommaRegex).map(String.trim);
-	},
-
-	hasDataFilter: function(name){
-		return this.getDataFilters().contains(name);
-	}
-
-});
 
 //allows for selectors like $$('[data-foo-bar]'); TODO: Note that it'll be in Moo 1.3; remove then.
 if (window.Selectors && Selectors.RegExps) {
