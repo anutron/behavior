@@ -111,12 +111,15 @@ provides: [Behavior]
 			return this;
 		},
 
+
 		//Applies a specific behavior to a specific element.
 		//element - the element to which to apply the behavior
 		//filter - (object) a specific behavior filter, typically one registered with this instance or registered globally.
 		//force - (boolean; optional) apply the behavior to each element it matches, even if it was previously applied. Defaults to *false*.
-		//returnPlugins - (boolean; optional) if true, plugins are not rendered but instead returned as an array of functions
-		applyFilter: function(element, filter, force, returnPlugins){
+		//_returnPlugins - (boolean; optional; internal) if true, plugins are not rendered but instead returned as an array of functions
+		//_pluginTargetResult - (obj; optional internal) if this filter is a plugin for another, this is whatever that target filter returned
+		//                      (an instance of a class for example)
+		applyFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
 			var pluginsToReturn = [];
 			var run = function(){
 				element = document.id(element);
@@ -127,17 +130,18 @@ provides: [Behavior]
 					//if it was previously applied, garbage collect it
 					if (applied[filter.name]) applied[filter.name].cleanup(element);
 					//apply the filter
-					filter.attach(element, this._passedMethods);
+					var result = filter.attach(element, this._passedMethods, _pluginTargetResult);
+					element.store('Behavior:' + filter.name, result);
 					//and mark it as having been previously applied
 					applied[filter.name] = filter;
 					//apply all the plugins for this filter
 					var plugins = this.getPlugins(filter.name);
 					if (plugins) {
 						for (var name in plugins) {
-							if (returnPlugins) {
-								pluginsToReturn.push(this.applyFilter.pass([element, plugins[name], force], this));
+							if (_returnPlugins) {
+								pluginsToReturn.push(this.applyFilter.pass([element, plugins[name], force, null, result], this));
 							} else {
-								this.applyFilter(element, plugins[name], force);
+								this.applyFilter(element, plugins[name], force, null, result);
 							}
 						}
 					}
@@ -152,7 +156,7 @@ provides: [Behavior]
 					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
 				}
 			}
-			return returnPlugins ? pluginsToReturn : this;
+			return _returnPlugins ? pluginsToReturn : this;
 		},
 
 		//given a name, returns a registered behavior
@@ -171,9 +175,10 @@ provides: [Behavior]
 		cleanup: function(element, ignoreChildren){
 			element = document.id(element);
 			var applied = getApplied(element);
-			for (var behavior in applied) {
-				applied[behavior].cleanup(element);
-				delete applied[behavior];
+			for (var filter in applied) {
+				applied[filter].cleanup(element);
+				element.eliminate('Behavior:' + filter);
+				delete applied[filter];
 			}
 			if (!ignoreChildren) element.getElements(':hasBehaviors').each(this.cleanup, this);
 			return this;
@@ -303,6 +308,10 @@ provides: [Behavior]
 
 		hasDataFilter: function(name){
 			return this.getDataFilters().contains(name);
+		},
+
+		getFilterResult: function(name){
+			return this.retrieve('Behavior:' + name);
 		}
 
 	});
