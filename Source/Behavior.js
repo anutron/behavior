@@ -129,8 +129,10 @@ provides: [DashSelectors, Behavior]
 				if (!applied[filter.name] || force) {
 					//if it was previously applied, garbage collect it
 					if (applied[filter.name]) applied[filter.name].cleanup(element);
+					this._passedMethods.markForCleanup = filter.markForCleanup.bind(filter);
 					//apply the filter
 					var result = filter.attach(element, this._passedMethods, _pluginTargetResult);
+					delete this._passedMethods.markForCleanup;
 					element.store('Behavior:' + filter.name, result);
 					//and mark it as having been previously applied
 					applied[filter.name] = filter;
