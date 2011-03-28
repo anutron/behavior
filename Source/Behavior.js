@@ -182,7 +182,7 @@ provides: [DashSelectors, Behavior]
 				element.eliminate('Behavior:' + filter);
 				delete applied[filter];
 			}
-			if (!ignoreChildren) element.getElements(':hasBehaviors').each(this.cleanup, this);
+			if (!ignoreChildren) element.getElements('[data-filters]').each(this.cleanup, this);
 			return this;
 		}
 
@@ -284,12 +284,6 @@ provides: [DashSelectors, Behavior]
 		}
 
 	});
-
-
-	//a selector to find all elements that have behaviors applied to them.
-	Selectors.Pseudo.hasBehaviors = function(){
-		return !!Element.retrieve(this, '_appliedBehaviors');
-	};
 
 
 	Element.implement({
