@@ -1,8 +1,3 @@
-var container = new Element('div');
-var target = new Element('div', {
-	'data-filters': 'Test1 Test2'
-}).inject(container);
-
 var ClassAdder = new Class({
 	initialize: function(element, className){
 		this.element = element.addClass(className);
@@ -30,4 +25,62 @@ var makeAdder = function(className){
 		});
 		return adder;
 	};
+};
+
+MooBench.addBehaviorTest = function(name, content) {
+	var tester,
+	    container = new Element('div');
+	if ($type(content) == 'string') container.set('html', content);
+	else container.adopt(content);
+
+	var clean = function(){
+		if (tester) {
+			tester.destroy();
+			tester = null;
+		}
+	};
+
+	MooBench.add(name + ': instantiation', function(){ behaviorInstance.apply(document.body); }, {
+		// compiled/called before the test loop
+		'setup': function(){
+			tester = container.cloneNode(true);
+			document.body.appendChild(tester);
+		},
+
+		// compiled/called after the test loop
+		'teardown': function(){
+			behaviorInstance.cleanup(document.body);
+			clean();
+		}
+	});
+
+	MooBench.add(name + ': cleanup', function(){ behaviorInstance.cleanup(document.body); }, {
+		// compiled/called before the test loop
+		'setup': function(){
+			tester = container.cloneNode(true);
+			document.body.appendChild(tester);
+			behaviorInstance.apply(document.body);
+		},
+
+		// compiled/called after the test loop
+		'teardown': clean
+
+	});
+
+};
+
+MooBench.addMultipleBehaviorTest = function(name, content, times){
+	var tenX;
+	if ($type(content) == 'string'){
+		tenX = content;
+		(9).times(function(){
+			tenX += content;
+		});
+	} else {
+		tenX = new Element('div');
+		(10).times(function(){
+			tenX.adopt(content.clone(true, true));
+		});
+	}
+	MooBench.addBehaviorTest(name, tenX);
 };
