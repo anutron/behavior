@@ -35,7 +35,7 @@ Configuration.sets = {
 
 	'Behavior': {
 		path: 'Behavior/',
-		files: ['Behavior.Specs']
+		files: ['Behavior.SpecsHelpers', 'Behavior.Specs']
 	}
 
 };
