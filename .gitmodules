@@ -1,6 +1,6 @@
 [submodule "Specs/Runner"]
 	path = Specs/Runner
-	url = git://github.com/mootools/mootools-runner.git
+	url = git://github.com/anutron/mootools-runner.git
 [submodule "Specs/mootools-core"]
 	path = Specs/mootools-core
 	url = git://github.com/mootools/mootools-core.git
