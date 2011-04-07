@@ -35,7 +35,12 @@ Configuration.sets = {
 
 	'Behavior': {
 		path: 'Behavior/',
-		files: ['Behavior.SpecsHelpers', 'Behavior.Specs']
+		files: [
+			'Behavior.SpecsHelpers',
+			'Behavior.Specs',
+			'Element.Data.Specs',
+			'Behavior.API.Specs'
+		]
 	}
 
 };
@@ -53,21 +58,24 @@ Configuration.source = {
 		path: '',
 		files: [
 			'mootools-core/Source/Core/Core',
-			'mootools-core/Source/Native/Array',
-			'mootools-core/Source/Native/String',
-			'mootools-core/Source/Native/Function',
-			'mootools-core/Source/Native/Number',
-			'mootools-core/Source/Native/Hash',
+			'mootools-core/Source/Types/Array',
+			'mootools-core/Source/Types/String',
+			'mootools-core/Source/Types/Function',
+			'mootools-core/Source/Types/Number',
+			'mootools-core/Source/Types/Object',
 			'mootools-core/Source/Class/Class',
 			'mootools-core/Source/Class/Class.Extras',
-			'mootools-core/Source/Core/Browser',
+			'mootools-core/Source/Browser/Browser',
+			'mootools-core/Source/Slick/Slick.Parser',
+			'mootools-core/Source/Slick/Slick.Finder',
 			'mootools-core/Source/Element/Element',
 			'mootools-core/Source/Element/Element.Dimensions',
-			'mootools-core/Source/Utilities/Selectors',
+			'mootools-core/Source/Utilities/JSON',
 			'mootools-more/Source/Core/More',
 			'mootools-more/Source/Utilities/Table',
 			'../Source/Behavior',
-			'../Source/Element.Data'
+			'../Source/Element.Data',
+			'../Source/Behavior.API'
 		]
 	}
 
