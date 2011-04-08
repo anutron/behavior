@@ -45,10 +45,8 @@ provides: [DashSelectors, Behavior]
 				fireEvent: this.fireEvent.bind(this),
 				applyFilters: this.apply.bind(this),
 				applyFilter: this.applyFilter.bind(this),
-				getContentElement: $lambda(this.options.container || document.body),
-				//this doesn't really stand up; the container is variable - one behavior instance
-				//can handle numerous containers... TODO: revisit
-				getContainerSize: function() { return this.currentSize; }.bind(this),
+				getContentElement: this.getContentElement.bind(this),
+				getContainerSize: function() { return this.getContentElement().getSize(); }.bind(this),
 				error: function(){ this.fireEvent('error', arguments); }.bind(this)
 			});
 		},
@@ -58,6 +56,10 @@ provides: [DashSelectors, Behavior]
 		//pointed to this instance of behavior. you could use this to pass along
 		//other methods to your filters. For example, a method to close a popup
 		//for filters presented inside popups.
+		getContentElement: function(){
+			return this.options.container || document.body;
+		},
+
 		_passedMethods: {},
 		passMethod: function(method, fn){
 			var self = this;
@@ -74,23 +76,6 @@ provides: [DashSelectors, Behavior]
 			return this;
 		},
 
-		//These methods don't change the element's state but rather are used
-		//to tell filters that need to adapt to the new element state that
-		//it has changed.
-		show: function(){
-			return this.fireEvent('show');
-		},
-
-		//the element is hidden
-		hide: function(){
-			return this.fireEvent('hide');
-		},
-
-		//the element's dimensions are now the specified width and height
-		resize: function(x, y){
-			this.currentSize = {x: x, y: y};
-			return this.fireEvent('resize', [x, y]);
-		},
 
 		//Applies all the behavior filters for an element.
 		//container - (element) an element to apply the filters registered with this Behavior instance to.

@@ -6,10 +6,10 @@ requires: [/Behavior, /Element.Data]
 provides: [Behavior.API]
 ...
 */
+
+
 (function(){
-
 	var API = {
-
 		element: null,
 		prefix: '',
 
