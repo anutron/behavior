@@ -81,7 +81,44 @@
 			target.removeDataFilter('SimpleClass2');
 			expect(target.getFilterResult('SimpleClass2')).toBeFalsy();
 		});
-		
+
+
+		it('should create a filter that fails', function(){
+			Behavior.addGlobalFilter('Failure', {
+				setup: function(element, api){
+					api.fail('this thing is totally broken');
+				}
+			});
+			target.addDataFilter('Failure');
+			behaviorInstance.options.breakOnErrors = true;
+			try {
+				behaviorInstance.apply(container);
+				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
+			} catch(e) {
+				expect(e).toBe("this thing is totally broken");
+			}
+			behaviorInstance.options.breakOnErrors = false;
+			target.removeDataFilter('Failure');
+		});
+
+		it('should create a filter that warns', function(){
+			var warning,
+			    warner = function(msg){
+						warning = msg;
+					};
+			behaviorInstance.addEvent('warn', warner);
+			Behavior.addGlobalFilter('Warn', {
+				setup: function(element, api){
+					api.warn("you've been warned");
+				}
+			});
+			target.addDataFilter('Warn');
+			behaviorInstance.apply(container);
+			behaviorInstance.removeEvent('warn', warner);
+			expect(warning).toBe("you've been warned");
+			target.removeDataFilter('Warn');
+		});
+
 		it('should not invoke a filter twice unless forced', function(){
 			behaviorInstance.applyFilter(target, behaviorInstance.getFilter('Test1'));
 			expect(target.getFilterResult('Test1').getCount()).toBe(1);

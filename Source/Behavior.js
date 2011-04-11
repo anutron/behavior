@@ -9,6 +9,15 @@ provides: [Behavior]
 
 (function(){
 
+	var getLog = function(method){
+		return function(){
+			if (window.console && console[method]){
+				if(console.warn.apply) console[method].apply(console, arguments);
+				else console[method](Array.from(arguments).join(' '));
+			}
+		};
+	};
+
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
 
 	this.Behavior = new Class({
@@ -21,12 +30,8 @@ provides: [Behavior]
 			// breakOnErrors: false,
 
 			//default error behavior when a filter cannot be applied
-			onError: function(){
-				if (window.console && console.warn){
-					if(console.warn.apply) console.warn.apply(console, arguments);
-					else console.warn(Array.from(arguments).join(' '));
-				}
-			}
+			onError: getLog('error'),
+			onWarn: getLog('warn')
 		},
 
 		initialize: function(options){
@@ -42,7 +47,14 @@ provides: [Behavior]
 				applyFilter: this.applyFilter.bind(this),
 				getContentElement: this.getContentElement.bind(this),
 				getContainerSize: function(){ return this.getContentElement().getSize(); }.bind(this),
-				error: function(){ this.fireEvent('error', arguments); }.bind(this)
+				error: function(){ this.fireEvent('error', arguments); }.bind(this),
+				fail: function(){
+					var msg = Array.join(arguments, ' ');
+					throw msg;
+				},
+				warn: function(){
+					this.fireEvent('warn', arguments);
+				}.bind(this)
 			});
 		},
 		
@@ -56,12 +68,12 @@ provides: [Behavior]
 		},
 
 		passMethod: function(method, fn){
-			this.API.extend(method, fn);
+			this.API.implement(method, fn);
 			return this;
 		},
 
 		passMethods: function(methods){
-			this.API.extend(methods);
+			this.API.implement(methods);
 			return this;
 		},
 
@@ -299,18 +311,18 @@ provides: [Behavior]
 				delay: 100,
 				//OR
 				initializer: function(element, API){
-					element.addEvent('mouseover', API.runFilter); //same as specifying event
+					element.addEvent('mouseover', API.runSetup); //same as specifying event
 					//or
-					API.runFilter.delay(100); //same as specifying delay
+					API.runSetup.delay(100); //same as specifying delay
 					//or something completely esoteric
 					var timer = (function(){
 						if (element.hasClass('foo')){
 							clearInterval(timer);
-							API.runFilter();
+							API.runSetup();
 						}
 					}).periodical(100);
 					//or
-					API.addEvent('someBehaviorEvent', API.runFilter);
+					API.addEvent('someBehaviorEvent', API.runSetup);
 				}
 				*/
 		},
