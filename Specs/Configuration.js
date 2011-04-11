@@ -69,6 +69,7 @@ Configuration.source = {
 			'mootools-core/Source/Slick/Slick.Parser',
 			'mootools-core/Source/Slick/Slick.Finder',
 			'mootools-core/Source/Element/Element',
+			'mootools-core/Source/Element/Element.Event',
 			'mootools-core/Source/Element/Element.Dimensions',
 			'mootools-core/Source/Utilities/JSON',
 			'mootools-more/Source/Core/More',

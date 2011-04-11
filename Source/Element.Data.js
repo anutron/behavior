@@ -9,7 +9,7 @@ script: Element.Data.js
 */
 (function(){
 
-	var isSecure = function(string){
+	JSON.isSecure = function(string){
 		//this verfies that the string is parsable JSON and not malicious (borrowed from JSON.js in MooTools, which in turn borrowed it from Crockford)
 		//this version is a little more permissive, as it allows single quoted attributes because forcing the use of double quotes
 		//is a pain when this stuff is used as HTML properties
@@ -23,13 +23,13 @@ script: Element.Data.js
 				name - (string) the data name to store; will be automatically prefixed with 'data-'.
 				value - (string, number) the value to store.
 		*/
-		setData: function(name, value) {
+		setData: function(name, value){
 			return this.set('data-' + name, value);
 		},
 
 		getData: function(name, default_value){
 			var value = this.get('data-' + name);
-			if (value) {
+			if (value){
 				return value;
 			} else if (default_value != null){
 				this.setData(name, default_value);
@@ -43,7 +43,7 @@ script: Element.Data.js
 				name - (string) the data name to store; will be automatically prefixed with 'data-'
 				value - (string, array, or object) if an object or array the object will be JSON encoded; otherwise stored as provided.
 		*/
-		setJSONData: function(name, value) {
+		setJSONData: function(name, value){
 			return this.setData(name, JSON.encode(value));
 		},
 
@@ -57,8 +57,8 @@ script: Element.Data.js
 		*/
 		getJSONData: function(name, strict, default_value){
 			var value = this.get('data-' + name);
-			if (value) {
-				return isSecure(value) ? JSON.decode(value, strict) : null;
+			if (value){
+				return JSON.isSecure(value) ? JSON.decode(value, strict) : null;
 			} else if (default_value){
 				this.setJSONData(name, default_value);
 				return default_value;
