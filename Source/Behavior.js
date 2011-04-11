@@ -2,8 +2,8 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element, Core/Selectors, /Element.Data, More/Table]
-provides: [DashSelectors, Behavior]
+requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, /Element.Data, More/Table]
+provides: [Behavior]
 ...
 */
 
@@ -27,16 +27,11 @@ provides: [DashSelectors, Behavior]
 					else console.warn(Array.from(arguments).join(' '));
 				}
 			}
-			//Components that have a Behavior instance (like an ART.Window)
-			//call these events to tell filters that need to know that the state
-			//has changed:
-			// onResize: $empty, //the element's dimensions have changed
-			// onShow: $empty, //the element is displayed
-			// onHide: $empty //the element is hidden
 		},
 
 		initialize: function(options){
 			this.setOptions(options);
+			this.API = new Class({ Extends: Behavior.API });
 			this.passMethods({
 				addEvent: this.addEvent.bind(this), 
 				removeEvent: this.removeEvent.bind(this),
@@ -46,7 +41,7 @@ provides: [DashSelectors, Behavior]
 				applyFilters: this.apply.bind(this),
 				applyFilter: this.applyFilter.bind(this),
 				getContentElement: this.getContentElement.bind(this),
-				getContainerSize: function() { return this.getContentElement().getSize(); }.bind(this),
+				getContainerSize: function(){ return this.getContentElement().getSize(); }.bind(this),
 				error: function(){ this.fireEvent('error', arguments); }.bind(this)
 			});
 		},
@@ -60,19 +55,13 @@ provides: [DashSelectors, Behavior]
 			return this.options.container || document.body;
 		},
 
-		_passedMethods: {},
 		passMethod: function(method, fn){
-			var self = this;
-			this._passedMethods[method] = function(){
-				return fn.apply(this, arguments);
-			};
+			this.API.extend(method, fn);
 			return this;
 		},
 
 		passMethods: function(methods){
-			for (var method in methods) {
-				this.passMethod(method, methods[method]);
-			}
+			this.API.extend(methods);
 			return this;
 		},
 
@@ -84,11 +73,19 @@ provides: [DashSelectors, Behavior]
 			document.id(container).getElements('[data-filters]').each(function(element){
 				var plugins = [];
 				element.getDataFilters().each(function(name){
-					var behavior = this.getFilter(name.trim());
-					if (!behavior) {
-						this.fireEvent('error', ['There is no behavior registered with this name: ', name, element]);
+					var filter = this.getFilter(name);
+					if (!filter){
+						this.fireEvent('error', ['There is no filter registered with this name: ', name, element]);
 					} else {
-						plugins.extend(this.applyFilter(element, behavior, force, true));
+						if (filter.config.delay !== undefined){
+							this._delayFilter(filter.config.delay, element, filter, force);
+						} else if(filter.config.delayUntil){
+							this._delayFilterUntil(filter.config.delayUntil, element, filter, force);
+						} else if(filter.config.initializer){
+							this._customInit(filter.config.initializer, element, filter, force);
+						} else {
+							plugins.extend(this.applyFilter(element, filter, force, true));
+						}
 					}
 				}, this);
 				plugins.each(function(plugin){ plugin(); });
@@ -96,6 +93,29 @@ provides: [DashSelectors, Behavior]
 			return this;
 		},
 
+		_delayFilter: function(delay, element, filter, force){
+			this.applyFilter.delay(delay, this, [element, filter, force]);
+		},
+
+		_delayFilterUntil: function(event, element, filter, force){
+			var init = function(e){
+				element.removeEvent(event, init);
+				var setup = filter.setup;
+				filter.setup = function(element, api, _pluginResult){
+					api.event = e;
+					setup.apply(filter, [element, api, _pluginResult]);
+				};
+				this.applyFilter(element, filter, force);
+				filter.setup = setup;
+			}.bind(this);
+			element.addEvent(event, init);
+		},
+
+		_customInit: function(init, element, filter, force){
+			var api = new this.API(element, filter.name);
+			api.runSetup = this.applyFilter.pass([element, filter, force], this);
+			init(element, api);
+		},
 
 		//Applies a specific behavior to a specific element.
 		//element - the element to which to apply the behavior
@@ -106,44 +126,63 @@ provides: [DashSelectors, Behavior]
 		//                      (an instance of a class for example)
 		applyFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
 			var pluginsToReturn = [];
-			var run = function(){
-				element = document.id(element);
-				//get the filters already applied to this element
-				var applied = getApplied(element);
-				//if this filter is not yet applied to the element, or we are forcing the filter
-				if (!applied[filter.name] || force) {
-					//if it was previously applied, garbage collect it
-					if (applied[filter.name]) applied[filter.name].cleanup(element);
-					this._passedMethods.markForCleanup = filter.markForCleanup.bind(filter);
-					//apply the filter
-					var result = filter.attach(element, this._passedMethods, _pluginTargetResult);
-					delete this._passedMethods.markForCleanup;
-					element.store('Behavior:' + filter.name, result);
-					//and mark it as having been previously applied
-					applied[filter.name] = filter;
-					//apply all the plugins for this filter
-					var plugins = this.getPlugins(filter.name);
-					if (plugins) {
-						for (var name in plugins) {
-							if (_returnPlugins) {
-								pluginsToReturn.push(this.applyFilter.pass([element, plugins[name], force, null, result], this));
-							} else {
-								this.applyFilter(element, plugins[name], force, null, result);
-							}
-						}
-					}
-				}
-			}.bind(this);
-			if (this.options.breakOnErrors) {
-				run();
+			if (this.options.breakOnErrors){
+				pluginsToReturn = this._runFilter.apply(this, arguments);
 			} else {
 				try {
-					run();
-				} catch (e) {
+					pluginsToReturn = this._runFilter.apply(this, arguments);
+				} catch (e){
 					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
 				}
 			}
 			return _returnPlugins ? pluginsToReturn : this;
+		},
+
+		_runFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
+			var pluginsToReturn = [];
+			element = document.id(element);
+			//get the filters already applied to this element
+			var applied = getApplied(element);
+			//if this filter is not yet applied to the element, or we are forcing the filter
+			if (!applied[filter.name] || force){
+				//if it was previously applied, garbage collect it
+				if (applied[filter.name]) applied[filter.name].cleanup(element);
+				var api = new this.API(element, filter.name);
+
+				//deprecated
+				api.markForCleanup = filter.markForCleanup.bind(filter);
+				api.onCleanup = function(fn){
+					filter.markForCleanup(element, fn);
+				};
+
+				//deal with requirements and defaults
+				if (filter.config.requireAs){
+					api.requireAs(filter.config.requireAs);
+				} else if (filter.config.require){
+					api.require.apply(api, Array.from(filter.config.require));
+				} if (filter.config.defaults) api.setDefault(defaults);
+
+				//apply the filter
+				var result = filter.setup(element, api, _pluginTargetResult);
+				if (filter.config.returns && !instanceOf(result, filter.config.returns)){
+					throw "Filter " + filter.name + " did not return a valid instance.";
+				}
+				element.store('Behavior:' + filter.name, result);
+				//and mark it as having been previously applied
+				applied[filter.name] = filter;
+				//apply all the plugins for this filter
+				var plugins = this.getPlugins(filter.name);
+				if (plugins){
+					for (var name in plugins){
+						if (_returnPlugins){
+							pluginsToReturn.push(this.applyFilter.pass([element, plugins[name], force, null, result], this));
+						} else {
+							this.applyFilter(element, plugins[name], force, null, result);
+						}
+					}
+				}
+			}
+			return pluginsToReturn;
 		},
 
 		//given a name, returns a registered behavior
@@ -162,7 +201,7 @@ provides: [DashSelectors, Behavior]
 		cleanup: function(element, ignoreChildren){
 			element = document.id(element);
 			var applied = getApplied(element);
-			for (var filter in applied) {
+			for (var filter in applied){
 				applied[filter].cleanup(element);
 				element.eliminate('Behavior:' + filter);
 				delete applied[filter];
@@ -186,8 +225,8 @@ provides: [DashSelectors, Behavior]
 		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
 	};
 	
-	var addFilters = function(obj, overwrite) {
-		for (var name in obj) {
+	var addFilters = function(obj, overwrite){
+		for (var name in obj){
 			addFilter.apply(this, [name, obj[name], overwrite]);
 		}
 	};
@@ -195,15 +234,15 @@ provides: [DashSelectors, Behavior]
 	//Registers a behavior plugin
 	//filterName - (*string*) the filter (or plugin) this is a plugin for
 	//name - (*string*) the name of this plugin
-	//attacher - a function that applies the filter to the given element
-	var addPlugin = function(filterName, name, attacher, overwrite) {
+	//setup - a function that applies the filter to the given element
+	var addPlugin = function(filterName, name, setup, overwrite){
 		if (!this._plugins[filterName]) this._plugins[filterName] = {};
-		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, attacher);
+		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, setup);
 	};
 	
-	var addPlugins = function(obj, overwrite) {
-		for (var name in obj) {
-			addPlugin.apply(this, [obj[name].fitlerName, obj[name].name, obj[name].attacher], overwrite);
+	var addPlugins = function(obj, overwrite){
+		for (var name in obj){
+			addPlugin.apply(this, [obj[name].fitlerName, obj[name].name, obj[name].setup], overwrite);
 		}
 	};
 	
@@ -229,12 +268,64 @@ provides: [DashSelectors, Behavior]
 	//This class is an actual filter that, given an element, alters it with specific behaviors.
 	Behavior.Filter = new Class({
 
+		config: {
+			/**
+				returns: Foo,
+				require: ['req1', 'req2'],
+				//or
+				requireAs: {
+					req1: Boolean,
+					req2: Number,
+					req3: String
+				},
+				defaults: {
+					opt1: false,
+					opt2: 2
+				},
+				//simple example:
+				setup: funciton(element, API){
+					var kids = element.getElements(API.get('selector'));
+					//some validation still has to occur here
+					if (!kids.length) API.fail('there were no child elements found that match ', API.get('selector'));
+					if (kids.length < 2) API.warn("there weren't more than 2 kids that match", API.get('selector'));
+					var fooInstance = new Foo(kids, API.get('opt1', 'opt2'));
+					API.onCleanup(function(){
+						fooInstance.destroy();
+					});
+					return fooInstance;
+				},
+				delayUntil: 'mouseover',
+				//OR
+				delay: 100,
+				//OR
+				initializer: function(element, API){
+					element.addEvent('mouseover', API.runFilter); //same as specifying event
+					//or
+					API.runFilter.delay(100); //same as specifying delay
+					//or something completely esoteric
+					var timer = (function(){
+						if (element.hasClass('foo')){
+							clearInterval(timer);
+							API.runFilter();
+						}
+					}).periodical(100);
+					//or
+					API.addEvent('someBehaviorEvent', API.runFilter);
+				}
+				*/
+		},
+
 		//Pass in an object with the following properties:
 		//name - the name of this filter
-		//attacher - a function that applies the filter to the given element
-		initialize: function(name, attacher){
+		//setup - a function that applies the filter to the given element
+		initialize: function(name, setup){
 			this.name = name;
-			this.attach = attacher;
+			if (typeOf(setup) == "function"){
+				this.setup = setup;
+			} else {
+				Object.append(this.config, setup);
+				this.setup = this.config.setup;
+			}
 			this._marks = new Table();
 		},
 
@@ -261,7 +352,7 @@ provides: [DashSelectors, Behavior]
 		//NOTE: this should be an element that has a data-filter property that matches this filter.
 		cleanup: function(element){
 			var marks = this._marks.get(element);
-			if (marks) {
+			if (marks){
 				marks.each(function(fn){ fn(); });
 				this._marks.erase(element);
 			}
