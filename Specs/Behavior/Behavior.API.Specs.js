@@ -32,6 +32,15 @@
 			expect(api.get('foo')).toBe('bar');
 			expect(api.get('nine')).toBe(9);
 			expect(api.get('arr')).toEqual([1,2,3]);
+			
+			
+			var target2 = new Element('div', {
+				'data-filtername-options':'"foo": "bar", "nine": 9, "arr": [1, 2, 3]'
+			});
+			var api2 = new Behavior.API(target2, 'filtername');
+			expect(api2.get('foo')).toBe('bar');
+			expect(api2.get('nine')).toBe(9);
+			expect(api2.get('arr')).toEqual([1,2,3]);
 		});
 
 		it('should set a default value', function(){
