@@ -9,9 +9,15 @@ provides: [Behavior.API]
 
 
 (function(){
-	var API = {
+	
+	Behavior.API = new Class({
 		element: null,
 		prefix: '',
+
+		initialize: function(element, prefix){
+			this.element = element;
+			this.prefix = prefix;
+		},
 
 		get: function(/* name[, name, name, etc] */){
 			if (arguments.length > 1) return this._getObj(Array.from(arguments));
@@ -19,19 +25,19 @@ provides: [Behavior.API]
 		},
 
 		getAs: function(/*returnType, name, defaultValue OR {name: returnType, name: returnType, etc}*/){
-			if (typeOf(arguments[0]) == "object") return this._getValuesAs.apply(this, arguments);
+			if (typeOf(arguments[0]) == 'object') return this._getValuesAs.apply(this, arguments);
 			return this._getValueAs.apply(this, arguments);
 		},
 
 		require: function(/* name[, name, name, etc] */){
 			for (var i = 0; i < arguments.length; i++){
-				if (this.get(arguments[i]) == null) throw "Could not find " + this.prefix + '-' + arguments[i] + " option on element.";
+				if (this.get(arguments[i]) == undefined) throw 'Could not find ' + this.prefix + '-' + arguments[i] + ' option on element.';
 			}
 		},
 
 		requireAs: function(returnType, name /* OR {name: returnType, name: returnType, etc}*/){
 			var val;
-			if (typeOf(arguments[0]) == "object"){
+			if (typeOf(arguments[0]) == 'object'){
 				for (var objName in arguments[0]){
 					val = this.getAs(arguments[0][objName], objName);
 					if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + objName + " option on element or it's type was invalid.";
@@ -43,13 +49,13 @@ provides: [Behavior.API]
 		},
 
 		setDefault: function(name, value /* OR {name: value, name: value, etc }*/){
-			if (typeOf(arguments[0]) == "object") {
+			if (typeOf(arguments[0]) == 'object'){
 				for (var objName in arguments[0]){
 					this.setDefault(objName, arguments[0][objName]);
 				}
 				return;
 			}
-			if (this.get(name) == null) {
+			if (this.get(name) == null){
 				var options = this._getOptions();
 				options[name] = value;
 			}
@@ -63,7 +69,11 @@ provides: [Behavior.API]
 			return obj;
 		},
 		_getOptions: function(){
-			if (!this.options) this.options = this.element.getJSONData(this.prefix + '-options') || {};
+			if (!this.options){
+				var options = this.element.getData(this.prefix + '-options', '{}');
+				if (options && options[0] != '{') options = '{' + options + '}';
+				this.options = JSON.isSecure(options) ? JSON.decode(options) : {};
+			}
 			return this.options;
 		},
 		_getValue: function(name){
@@ -74,7 +84,7 @@ provides: [Behavior.API]
 			}
 			return options[name];
 		},
-		_getValueAs: function(returnType, name, defaultValue) {
+		_getValueAs: function(returnType, name, defaultValue){
 			var value = this._coerceFromString(returnType, this.get(name));
 			return instanceOf(value, returnType) ? value : defaultValue;
 		},
@@ -86,30 +96,12 @@ provides: [Behavior.API]
 			return returnObj;
 		},
 		_coerceFromString: function(toType, value){
-			if (value == null || instanceOf(value, toType)) return value;
-			switch(toType){
-				case(Boolean):
-					if (value == "false") return false;
-					if (value == "true") return true;
-				case(Number):
-					var number = Number.from(value);
-					if (!isNaN(number)) return number;
-				default:
-					return toType.from(value);
+			if (typeOf(value) == 'string' && toType != String){
+				if (JSON.isSecure(value)) value = JSON.decode(value);
 			}
+			if (instanceOf(value, toType)) return value;
 			return null;
 		}
-	};
-
-
-	Behavior.API = function(element, filterName){
-		function F() {
-			this.element = element;
-			this.prefix = filterName;
-		};
-		F.prototype = API;
-		return new F;
-	};
-
+	});
 
 })();
