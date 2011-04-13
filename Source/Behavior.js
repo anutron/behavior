@@ -28,6 +28,7 @@ provides: [Behavior]
 			//by default, errors thrown by filters are caught; the onError event is fired.
 			//set this to *true* to NOT catch these errors to allow them to be handled by the browser.
 			// breakOnErrors: false,
+			// container: document.body,
 
 			//default error behavior when a filter cannot be applied
 			onError: getLog('error'),
@@ -46,7 +47,11 @@ provides: [Behavior]
 				applyFilters: this.apply.bind(this),
 				applyFilter: this.applyFilter.bind(this),
 				getContentElement: this.getContentElement.bind(this),
-				getContainerSize: function(){ return this.getContentElement().getSize(); }.bind(this),
+				getContainerSize: function(){
+					return this.getContentElement().measure(function(){
+						return this.getSize();
+					}); 
+				}.bind(this),
 				error: function(){ this.fireEvent('error', arguments); }.bind(this),
 				fail: function(){
 					var msg = Array.join(arguments, ' ');
@@ -57,23 +62,24 @@ provides: [Behavior]
 				}.bind(this)
 			});
 		},
-		
+
+		getContentElement: function(){
+			return this.options.container || document.body;
+		},
+
 		//pass a method pointer through to a filter
 		//by default the methods for add/remove events are passed to the filter
 		//pointed to this instance of behavior. you could use this to pass along
 		//other methods to your filters. For example, a method to close a popup
 		//for filters presented inside popups.
-		getContentElement: function(){
-			return this.options.container || document.body;
-		},
-
 		passMethod: function(method, fn){
+			if (this.API.prototype[method]) throw 'Cannot overwrite API method ' + method + ' as it already exists';
 			this.API.implement(method, fn);
 			return this;
 		},
 
 		passMethods: function(methods){
-			this.API.implement(methods);
+			for (method in methods) this.passMethod(method, methods[method]);
 			return this;
 		},
 
@@ -89,12 +95,13 @@ provides: [Behavior]
 					if (!filter){
 						this.fireEvent('error', ['There is no filter registered with this name: ', name, element]);
 					} else {
-						if (filter.config.delay !== undefined){
-							this._delayFilter(filter.config.delay, element, filter, force);
-						} else if(filter.config.delayUntil){
-							this._delayFilterUntil(filter.config.delayUntil, element, filter, force);
-						} else if(filter.config.initializer){
-							this._customInit(filter.config.initializer, element, filter, force);
+						var config = filter.config;
+						if (config.delay !== undefined){
+							this._delayFilter(config.delay, element, filter, force);
+						} else if(config.delayUntil){
+							this._delayFilterUntil(config.delayUntil, element, filter, force);
+						} else if(config.initializer){
+							this._customInit(config.initializer, element, filter, force);
 						} else {
 							plugins.extend(this.applyFilter(element, filter, force, true));
 						}
@@ -179,7 +186,7 @@ provides: [Behavior]
 				if (filter.config.returns && !instanceOf(result, filter.config.returns)){
 					throw "Filter " + filter.name + " did not return a valid instance.";
 				}
-				element.store('Behavior:' + filter.name, result);
+				element.store('Behavior Filter result:' + filter.name, result);
 				//and mark it as having been previously applied
 				applied[filter.name] = filter;
 				//apply all the plugins for this filter
@@ -215,7 +222,7 @@ provides: [Behavior]
 			var applied = getApplied(element);
 			for (var filter in applied){
 				applied[filter].cleanup(element);
-				element.eliminate('Behavior:' + filter);
+				element.eliminate('Behavior Filter result:' + filter);
 				delete applied[filter];
 			}
 			if (!ignoreChildren) element.getElements('[data-filters]').each(this.cleanup, this);
@@ -295,7 +302,7 @@ provides: [Behavior]
 					opt2: 2
 				},
 				//simple example:
-				setup: funciton(element, API){
+				setup: function(element, API){
 					var kids = element.getElements(API.get('selector'));
 					//some validation still has to occur here
 					if (!kids.length) API.fail('there were no child elements found that match ', API.get('selector'));
@@ -323,7 +330,7 @@ provides: [Behavior]
 					}).periodical(100);
 					//or
 					API.addEvent('someBehaviorEvent', API.runSetup);
-				}
+				});
 				*/
 		},
 
@@ -400,7 +407,7 @@ provides: [Behavior]
 		},
 
 		getFilterResult: function(name){
-			return this.retrieve('Behavior:' + name);
+			return this.retrieve('Behavior Filter result:' + name);
 		}
 
 	});

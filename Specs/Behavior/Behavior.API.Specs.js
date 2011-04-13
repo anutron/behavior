@@ -59,6 +59,18 @@
 			expect(api.get('two')).toBe(2);
 		});
 
+		it('should reset cached values', function(){
+			var clone = target.clone(true, true);
+			var api = new Behavior.API(clone, 'filtername');
+			api.setDefault('fred', 'flintsone');
+			expect(api.get('number')).toBe('0');
+			clone.setData('filtername-number', '5');
+			expect(api.get('number')).toBe('0');
+			api.refreshAPI();
+			expect(api.get('number')).toBe('5');
+		});
+
+
 		it('should require an option that is present', function(){
 			var api = new Behavior.API(target, 'filtername');
 			api.require('number');
@@ -85,14 +97,14 @@
 				api.requireAs(Number, 'true');
 				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 			} catch(e) {
-				expect(e).toBe('Could not find filtername-true option on element or it\'s type was invalid.');
+				expect(e).toBe('Could not find filtername-true option on element or its type was invalid.');
 			}
 
 			try {
 				api.requireAs(Boolean, 'number');
 				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 			} catch(e) {
-				expect(e).toBe('Could not find filtername-number option on element or it\'s type was invalid.');
+				expect(e).toBe('Could not find filtername-number option on element or its type was invalid.');
 			}
 
 			try {
@@ -102,7 +114,7 @@
 					'number': Boolean
 				});
 			} catch(e){
-				expect(e).toBe('Could not find filtername-number option on element or it\'s type was invalid.');
+				expect(e).toBe('Could not find filtername-number option on element or its type was invalid.');
 			}
 		});
 

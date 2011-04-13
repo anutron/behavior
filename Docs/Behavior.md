@@ -17,14 +17,13 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 ### Options
 
-* breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to *true* to NOT catch these errors to allow them to be handled by the browser.
+* breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to *document.body*;
 
 ### Events
 
-* error - function invoked when an error is caught in a filter. Defaults to console warnings if console.warn is available.
-* resize - call this event, passing in x/y values for the new element size, when the container changes size. See the [resize](#Behavior:resize) method.
-* show - call this event when the container is displayed. See the [resize](#Behavior:show) method.
-* hide - call this event when the container is hidden. See the [resize](#Behavior:hide) method.
+* error - function invoked when an error is caught in a filter. Defaults to console errors if console.error is available.
+* warn - function invoked when a filter calls the warn method no the method api. Defaults to console warnings if console.warn is available.
 
 ### Usage
 
@@ -46,6 +45,14 @@ Behavior is applied to an element whenever you want to parse that element's DOM 
 
 The above example will invoke the registered "Accordion" filter. See the section on [Behavior.Filter][] below.
 
+### HTML properties
+
+Behavior uses a clearly defined API to read HTML properties off the elements it configures. See [Behavior.API][] for details as well as [passMethod](#Behavior:passMethod) for methods that Behavior instances themselves provide.
+
+### Using Multiple Filters Together
+
+It's possible to declare more than one data filter property for a single element (`data-filters="FormRequest FormValidator"`)
+
 Behavior Method: passMethod {#Behavior:passMethod}
 --------------------------------------------------
 
@@ -61,14 +68,18 @@ Defines a method that will be passed to filters. Behavior allows you to create a
 
 ### Notes
 
-By default, Behavior passes the following methods to filters:
+By default, Behavior passes the following methods to filters in addition to the methods defined in the [Behavior.API][]
 
 * addEvent - the addEvent on the behavior instance method provided by the [Events][] class.
 * removeEvent - the removeEvent on the behavior instance method provided by the [Events][] class.
 * addEvents - the addEvents on the behavior instance method provided by the [Events][] class.
 * removeEvents - the removeEvents on the behavior instance method provided by the [Events][] class.
-* getContainerSize - returns the current value of *this.containerSize* - does not actually measure the container (which may be hidden or not in the DOM at the time). See the [resize](#Behavior:resize) method for more details.
-* error - fires the behavior instance's *error* event with the arguments passed.
+* fireEvents - the fireEvents on the behavior instance method provided by the [Events][] class.
+* getContentElement - returns the "container" element of the Behavior instance. By default this points to *document.body*. Set `options.container` to change it.
+* getContainerSize - returns the value of getContentElement().getSize(); Note that if that element is not in the DOM this will return zeros.
+* error - fires the behavior instance's `error` event with the arguments passed.
+* fail - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
+* See the [Behavior.API][] for additional methods passed by default.
 
 You can add any other methods that our filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
 
@@ -79,33 +90,11 @@ Iterates over an object of key/values passing them to the [passMethod](#Behavior
 
 ### Syntax
 
-	myBehaviorInstance.passMethods(method);
+	myBehaviorInstance.passMethods(obj);
 
-### Returns
+### Arguments
 
-* (*object*) this instance of Behavior
-
-Behavior Method: show {#Behavior:show}
---------------------------------------------------
-
-Fires the *show* event which filters can monitor. Does not actually alter the visibility of anything. This is used for filters that need to know when their elements are visible. 
-
-### Syntax
-
-	myBehaviorInstance.show();
-
-### Returns
-
-* (*object*) this instance of Behavior
-
-Behavior Method: hide {#Behavior:hide}
---------------------------------------------------
-
-Fires the *hide* event which filters can monitor. Does not actually alter the visibility of anything. This is used for filters that need to know when their elements are hidden.
-
-### Syntax
-
-	myBehaviorInstance.hide();
+1. obj - (*object*) a set of name/function pairs to pass to the passMethod method.
 
 ### Returns
 
@@ -123,7 +112,7 @@ Applies all the behavior filters for an element and its children.
 ### Arguments
 
 1. container - (*element*) The DOM container to process behavior filters.
-2. force - (*boolean*; optional) if *true* elements that have already been processed will be processed again.
+2. force - (*boolean*; optional) if `true` elements that have already been processed will be processed again.
 
 ### Returns
 
@@ -142,7 +131,7 @@ Applies a specific behavior filter to a specific element (but not its children).
 
 1. container - (*element*) The DOM container to process behavior filters.
 2. filter - (*object*) An instance of [Behavior.Filter][].
-3. force - (*boolean*; optional) if *true* elements that have already been processed will be processed again.
+3. force - (*boolean*; optional) if `true` elements that have already been processed will be processed again.
 
 ### Returns
 
@@ -163,7 +152,7 @@ Given a name, return the registered filter.
 
 ### Returns
 
-* (*object*) the instance of [Behavior.Filter][] or *undefined* if one is not found.
+* (*object*) the instance of [Behavior.Filter][] or `undefined` if one is not found.
 
 Behavior Method: getPlugins {#Behavior:getPlugins}
 --------------------------------------------------
@@ -180,7 +169,7 @@ Given a name, return the plugins registered for a filter by that name. See the s
 
 ### Returns
 
-* (*object*) the instance of [Behavior.Filter][] or *undefined* if one is not found.
+* (*object*) the instance of [Behavior.Filter][] or `undefined` if one is not found.
 
 Behavior Method: cleanup {#Behavior:cleanup}
 --------------------------------------------------
@@ -202,7 +191,7 @@ Garbage collects the specified element, cleaning up all the filters applied to i
 Filters
 =======
 
-Behavior applies all the registered filters to the element you specify (and its children). This requires that each element that should have a behavior applied name the filters it needs in its *data-filters* property. It also means that every named filter must be registered.
+Behavior applies all the registered filters to the element you specify (and its children). This requires that each element that should have a behavior applied name the filters it needs in its `data-filters` property. It also means that every named filter must be registered.
 
 Filters can be registered to an *instance* of Behavior or to the global Behavior namespace. So if you register a "Foo" filter globally, all instance of Behavior get that filter. If a specific instance of Behavior defines a "Foo" filter, then the local instance is used regardless of the presence of a global filter.
 
@@ -215,13 +204,13 @@ Add a new filter.
 
 ### Syntax
 
-	myBehaviorInstance.addFilter(name, fn[, overwrite]);
+	myBehaviorInstance.addFilter(name, filter[, overwrite]);
 
 ### Arguments
 
 1. name - (*string*) the name of the filter to add.
-2. fn - (*function*) the function invoked when that filter is run against an element. See [Behavior.Filters][] below.
-3. overwrite - (*boolean*; optional) if *true* and there is already an existing filter by the given name, that filter will be replaced, otherwise the original is retained.
+2. filter - (*function* or *object*) See [Behavior.Filters][] below.
+3. overwrite - (*boolean*; optional) if `true` and there is already an existing filter by the given name, that filter will be replaced, otherwise the original is retained.
 
 ### Returns
 
@@ -239,7 +228,7 @@ Adds a group of filters.
 ### Arguments
 
 1. obj - (*object*) a key/value set of name/functions to be added.
-2. overwrite - (*boolean*; optional) if *true* and there is already an existing filter by the given name, that filter will be replaced, otherwise the original is retained.
+2. overwrite - (*boolean*; optional) if `true` and there is already an existing filter by the given name, that filter will be replaced, otherwise the original is retained.
 
 ### Returns
 
@@ -259,7 +248,7 @@ Add a new plugin for a specified filter.
 1. filterName - (*string*) the name of the filter for the plugin.
 2. pluginName - (*string*) the name of the plugin.
 3. fn - (*function*) the function invoked after the filter is run against an element. See [plugins](#Behavior.Filter:plugins) below.
-4. overwrite - (*boolean*; optional) if *true* and there is already an existing plugin by the given name, that plugin will be replaced, otherwise the original is retained.
+4. overwrite - (*boolean*; optional) if `true` and there is already an existing plugin by the given name, that plugin will be replaced, otherwise the original is retained.
 
 ### Returns
 
@@ -277,7 +266,7 @@ Adds a group of plugins.
 ### Arguments
 
 1. obj - (*object*) a key/value set of name/functions to be added as plugins.
-2. overwrite - (*boolean*; optional) if *true* and there is already an existing plugin by the given name, that filter will be replaced, otherwise the original is retained.
+2. overwrite - (*boolean*; optional) if `true` and there is already an existing plugin by the given name, that filter will be replaced, otherwise the original is retained.
 
 ### Returns
 
@@ -327,53 +316,168 @@ Adds a group of plugins to the global Behavior namespace.
 Class: Behavior.Filter {#Behavior.Filter}
 ====================================
 
-Behavior Filters are where you define what to do with elements that are marked with that filter. Elements can have numerous filters defined and filters can do anything with those elements that they like. In general, filters should only alter the element given, though it is possible to have elements that relate to others (for example, an *Accoridon* filter might set up an instance of *Fx.Accordion* using children that are the togglers and sections).
+Behavior Filters are where you define what to do with elements that are marked with that filter. Elements can have numerous filters defined and filters can do anything with those elements that they like. In general, filters should only alter the element given, though it is possible to have elements that relate to others (for example, an *Accoridon* filter might set up an instance of `Fx.Accordion` using children that are the togglers and sections).
 
-Typically filters allow for configuration using HTML5 data- properties, classes, and element attributes.
+Typically filters allow for configuration using HTML5 data- properties, classes, and element attributes. See the [Behavior.API][] which automates the reading of these properties.
 
 An important rule of filters is that they cannot know about each other or be in any way dependent on each other. When two filters need to be managed differently when both are present, use a [plugin](#Behavior.Filter:plugins) (this should be rare).
 
-Filters are typically not created with the constructor (i.e. *new Behavior.Filter*) but instead with the [addFilter](#Behavior.addFilter)/[addFilters](#Behavior.addFilters) methods defined on the Behavior instance or the [addGlobalFilter](#Behavior.addGlobalFilter)/[addGlobalFilters](#Behavior.addGlobalFilters) methods on the Behavior namespace.
+Filters are typically not created with the constructor (i.e. `new Behavior.Filter`) but instead with the [addFilter](#Behavior.addFilter)/[addFilters](#Behavior.addFilters) methods defined on the Behavior instance or the [addGlobalFilter](#Behavior.addGlobalFilter)/[addGlobalFilters](#Behavior.addGlobalFilters) methods on the Behavior namespace.
+
+Filters nearly always return instances of classes (this is essentially their purpose). It's not a requirement, but it is generally preferred.
 
 ### Example
 
-	Behavior.addGlobalPlugins({
-		Accordion: function(element) {
-			var toggles = element.getData('toggler-elements') || '.toggle';
-			var sections = element.getData('section-elements') || '.target';
-			var accordion = new Fx.Accordion(toggles, sections);
-			this.markForCleanup(element, function() {
+	Behavior.addGlobalFilters({
+		Accordion: function(element, api) {
+			var togglers = element.getElements(api.get('togglers'));
+			var sections = element.getElements(api.get('sections'));
+			if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
+			if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
+			var accordion = new Fx.Accordion(togglers, sections);
+			api.onCleanup(function() {
 				accordion.detach();
+			});
+			return accorion; //note that the instance is always returned!
+		}
+	});
+
+	/* the matching HTML
+	<div data-filters="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
+	  <div class="toggle">Toggle 1</div>
+	  <div class="target">This area is controlled by Toggle 1.</div>
+	</div> */
+
+In the example above our filter finds the sections and togglers and validates that there is at least one of each. If there aren't it calls `api.fail` - this stops the filter's execution and Behavior.js catches it and calls its `onError` event (which defaults to `console.error`). It also checks if the number of togglers and the number of sections are equal and calls `api.warn` if they are off. This does *not* top execution; it only fires the `onWarn` event on Behavior (which defaults to `console.warn`).
+
+### Advanced Filters
+
+A simple filter is just a function and a name ("Accordion") and the function that creates accordions given an element and the api object. This is fine, but it's possible to express more complex configurations. Example:
+
+	Behavior.addGlobalFilters({
+		Accordion: {
+			//if your filter does not return an instance of this value Behavior will throw an error
+			//which is caught and logged by default
+			returns: Accordion,
+			require: ['togglers', 'togglers'],
+			//or
+			requireAs: {
+				togglers: String,
+				someNumericalValue: Number,
+				someArrayValue: Array
+			},
+			//you wouldn't define defaults for required values, but this is just an example
+			defaults: {
+				togglers: '.toggler',
+				sections: '.sections',
+				initialDisplayFx: false
+			},
+			//simple example:
+			setup: function(element, API){
+				var togglers = element.getElements(api.get('togglers'));
+				var sections = element.getElements(api.get('sections'));
+				if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
+				if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
+				var accordion = new Fx.Accordion(togglers, sections,
+					api.getAs({
+						fixedHeight: Number,
+						fixedWidth: Number,
+						display: Number,
+						show: Number,
+						height: Boolean,
+						width: Boolean,
+						opacity: Boolean,
+						alwaysHide: Boolean,
+						trigger: String,
+						initialDisplayFx: Boolean,
+						returnHeightToAuto: Boolean
+					})
+				);
+				api.onCleanup(function() {
+					accordion.detach();
+				});
+				return accorion; //note that the instance is always returned!
+			},
+			//don't instantiate this value until the user mouses over the target element
+			delayUntil: 'mouseover',
+			//OR delay for a specific period
+			delay: 100,
+			//OR let me initialize the function manually
+			initializer: function(element, API){
+				element.addEvent('mouseover', API.runSetup); //same as specifying event
+				//or
+				API.runSetup.delay(100); //same as specifying delay
+				//or something completely esoteric
+				var timer = (function(){
+					if (element.hasClass('foo')){
+						clearInterval(timer);
+						API.runSetup();
+					}
+				}).periodical(100);
+				//or
+				API.addEvent('someBehaviorEvent', API.runSetup);
 			});
 		}
 	});
+
+In the long-form example above, we see that filters can be passed as objects that map to the config option in the Behavior.Filter constructor arguments. (see [Behavior.Filter's constructor](#Behavior.Filter:constructor)) below.
 
 ### Accessing passed methods
 
 Behavior has a way to [define API methods passed to filters for their use](#Behavior:passMethod). To use these methods, access them in the second argument passed to your filter function:
 
 	Behavior.addGlobalPlugins({
-		MeasureOnResize: function(element, behaviorAPI) {
-			var updater = function(w,h){
-				element.set('html', 'the width is ' + w + ' and the height is ' + h);
-			};
-			behaviorAPI.addEvent('show', updater);
-			this.markForCleanup(element, function(){
-				behaviorAPI.removeEvent('show', updater);
+		MeasureOnResize: function(element, api) {
+			api.addEvent('resize', updater);
+			api.onCleanup(function(){
+				api.removeEvent('resize', updater);
 			});
 		}
 	});
+	var myBehaviorInstance = new Behavior();
+	myBehaviorInstance.apply(document.body); //applies all filters named in your content
+	//let's assume there's an element with the data-filters property set to MeasureOnResize
+	myBehaviorInstance.fireEvent('resize');
 
-As you can see in the example above, we add an event whenever the Behavior instance fires it's "show" method. We also clean up that event with the [markForCleanup](#Behavior.Filter:markForCleanup) method.
+As you can see in the example above, we add an event whenever the Behavior instance fires a "resize" method. We also clean up that event with the [markForCleanup](#Behavior.Filter:markForCleanup) method which is passed through the api object as "onCleanup".
 
-Behavior.Filter Method: markForCleanup {#Behavior:markForCleanup}
+Behavior.Filter constructor {#Behavior.Filter:constructor}
 --------------------------------------------------
 
-Adds a function to invoke when the element referenced is cleaned up by the Behavior instance.
+While is common (and recommended) for filters to be declared using Behavior's [addFilter](#Behavior.addFilter) method it's possible to create a filter on its own.
+
+### Syntax
+
+	new Behavior.Filter(name, filter);
+
+### Arguments
+
+1. name - (*string*) The name of this filter. This is not used directly by the filter, though Behavior instances use it. Stored as `this.name` on the instance of the filter.
+2. filter - (*function* or *object*) Can be a single function or an object with the config options listed below. The function (which must be present either as the argument or as the `.setup` property on the object) expect to be invoked with an element and an instance of [Behavior.API][] passed to it. Filters in general expect this API object to be provided by a Behavior instance which also adds additional methods (see [Behavior.passMethod](#Behavior:passMethod)) for more details.
+
+### Configuration
+
+If the second argument passed to the constructor is an object, the following options are specified:
+
+* setup - (*function*; required) The function to invoke when the filter is applied.
+* delay - (*integer*; optional) If specified, the filter is to be delayed *by the caller* (typically Behavior instances) by this duration.
+* delayUntil (*string*; optional) If specified, the filter is to be deferred until the event is fired upon the element the filter is applied to. This configuration is applied *by the caller*.
+* initializer - (*function*; optional) If specified, the caller (e.g. a Behavior instance) does *not* call the setup function but instead calls this function, passing in the element and the api object. The api object has an additional method, `api.runSetup`, which this initializer can invoke when it pleases (or not at all).
+* require - (*array*) an array of strings (names) of required attributes on the element. If the element does not have these attributes, the filter fails. Note that the actual attribute name is data-filtername-name (example: data-Accordion-togglers); the data-filtername- portion is not specified in this list of required names, just the suffix (in this example, just "togglers").
+* requireAs - (*object*) a list of required attribute names mapped to their types. The types here being MooTools Type objects (String, Number, Function, etc); actual pointers to the actual Type instance (i.e. not a string).
+* defaults - (*object*) a set of name / default value pairs. Note that setting defaults for required properties makes no sense.
+
+Behavior.Filter Method: markForCleanup {#Behavior.Filter:markForCleanup}
+--------------------------------------------------
+
+Adds a function to invoke when the element referenced is cleaned up by the Behavior instance. Note that Behavior passes this method through as "onCleanup" in it's API object.
 
 ### Syntax
 
 	myBehaviorFilter.markForCleanup(element, fn);
+
+	//more commonly inside a filter:
+	api.onCleanup(fn); //element is not specified on the api object
 
 ### Arguments
 
@@ -381,14 +485,19 @@ Adds a function to invoke when the element referenced is cleaned up by the Behav
 2. fn - (*function*) the function invoked when that element is garbage collected.
 
 
-Behavior.Filter Method: cleanup {#Behavior:cleanup}
+Behavior.Filter Method: cleanup {#Behavior.Filter:cleanup}
 --------------------------------------------------
 
-Garbage collects the specific filter instance for a given element.
+Garbage collects the specific filter instance for a given element. This is typically handled by the Behavior instance when you call its [cleanup](#Behavior:cleanup) method.
 
 ### Syntax
 
 	myBehaviorFilter.cleanup(element);
+
+	//more commonly
+	myBehaviorInstance.cleanup(container);
+	//here the container can be any element that is being removed from the DOM
+	//all its children that have had filters applied will have their cleanup method run
 
 ### Arguments
 
@@ -398,23 +507,36 @@ Garbage collects the specific filter instance for a given element.
 Filter Plugins {#FilterPlugins}
 ====================================
 
-Filter Plugins are identical to regular filters with the exception that they are invoked only when the filter they are altering is invoked and always after that. Filters do not have any guarantee that they will be invoked in any given order, but plugins are always guaranteed to be invoked after the filter they reference.
+Filter Plugins are identical to regular filters with the exception that they are invoked only when the filter they are altering is invoked and always after that. Filters do not have any guarantee that they will be invoked in any given order, but plugins are always guaranteed to be invoked after the filter they reference. More specifically, they are always invoked after all the filters on an element are invoked. If an element has two filters (A and B) and each of these filters have plugins (A1 and B1) the invocation order will be A, B, A1, B1.
 
 ### Example
 
-	Behavior.defineGlobalPlugin('Mask', 'AlertOnMask', function(element, behaviorAPI){
-		var mask = element.retrieve('Mask'); //get the instance of the Mask class created in the Mask filter
-		var aleter = function(){
-			alert('the mask is visible!');
+	Behavior.addFilter('Mask', function(element, api){
+		var maskInstance = new Mask(element);
+		//this is silly
+		var events = {
+			mouseover: maskInstance.show.bind(maskInstance),
+			mouseout: maskInstance.hide.bind(maskInstance)
 		};
-		mask.addEvent('show', alerter);
-		this.markForCleanup(element, function(){
-			mask.removeEvent('show', alerter);
+		element.addEvents(events);
+		api.onCleanup(function(){
+			element.removeEvents(events);
+		});
+		return maskInstance; //note that we return the instance!
+	});
+
+	Behavior.defineGlobalPlugin('Mask', 'AlertOnMask', function(element, api, maskInstance){
+		//also silly
+		var aleter = function(){ alert('the mask is visible!'); };
+		maskInstance.addEvent('show', alerter);
+		api.onCleanup(function(){
+			maskInstance.removeEvent('show', alerter);
 		});
 	});
 
-The above example is guaranteed to always run after the "Mask" filter. You can define a plugin for a plugin just as well; simply name the plugin as the first argument (you could create a plugin for the above example by making a plugin for "AlertOnMask").
+The above example is guaranteed to always run after the "Mask" filter. You can define a plugin for a plugin just as well; simply name the plugin as the first argument (you could create a plugin for the above example by making a plugin for "AlertOnMask"). Plugin setup functions are passed not only the target element and the api object but also the instance returned by the filter they augment.
 
 [Options]: http://mootools.net/docs/core/Class/Class.Extras#Options
 [Events]: http://mootools.net/docs/core/Class/Class.Extras#Events
 [Behavior.Filter]: #Behavior.Filter
+[Behavior.API]: #Behavior.API

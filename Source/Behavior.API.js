@@ -13,6 +13,7 @@ provides: [Behavior.API]
 	Behavior.API = new Class({
 		element: null,
 		prefix: '',
+		defaults: {},
 
 		initialize: function(element, prefix){
 			this.element = element;
@@ -31,21 +32,23 @@ provides: [Behavior.API]
 
 		require: function(/* name[, name, name, etc] */){
 			for (var i = 0; i < arguments.length; i++){
-				if (this.get(arguments[i]) == undefined) throw 'Could not find ' + this.prefix + '-' + arguments[i] + ' option on element.';
+				if (this._getValue(arguments[i]) == undefined) throw 'Could not find ' + this.prefix + '-' + arguments[i] + ' option on element.';
 			}
+			return this;
 		},
 
 		requireAs: function(returnType, name /* OR {name: returnType, name: returnType, etc}*/){
 			var val;
 			if (typeOf(arguments[0]) == 'object'){
 				for (var objName in arguments[0]){
-					val = this.getAs(arguments[0][objName], objName);
-					if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + objName + " option on element or it's type was invalid.";
+					val = this._getValueAs(arguments[0][objName], objName);
+					if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + objName + " option on element or its type was invalid.";
 				}
 			} else {
-				val = this.getAs(returnType, name);
-				if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + name + " option on element or it's type was invalid.";
+				val = this._getValueAs(returnType, name);
+				if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + name + " option on element or its type was invalid.";
 			}
+			return this;
 		},
 
 		setDefault: function(name, value /* OR {name: value, name: value, etc }*/){
@@ -55,16 +58,24 @@ provides: [Behavior.API]
 				}
 				return;
 			}
-			if (this.get(name) == null){
+			this.defaults[name] = value;
+			if (this._getValue(name) == null){
 				var options = this._getOptions();
 				options[name] = value;
 			}
+			return this;
+		},
+
+		refreshAPI: function(){
+			delete this.options;
+			this.setDefault(this.defaults);
+			return;
 		},
 
 		_getObj: function(names){
 			var obj = {};
 			names.each(function(name){
-				obj[name] = this.get(name);
+				obj[name] = this._getValue(name);
 			}, this);
 			return obj;
 		},
@@ -85,7 +96,7 @@ provides: [Behavior.API]
 			return options[name];
 		},
 		_getValueAs: function(returnType, name, defaultValue){
-			var value = this._coerceFromString(returnType, this.get(name));
+			var value = this._coerceFromString(returnType, this._getValue(name));
 			return instanceOf(value, returnType) ? value : defaultValue;
 		},
 		_getValuesAs: function(obj){

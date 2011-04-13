@@ -159,7 +159,7 @@
 				}
 				if (options.truthy) expect(instanceOf(target.getFilterResult('Require'), SimpleClass)).toBeTruthy();
 				else expect(target.getFilterResult('Require')).toBeFalsy();
-				target.eliminate('Behavior:Require');
+				target.eliminate('Behavior Filter result:Require');
 				target.removeDataFilter('Require');
 		
 				behaviorInstance.options.breakOnErrors = false;
@@ -193,7 +193,7 @@
 					'nine': Array
 				},
 				truthy: false,
-				catcher: "Could not find Require-nine option on element or it's type was invalid."
+				catcher: "Could not find Require-nine option on element or its type was invalid."
 			})
 		);
 		
@@ -330,6 +330,28 @@
 			
 		});
 
+		it('should pass a method to a filter via the API', function(){
+			var val = false;
+			behaviorInstance.passMethod('changeVal', function(){
+				val = true;
+			});
+			target.addDataFilter('PassedMethod');
+			Behavior.addGlobalFilter('PassedMethod', function(el, api){
+				api.changeVal();
+			});
+			behaviorInstance.apply(container);
+			expect(val).toBe(true);
+			target.removeDataFilter('PassedMethod');
+		});
+
+		it('should throw an error when attempting to pass a method that is already defined', function(){
+			try {
+				behaviorInstance.passMethod('addEvent', function(){});
+				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
+			} catch (e) {
+				expect(e).toBe('Cannot overwrite API method addEvent as it already exists');
+			}
+		});
 
 		// plugins
 
