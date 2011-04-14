@@ -1,5 +1,12 @@
 (function(){
+
 	Behavior.addGlobalFilter('Test1', function(){});
 
-	MooBench.addBehaviorTest('Behavior: Empty filters', '<div data-filters="Test1"></div>');
+	Behavior.addFilterTest({
+		filterName: 'Test1',
+		desc: 'Applies an empty filter',
+		content: '<div data-filters="Test1"></div>',
+		noSpecs: true
+	});
+
 })();
