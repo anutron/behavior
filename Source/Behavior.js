@@ -112,6 +112,7 @@ provides: [Behavior]
 			return this;
 		},
 
+		//delays a filter until the event specified in filter.config.delayUntil is fired on the element
 		_delayFilterUntil: function(element, filter, force){
 			var event = filter.config.delayUntil;
 			var init = function(e){
@@ -127,6 +128,7 @@ provides: [Behavior]
 			element.addEvent(event, init);
 		},
 
+		//runs custom initiliazer defined in filter.config.initializer
 		_customInit: function(element, filter, force){
 			var api = new this.API(element, filter.name);
 			api.runSetup = this.applyFilter.pass([element, filter, force], this);
@@ -143,10 +145,10 @@ provides: [Behavior]
 		applyFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
 			var pluginsToReturn = [];
 			if (this.options.breakOnErrors){
-				pluginsToReturn = this._runFilter.apply(this, arguments);
+				pluginsToReturn = this._applyFilter.apply(this, arguments);
 			} else {
 				try {
-					pluginsToReturn = this._runFilter.apply(this, arguments);
+					pluginsToReturn = this._applyFilter.apply(this, arguments);
 				} catch (e){
 					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
 				}
@@ -154,7 +156,8 @@ provides: [Behavior]
 			return _returnPlugins ? pluginsToReturn : this;
 		},
 
-		_runFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
+		//see argument list above for applyFilter
+		_applyFilter: function(element, filter, force, _returnPlugins, _pluginTargetResult){
 			var pluginsToReturn = [];
 			element = document.id(element);
 			//get the filters already applied to this element
@@ -342,7 +345,7 @@ provides: [Behavior]
 				Object.append(this.config, setup);
 				this.setup = this.config.setup;
 			}
-			this._marks = new Table();
+			this._cleanupFunctions = new Table();
 		},
 
 		//Stores a garbage collection pointer for a specific element.
@@ -357,20 +360,20 @@ provides: [Behavior]
 		//If this filter is FormValidator, you can mark the form for cleanup, but not, for example
 		//the input. Only elements that match this filter can be marked.
 		markForCleanup: function(element, fn){
-			var marks = this._marks.get(element);
-			if (!marks) marks = [];
-			marks.include(fn);
-			this._marks.set(element, marks);
+			var functions = this._cleanupFunctions.get(element);
+			if (!functions) functions = [];
+			functions.include(fn);
+			this._cleanupFunctions.set(element, functions);
 			return this;
 		},
 
 		//Garbage collect a specific element.
 		//NOTE: this should be an element that has a data-filter property that matches this filter.
 		cleanup: function(element){
-			var marks = this._marks.get(element);
+			var marks = this._cleanupFunctions.get(element);
 			if (marks){
 				marks.each(function(fn){ fn(); });
-				this._marks.erase(element);
+				this._cleanupFunctions.erase(element);
 			}
 			return this;
 		}

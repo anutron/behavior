@@ -9,7 +9,7 @@ provides: [Behavior.API]
 
 
 (function(){
-	
+	//see Docs/Behavior.API.md for documentation of public methods.
 	Behavior.API = new Class({
 		element: null,
 		prefix: '',
@@ -19,6 +19,10 @@ provides: [Behavior.API]
 			this.element = element;
 			this.prefix = prefix;
 		},
+
+		/******************
+		 * PUBLIC METHODS
+		 ******************/
 
 		get: function(/* name[, name, name, etc] */){
 			if (arguments.length > 1) return this._getObj(Array.from(arguments));
@@ -72,6 +76,11 @@ provides: [Behavior.API]
 			return;
 		},
 
+		/******************
+		 * PRIVATE METHODS
+		 ******************/
+
+		//given an array of names, returns an object of key/value pairs for each name
 		_getObj: function(names){
 			var obj = {};
 			names.each(function(name){
@@ -79,6 +88,7 @@ provides: [Behavior.API]
 			}, this);
 			return obj;
 		},
+		//gets the data-filtername-options object and parses it as JSON
 		_getOptions: function(){
 			if (!this.options){
 				var options = this.element.getData(this.prefix + '-options', '{}');
@@ -87,6 +97,7 @@ provides: [Behavior.API]
 			}
 			return this.options;
 		},
+		//given a name (string) returns the value for it
 		_getValue: function(name){
 			var options = this._getOptions();
 			if (!options.hasOwnProperty(name)){
@@ -95,10 +106,13 @@ provides: [Behavior.API]
 			}
 			return options[name];
 		},
+		//given a Type and a name (string) returns the value for it coerced to that type if possible
+		//else returns the defaultValue or null
 		_getValueAs: function(returnType, name, defaultValue){
 			var value = this._coerceFromString(returnType, this._getValue(name));
 			return instanceOf(value, returnType) ? value : defaultValue;
 		},
+		//given an object of name/Type pairs, returns those as an object of name/value (as specified Type) pairs
 		_getValuesAs: function(obj){
 			var returnObj = {};
 			for (var name in obj){
@@ -106,6 +120,7 @@ provides: [Behavior.API]
 			}
 			return returnObj;
 		},
+		//attempts to run a value through the JSON parser. If the result is not of that type returns null.
 		_coerceFromString: function(toType, value){
 			if (typeOf(value) == 'string' && toType != String){
 				if (JSON.isSecure(value)) value = JSON.decode(value);
