@@ -97,11 +97,11 @@ provides: [Behavior]
 					} else {
 						var config = filter.config;
 						if (config.delay !== undefined){
-							this._delayFilter(config.delay, element, filter, force);
+							this.applyFilter.delay(filter.config.delay, this, [element, filter, force]);
 						} else if(config.delayUntil){
-							this._delayFilterUntil(config.delayUntil, element, filter, force);
+							this._delayFilterUntil(element, filter, force);
 						} else if(config.initializer){
-							this._customInit(config.initializer, element, filter, force);
+							this._customInit(element, filter, force);
 						} else {
 							plugins.extend(this.applyFilter(element, filter, force, true));
 						}
@@ -112,11 +112,8 @@ provides: [Behavior]
 			return this;
 		},
 
-		_delayFilter: function(delay, element, filter, force){
-			this.applyFilter.delay(delay, this, [element, filter, force]);
-		},
-
-		_delayFilterUntil: function(event, element, filter, force){
+		_delayFilterUntil: function(element, filter, force){
+			var event = filter.config.delayUntil;
 			var init = function(e){
 				element.removeEvent(event, init);
 				var setup = filter.setup;
@@ -130,10 +127,10 @@ provides: [Behavior]
 			element.addEvent(event, init);
 		},
 
-		_customInit: function(init, element, filter, force){
+		_customInit: function(element, filter, force){
 			var api = new this.API(element, filter.name);
 			api.runSetup = this.applyFilter.pass([element, filter, force], this);
-			init(element, api);
+			filter.config.initializer(element, api);
 		},
 
 		//Applies a specific behavior to a specific element.

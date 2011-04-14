@@ -27,7 +27,7 @@
 			expect(behaviorInstance.getFilter('Test2').setup).toBe(test2);
 		});
 		
-		it('should not overwrite a filter', function(){
+		it('should not overwrite a filter unless forced', function(){
 			var test1 = function(){};
 			var test2 = function(){};
 			Behavior.addGlobalFilter('T1', test1);
@@ -35,7 +35,7 @@
 			expect(behaviorInstance.getFilter('Test1').setup).toNotBe(test1);
 		});
 		
-		it('should overwrite a filter', function(){
+		it('should overwrite a filter when forced', function(){
 			var test1 = function(){};
 			var test2 = function(){};
 			Behavior.addGlobalFilter('T2', test1);
