@@ -27,6 +27,11 @@
 			expect(api.getAs(Boolean, 'false')).toBe(false);
 		});
 
+		it('should not fail when using getAs on a property that isn\'t present', function(){
+			var api = new Behavior.API(target, 'filtername');
+			expect(api.getAs(Boolean, 'notHere')).toBe(undefined);
+		});
+
 		it('should read JSON values', function(){
 			var api = new Behavior.API(target, 'filtername');
 			expect(api.get('foo')).toBe('bar');
