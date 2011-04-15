@@ -1,4 +1,4 @@
-name: "Behavior"
+name: "Behavior-Tests"
 
 web: "[clientcide.com](http://clientcide.com)"
 
@@ -11,6 +11,8 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 authors: "[Aaron Newton](http://clientcide.com)"
 
 sources:
-  - "Source/Element.Data.js"
-  - "Source/Behavior.js"
-  - "Source/Behavior.API.js"
+  - "Behavior/Benchmarks.js"
+  - "Behavior/Behavior.SpecsHelpers.js"
+  - "Behavior/Element.Data.Specs.js"
+  - "Behavior/Behavior.Specs.js"
+  - "Behavior/Behavior.API.Specs.js"

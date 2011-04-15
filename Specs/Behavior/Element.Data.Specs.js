@@ -1,3 +1,12 @@
+/*
+---
+name: Element.Data.Specs
+description: n/a
+requires: [Behavior/Element.Data]
+provides: [Element.Data.Specs]
+...
+*/
+
 (function(){
 	var target = new Element('div', {
 		'data-filters': 'Test1 Test2',

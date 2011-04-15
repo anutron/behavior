@@ -1,3 +1,11 @@
+/*
+---
+name: Behavior.Benchmarks
+description: n/a
+requires: [Behavior-Tests/Behavior.SpecsHelpers]
+provides: [Behavior.Benchmarks]
+...
+*/
 (function(){
 
 	Behavior.addGlobalFilter('Test1', function(){});
