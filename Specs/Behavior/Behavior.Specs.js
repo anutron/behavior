@@ -193,7 +193,7 @@
 					'nine': Array
 				},
 				truthy: false,
-				catcher: "Could not find Require-nine option on element or its type was invalid."
+				catcher: "Could not retrieve value \'nine\' as the specified type. Its value is: 9"
 			})
 		);
 		
@@ -201,7 +201,7 @@
 			makeRequirementTest({
 				require: ['number', 'true', 'false', 'nope'],
 				truthy: false,
-				catcher: "Could not find Require-nope option on element."
+				catcher: "Could not retrieve Require-nope option from element."
 			})
 		);
 		

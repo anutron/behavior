@@ -36,7 +36,7 @@ provides: [Behavior.API]
 
 		require: function(/* name[, name, name, etc] */){
 			for (var i = 0; i < arguments.length; i++){
-				if (this._getValue(arguments[i]) == undefined) throw 'Could not find ' + this.prefix + '-' + arguments[i] + ' option on element.';
+				if (this._getValue(arguments[i]) == undefined) throw 'Could not retrieve ' + this.prefix + '-' + arguments[i] + ' option from element.';
 			}
 			return this;
 		},
@@ -46,11 +46,11 @@ provides: [Behavior.API]
 			if (typeOf(arguments[0]) == 'object'){
 				for (var objName in arguments[0]){
 					val = this._getValueAs(arguments[0][objName], objName);
-					if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + objName + " option on element or its type was invalid.";
+					if (val === undefined || val === null) throw "Could not retrieve " + this.prefix + '-' + objName + " option from element.";
 				}
 			} else {
 				val = this._getValueAs(returnType, name);
-				if (val === undefined || val === null) throw "Could not find " + this.prefix + '-' + name + " option on element or its type was invalid.";
+				if (val === undefined || val === null) throw "Could not retrieve " + this.prefix + '-' + name + " option from element.";
 			}
 			return this;
 		},
@@ -109,8 +109,11 @@ provides: [Behavior.API]
 		//given a Type and a name (string) returns the value for it coerced to that type if possible
 		//else returns the defaultValue or null
 		_getValueAs: function(returnType, name, defaultValue){
-			var value = this._coerceFromString(returnType, this._getValue(name));
-			return instanceOf(value, returnType) ? value : defaultValue;
+			var value = this._getValue(name);
+			if (value == null || value == undefined) return defaultValue;
+			var coerced = this._coerceFromString(returnType, value);
+			if (coerced == null) throw "Could not retrieve value '" + name + "' as the specified type. Its value is: " + value;
+			return coerced;
 		},
 		//given an object of name/Type pairs, returns those as an object of name/value (as specified Type) pairs
 		_getValuesAs: function(obj){

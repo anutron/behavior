@@ -90,21 +90,21 @@
 				api.require('notThere');
 				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 			} catch(e) {
-				expect(e).toBe('Could not find filtername-notThere option on element.');
+				expect(e).toBe('Could not retrieve filtername-notThere option from element.');
 			}
 
 			try {
 				api.requireAs(Number, 'true');
 				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 			} catch(e) {
-				expect(e).toBe('Could not find filtername-true option on element or its type was invalid.');
+				expect(e).toBe('Could not retrieve value \'true\' as the specified type. Its value is: true');
 			}
 
 			try {
 				api.requireAs(Boolean, 'number');
 				expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 			} catch(e) {
-				expect(e).toBe('Could not find filtername-number option on element or its type was invalid.');
+				expect(e).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
 			}
 
 			try {
@@ -114,7 +114,7 @@
 					'number': Boolean
 				});
 			} catch(e){
-				expect(e).toBe('Could not find filtername-number option on element or its type was invalid.');
+				expect(e).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
 			}
 		});
 
