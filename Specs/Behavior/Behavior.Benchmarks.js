@@ -8,12 +8,12 @@ provides: [Behavior.Benchmarks]
 */
 (function(){
 
-	Behavior.addGlobalFilter('Test1', function(){});
+	Behavior.addGlobalFilter('BenchmarkFilter', function(){});
 
 	Behavior.addFilterTest({
-		filterName: 'Test1',
+		filterName: 'BenchmarkFilter',
 		desc: 'Applies an empty filter',
-		content: '<div data-filters="Test1"></div>',
+		content: '<div data-filters="BenchmarkFilter"></div>',
 		noSpecs: true
 	});
 

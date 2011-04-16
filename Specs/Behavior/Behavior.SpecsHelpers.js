@@ -27,18 +27,18 @@ var ClassAdder = new Class({
 
 //a vanilla behavior instance
 var behaviorInstance = new Behavior();
-(function(){
-	//returns a Behavior.Filter setup function that creates a ClassAdder instance (see above)
-	//for a specified CSS className
-	var makeAdder = function(className){
-		return function(el, API){ 
-			var adder = new ClassAdder(el, className);
-			API.markForCleanup(el, function(){
-				adder.destroy();
-			});
-			return adder;
-		};
+//returns a Behavior.Filter setup function that creates a ClassAdder instance (see above)
+//for a specified CSS className
+ClassAdder.makeAdder = function(className){
+	return function(el, API){ 
+		var adder = new ClassAdder(el, className);
+		API.markForCleanup(el, function(){
+			adder.destroy();
+		});
+		return adder;
 	};
+};
+(function(){
 	//given a peice of content (either an HTML string or a DOM tree)
 	//multiply it by a given number of times and return it
 	var multiplyContent = function(content, times){
@@ -185,27 +185,28 @@ var behaviorInstance = new Behavior();
 				behaviorInstance.apply(container);
 				//check to see if the filter was deferred; if it was, wait for it or invoke it
 				var filter = behaviorInstance.getFilter(options.filterName);
+				var checkCreated = function(){ expect(created).toBe(true); };
 				if (filter.config.delay){
 					waits(filter.config.delay + 50);
 					runs(function(){
-						expect(created).toBe(true);
+						checkCreated();
 						checkExpectations(options, filterElement, filterReturned);
 					});
 				} else if (filter.config.delayUntil){
-					container.getElements('[data-filters]').fireEvent('mouseover', true);
-					expect(created).toBe(true);
+					container.getElements('[data-filters]').fireEvent(filter.config.delayUntil, true);
+					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
 				} else if (filter.config.initializer){
 					container.getElement('[data-filters]').each(function(element){
 						if (element.hasDataFilter(filter.name)){
 							behaviorInstance.applyFilter(element, filter);
-							expect(created).toBe(true);
+							checkCreated();
 							checkExpectations(options, filterElement, filterReturned);
 						}
 					});
 				} else {
 					//not deffered
-					expect(created).toBe(true);
+					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
 				}
 			});

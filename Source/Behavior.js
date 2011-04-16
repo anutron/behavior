@@ -2,7 +2,7 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, /Element.Data, More/Table]
+requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, More/Table, /Element.Data, /Behavior.API]
 provides: [Behavior]
 ...
 */
@@ -19,6 +19,12 @@ provides: [Behavior]
 	};
 
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
+
+	//Behavior depends on Behavior.API. Behavior.API declares a temporary namespace for Behavior
+	//since it's included first. This sets it asside, declares the Behavior class, and then puts it
+	//back.
+	var API;
+	if (window.Behavior) API = window.Behavior.API;
 
 	this.Behavior = new Class({
 
@@ -230,6 +236,8 @@ provides: [Behavior]
 		}
 
 	});
+
+	if (API) Behavior.API = API;
 
 	//Returns the applied behaviors for an element.
 	var getApplied = function(el){

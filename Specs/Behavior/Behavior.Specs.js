@@ -24,11 +24,11 @@ if (window.describe){
 		describe('Behavior', function(){
 
 			it('should register a filter', function(){
-				var test1 = makeAdder('one');
+				var test1 = ClassAdder.makeAdder('one');
 				Behavior.addGlobalFilter('Test1', test1);
 				expect(behaviorInstance.getFilter('Test1').setup).toBe(test1);
 		
-				var test2 = makeAdder('two');
+				var test2 = ClassAdder.makeAdder('two');
 				Behavior.addGlobalFilters({
 					Test2: test2
 				});
@@ -227,7 +227,7 @@ if (window.describe){
 			});
 		
 			it('should overwrite a global filter with a local one', function(){
-				var test1 = makeAdder('ONE');
+				var test1 = ClassAdder.makeAdder('ONE');
 				behaviorInstance.addFilter('Test1', test1);
 				expect(behaviorInstance.getFilter('Test1').setup).toBe(test1);
 				behaviorInstance.apply(container);
