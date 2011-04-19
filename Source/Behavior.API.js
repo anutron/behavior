@@ -88,7 +88,8 @@ provides: [Behavior.API]
 		_getObj: function(names){
 			var obj = {};
 			names.each(function(name){
-				obj[name] = this._getValue(name);
+				var value = this._getValue(name);
+				if (value !== undefined) obj[name] = value;
 			}, this);
 			return obj;
 		},
