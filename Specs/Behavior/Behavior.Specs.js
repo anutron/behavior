@@ -1,6 +1,6 @@
 /*
 ---
-name: Behavior.Benchmarks
+name: Behavior.Specs
 description: n/a
 requires: [Behavior-Tests/Behavior.SpecsHelpers]
 provides: [Behavior.Specs]

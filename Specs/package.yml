@@ -11,8 +11,9 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 authors: "[Aaron Newton](http://clientcide.com)"
 
 sources:
-  - "Behavior/Behavior.Benchmarks.js"
-  - "Behavior/Behavior.SpecsHelpers.js"
-  - "Behavior/Element.Data.Specs.js"
-  - "Behavior/Behavior.Specs.js"
   - "Behavior/Behavior.API.Specs.js"
+  - "Behavior/Behavior.Benchmarks.js"
+  - "Behavior/Behavior.Specs.js"
+  - "Behavior/Behavior.SpecsHelpers.js"
+  - "Behavior/Delegator.Specs.js"
+  - "Behavior/Element.Data.Specs.js"

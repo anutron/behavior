@@ -11,6 +11,8 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 authors: "[Aaron Newton](http://clientcide.com)"
 
 sources:
+  - "Source/Delegator.js"
   - "Source/Element.Data.js"
+  - "Source/Event.Mock.js"
   - "Source/Behavior.js"
   - "Source/Behavior.API.js"
