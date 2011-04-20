@@ -185,7 +185,9 @@ provides: [Behavior]
 					api.requireAs(filter.config.requireAs);
 				} else if (filter.config.require){
 					api.require.apply(api, Array.from(filter.config.require));
-				} if (filter.config.defaults) api.setDefault(defaults);
+				} if (filter.config.defaults){
+					api.setDefault(filter.config.defaults);
+				}
 
 				//apply the filter
 				var result = filter.setup(element, api, _pluginTargetResult);

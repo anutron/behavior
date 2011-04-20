@@ -11,6 +11,7 @@ if (window.describe){
 		var container = new Element('div');
 		var target = new Element('div', {
 			'data-filters': 'Test1 Test2',
+			'data-Defaults-options':'{"foo":"bar"}',
 			'data-Require-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}',
 			'data-Require-number': '0',
 			'data-Require-true': 'true',
@@ -140,6 +141,23 @@ if (window.describe){
 				expect(target.getFilterResult('Test1')).toBeNull();
 				expect(target.hasClass('one')).toBe(false);
 			});
+		
+			it('should set the defaults for a filter', function(){
+				target.addDataFilter('Defaults');
+				Behavior.addGlobalFilter('Defaults', {
+					defaults: {
+						foo: 'baz',
+						number: 9
+					},
+					setup: function(element, api){
+						expect(api.get('number')).toEqual(9);
+						expect(api.get('foo')).toEqual('bar');
+					}
+				});
+				behaviorInstance.apply(container);
+				target.removeDataFilter('Defaults');
+			});
+		
 		
 			var makeRequirementTest = function(options){
 				return function(){
