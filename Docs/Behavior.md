@@ -31,8 +31,8 @@ Behavior is applied to an element whenever you want to parse that element's DOM 
 
 ### Example Usage
 
-	 var myBehavior = new Behavior();
-	 myBehavior.apply(myContainerElement);
+	var myBehavior = new Behavior();
+	myBehavior.apply(myContainerElement);
 
 ### Example HTML
 
@@ -536,7 +536,95 @@ Filter Plugins are identical to regular filters with the exception that they are
 
 The above example is guaranteed to always run after the "Mask" filter. You can define a plugin for a plugin just as well; simply name the plugin as the first argument (you could create a plugin for the above example by making a plugin for "AlertOnMask"). Plugin setup functions are passed not only the target element and the api object but also the instance returned by the filter they augment.
 
+Element Methods
+===============
+
+Behavior implements the following helper methods on the Element prototype.
+
+Element Method: addDataFilter {#Element:addDataFilter}
+------------------------------------------------------
+
+Adds a data filter to the element.
+
+### Syntax
+
+	myElement.addDataFilter(name);
+
+### Arguments
+
+1. name - (*string*) The name of the data filter to add.
+
+### Returns
+
+* (*element*) This element.
+
+Element Method: removeDataFilter {#Element:removeDataFilter}
+------------------------------------------------------
+
+Removes a data filter to the element.
+
+### Syntax
+
+	myElement.removeDataFilter(name);
+
+### Arguments
+
+1. name - (*string*) The name of the data filter to remove.
+
+### Returns
+
+* (*element*) This element.
+
+
+Element Method: getDataFilters {#Element:getDataFilters}
+------------------------------------------------------
+
+Gets an array of data filters specified on an element.
+
+### Syntax
+
+	myElement.getDataFilters();
+
+### Returns
+
+* (*array*) A list of data filter names.
+
+Element Method: hasDataFilter {#Element:hasDataFilter}
+------------------------------------------------------
+
+Returns `true` if the element has the specified data filter.
+
+### Syntax
+
+	myElement.hasDataFilter(name);
+
+### Arguments
+
+1. name - (*string*) The name of the data filter to check for.
+
+### Returns
+
+* (*boolean*) Returns `true` if the element has the specified data filter.
+
+Element Method: getFilterResult {#Element:getFilterResult}
+------------------------------------------------------
+
+Filters generally return the instance of the widget they instantiate. This method allows you to access that widget.
+
+### Syntax
+
+	myElement.getFilterResult(name);
+
+### Arguments
+
+1. name - (*string*) The name of the data filter to get the result of.
+
+### Returns
+
+* (*mixed*) Returns whatever the named filter returns.
+
+
 [Options]: http://mootools.net/docs/core/Class/Class.Extras#Options
 [Events]: http://mootools.net/docs/core/Class/Class.Extras#Events
 [Behavior.Filter]: #Behavior.Filter
-[Behavior.API]: #Behavior.API
+[Behavior.API]: Behavior.API
