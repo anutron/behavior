@@ -16,7 +16,6 @@ provides: [Delegator]
 
 		options: {
 			// breakOnErrors: false,
-			// onTrigger: function(name, element, event){},
 			onError: function(){
 				if (window.console && console[method]){
 					if(console.warn.apply) console[method].apply(console, arguments);
@@ -49,12 +48,16 @@ provides: [Delegator]
 		},
 
 		detach: function(target){
-			this.attach(target, 'removeEvent');
-			return this;
+			if (target){
+				this.attach(target, 'removeEvent');
+				return this;
+			} else {
+				this._attachedTo.each(this.detach, this);
+			}
 		},
 
 		trigger: function(name, element, event){
-			if (!event) event = new Event.Mock(element);
+			if (!event || typeOf(event) == "string") event = new Event.Mock(element, event);
 			var trigger = this._getTrigger(name);
 			if (trigger && trigger.types.contains(event.type)) {
 				if (this.options.breakOnErrors){
@@ -89,8 +92,7 @@ provides: [Delegator]
 			} if (trigger.defaults){
 				api.setDefault(trigger.defaults);
 			}
-			trigger.handler(element, event, api);
-			this.fireEvent('trigger', [trigger, element, event]);
+			trigger.handler(event, element, api);
 		},
 
 		_eventHandler: function(event, target){
@@ -146,6 +148,8 @@ provides: [Delegator]
 			handler.name = name;
 			this._triggers[name] = handler;
 			this._onRegister(eventTypes);
+		} else {
+			throw 'Could add the trigger "' + name  +'" as a previous trigger by that same name exists.';
 		}
 		return this;
 	};

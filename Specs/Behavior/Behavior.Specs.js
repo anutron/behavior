@@ -11,11 +11,11 @@ if (window.describe){
 		var container = new Element('div');
 		var target = new Element('div', {
 			'data-filters': 'Test1 Test2',
-			'data-Defaults-options':'{"foo":"bar"}',
-			'data-Require-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}',
-			'data-Require-number': '0',
-			'data-Require-true': 'true',
-			'data-Require-false': 'false'
+			'data-defaults-options':'{"foo":"bar"}',
+			'data-require-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}',
+			'data-require-number': '0',
+			'data-require-true': 'true',
+			'data-require-false': 'false'
 		}).inject(container);
 
 		var SimpleClass = new Class({
@@ -41,8 +41,13 @@ if (window.describe){
 				var test1 = function(){};
 				var test2 = function(){};
 				Behavior.addGlobalFilter('T1', test1);
-				Behavior.addGlobalFilter('T1', test2);
-				expect(behaviorInstance.getFilter('Test1').setup).toNotBe(test1);
+				try {
+					Behavior.addGlobalFilter('T1', test2);
+					expect(true).toBe(false); //should not get here
+				} catch(e){
+					expect(e).toBe('Could not add the Behavior filter "T1" as a previous trigger by that same name exists.');
+				}
+				expect(behaviorInstance.getFilter('T1').setup).toNotBe(test2);
 			});
 		
 			it('should overwrite a filter when forced', function(){
@@ -228,7 +233,7 @@ if (window.describe){
 				makeRequirementTest({
 					require: ['number', 'true', 'false', 'nope'],
 					truthy: false,
-					catcher: "Could not retrieve Require-nope option from element."
+					catcher: "Could not retrieve require-nope option from element."
 				})
 			);
 		

@@ -22,7 +22,6 @@ Manager for generic (DOM) event handlers.
 ### Events
 
 * error - function invoked when a trigger is not found. Defaults to console errors if console.error is available.
-* trigger - function invoked when a trigger is invoked.
 
 ### Usage
 
@@ -139,15 +138,15 @@ Attaches the appropriate event listeners to the provided container.
 Delegator Method: detach {#Delegator:detach}
 --------------------------------------------------
 
-Detaches the appropriate event listeners from the provided container.
+Detaches the appropriate event listeners from the provided container or, if none is provided, all of them that have previously been attached.
 
 ### Syntax
 
-	myDelegator.detach(container);
+	myDelegator.detach([container]);
 
 ### Arguments
 
-1. container - (*element*) A DOM element (or its ID) to attach delegated events.
+1. container - (*element*; optional) A DOM element (or its ID) to attach delegated events. If none is specified all previously attached elements are detached.
 
 ### Returns
 
@@ -162,11 +161,15 @@ Invokes a specific trigger manually.
 
 	myDelegator.trigger(trigger, element[, event]);
 
+### Example
+
+	myDelegator.trigger('UpdateOnSubmit', myForm, 'submit'); //creates a mock "submit" event
+
 ### Arguments
 
 1. trigger - (*string*) The name of the registered trigger to invoke.
 2. element - (*element*) A DOM element (or its ID) for the trigger's target.
-3. event - (*event*; optional) An optional event to pass to the trigger. If none is provided a mock event is created as a "click" event.
+3. event - (*event* or *string*; optional) An optional event to pass to the trigger. If you pass in a string, a mock event will be created for that type. If none is provided a mock event is created as a "click" event.
 
 
 Element Methods

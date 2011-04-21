@@ -56,31 +56,36 @@ provides: [Delegator.Specs]
 		it('should register a global trigger', function(){
 			var test3 = function(){};
 			Delegator.register('click', 'Test3', test3);
-			expect(instance.getTrigger('Test3').handler).toBe(test3);
+			expect(instance._getTrigger('Test3').handler).toBe(test3);
 		});
 		
 		it('should register a local trigger', function(){
 			var test3 = function(){};
 			instance.register('click', 'Test3', test3);
-			expect(instance.getTrigger('Test3').handler).toBe(test3);
+			expect(instance._getTrigger('Test3').handler).toBe(test3);
 		});
 		
 		it('should fail to overwrite a filter', function(){
 			var test3 = function(){};
-			instance.register('click', 'Test3', test3);
-			expect(instance.getTrigger('Test3').handler).toNotBe(test3);
+			try {
+				instance.register('click', 'Test3', test3);
+				expect(true).toBe(false); //should not get here
+			} catch(e){
+				expect(e).toBe('Could add the trigger "Test3" as a previous trigger by that same name exists.');
+			}
+			expect(instance._getTrigger('Test3').handler).toNotBe(test3);
 		});
 		
 		it('should overwrite a filter', function(){
 			var overwrite = function(){};
 			instance.register('click', 'Test2', overwrite, true);
-			expect(instance.getTrigger('Test2').handler).toBe(overwrite);
+			expect(instance._getTrigger('Test2').handler).toBe(overwrite);
 		
 			var test4 = function(){};
 			instance.register('click', {
 				Test3: test4
 			}, true);
-			expect(instance.getTrigger('Test3').handler).toBe(test4);
+			expect(instance._getTrigger('Test3').handler).toBe(test4);
 		});
 		
 		// Only run this spec in browsers other than IE6-8 because they can't properly simulate bubbling events
@@ -153,7 +158,7 @@ provides: [Delegator.Specs]
 				}, true);
 				simulateEvent('click', [{}, target], function(){
 					expect(success).toBeFalsy();
-					expect(msg).toBe('Could not apply the trigger Required Could not retrieve Required-missing option from element.');
+					expect(msg).toBe('Could not apply the trigger Required Could not retrieve required-missing option from element.');
 					target.removeTrigger('Required');
 				});
 			});
@@ -169,7 +174,7 @@ provides: [Delegator.Specs]
 					instance.trigger('Required', target);
 					expect(true).toBe(false);
 				} catch(e){
-					expect(e).toBe('Could not retrieve Required-missing option from element.');
+					expect(e).toBe('Could not retrieve required-missing option from element.');
 				}
 				target.removeTrigger('Required');
 			});

@@ -21,7 +21,7 @@ provides: [Behavior.API]
 
 		initialize: function(element, prefix){
 			this.element = element;
-			this.prefix = prefix;
+			this.prefix = prefix.toLowerCase();
 		},
 
 		/******************

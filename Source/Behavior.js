@@ -252,6 +252,7 @@ provides: [Behavior]
 	//overwrite - (boolean) if true, will overwrite existing filter if one exists; defaults to false.
 	var addFilter = function(name, fn, overwrite){
 		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
+		else throw 'Could not add the Behavior filter "' + name  +'" as a previous trigger by that same name exists.';
 	};
 	
 	var addFilters = function(obj, overwrite){
@@ -267,6 +268,7 @@ provides: [Behavior]
 	var addPlugin = function(filterName, name, setup, overwrite){
 		if (!this._plugins[filterName]) this._plugins[filterName] = {};
 		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, setup);
+		else throw 'Could not add the Behavior filter plugin "' + name  +'" as a previous trigger by that same name exists.';
 	};
 	
 	var addPlugins = function(obj, overwrite){
