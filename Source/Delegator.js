@@ -149,7 +149,7 @@ provides: [Delegator]
 			this._triggers[name] = handler;
 			this._onRegister(eventTypes);
 		} else {
-			throw 'Could add the trigger "' + name  +'" as a previous trigger by that same name exists.';
+			throw new Error('Could add the trigger "' + name  +'" as a previous trigger by that same name exists.');
 		}
 		return this;
 	};

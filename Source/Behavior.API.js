@@ -40,7 +40,7 @@ provides: [Behavior.API]
 
 		require: function(/* name[, name, name, etc] */){
 			for (var i = 0; i < arguments.length; i++){
-				if (this._getValue(arguments[i]) == undefined) throw 'Could not retrieve ' + this.prefix + '-' + arguments[i] + ' option from element.';
+				if (this._getValue(arguments[i]) == undefined) throw new Error('Could not retrieve ' + this.prefix + '-' + arguments[i] + ' option from element.');
 			}
 			return this;
 		},
@@ -50,11 +50,11 @@ provides: [Behavior.API]
 			if (typeOf(arguments[0]) == 'object'){
 				for (var objName in arguments[0]){
 					val = this._getValueAs(arguments[0][objName], objName);
-					if (val === undefined || val === null) throw "Could not retrieve " + this.prefix + '-' + objName + " option from element.";
+					if (val === undefined || val === null) throw new Error("Could not retrieve " + this.prefix + '-' + objName + " option from element.");
 				}
 			} else {
 				val = this._getValueAs(returnType, name);
-				if (val === undefined || val === null) throw "Could not retrieve " + this.prefix + '-' + name + " option from element.";
+				if (val === undefined || val === null) throw new Error("Could not retrieve " + this.prefix + '-' + name + " option from element.");
 			}
 			return this;
 		},
@@ -117,7 +117,7 @@ provides: [Behavior.API]
 			var value = this._getValue(name);
 			if (value == null || value == undefined) return defaultValue;
 			var coerced = this._coerceFromString(returnType, value);
-			if (coerced == null) throw "Could not retrieve value '" + name + "' as the specified type. Its value is: " + value;
+			if (coerced == null) throw new Error("Could not retrieve value '" + name + "' as the specified type. Its value is: " + value);
 			return coerced;
 		},
 		//given an object of name/Type pairs, returns those as an object of name/value (as specified Type) pairs

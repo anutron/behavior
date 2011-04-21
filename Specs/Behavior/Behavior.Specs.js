@@ -45,7 +45,7 @@ if (window.describe){
 					Behavior.addGlobalFilter('T1', test2);
 					expect(true).toBe(false); //should not get here
 				} catch(e){
-					expect(e).toBe('Could not add the Behavior filter "T1" as a previous trigger by that same name exists.');
+					expect(e.message).toBe('Could not add the Behavior filter "T1" as a previous trigger by that same name exists.');
 				}
 				expect(behaviorInstance.getFilter('T1').setup).toNotBe(test2);
 			});
@@ -90,7 +90,7 @@ if (window.describe){
 					behaviorInstance.apply(container);
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch(e) {
-					expect(e).toBe("Filter SimpleClass2 did not return a valid instance.");
+					expect(e.message).toBe("Filter SimpleClass2 did not return a valid instance.");
 				}
 				behaviorInstance.options.breakOnErrors = false;
 				target.removeDataFilter('SimpleClass2');
@@ -110,7 +110,7 @@ if (window.describe){
 					behaviorInstance.apply(container);
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch(e) {
-					expect(e).toBe("this thing is totally broken");
+					expect(e.message).toBe("this thing is totally broken");
 				}
 				behaviorInstance.options.breakOnErrors = false;
 				target.removeDataFilter('Failure');
@@ -184,7 +184,7 @@ if (window.describe){
 							behaviorInstance.apply(container, true);
 							expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 						} catch(e) {
-							expect(e).toBe(options.catcher);
+							expect(e.message).toBe(options.catcher);
 						}
 					} else {
 						behaviorInstance.apply(container, true);
@@ -381,7 +381,7 @@ if (window.describe){
 					behaviorInstance.passMethod('addEvent', function(){});
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch (e) {
-					expect(e).toBe('Cannot overwrite API method addEvent as it already exists');
+					expect(e.message).toBe('Cannot overwrite API method addEvent as it already exists');
 				}
 			});
 

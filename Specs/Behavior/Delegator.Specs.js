@@ -71,7 +71,7 @@ provides: [Delegator.Specs]
 				instance.register('click', 'Test3', test3);
 				expect(true).toBe(false); //should not get here
 			} catch(e){
-				expect(e).toBe('Could add the trigger "Test3" as a previous trigger by that same name exists.');
+				expect(e.message).toBe('Could add the trigger "Test3" as a previous trigger by that same name exists.');
 			}
 			expect(instance._getTrigger('Test3').handler).toNotBe(test3);
 		});
@@ -158,7 +158,7 @@ provides: [Delegator.Specs]
 				}, true);
 				simulateEvent('click', [{}, target], function(){
 					expect(success).toBeFalsy();
-					expect(msg).toBe('Could not apply the trigger Required Could not retrieve required-missing option from element.');
+					expect(msg).toBe('Could not apply the trigger Required Error: Could not retrieve required-missing option from element.');
 					target.removeTrigger('Required');
 				});
 			});
@@ -174,7 +174,7 @@ provides: [Delegator.Specs]
 					instance.trigger('Required', target);
 					expect(true).toBe(false);
 				} catch(e){
-					expect(e).toBe('Could not retrieve required-missing option from element.');
+					expect(e.message).toBe('Could not retrieve required-missing option from element.');
 				}
 				target.removeTrigger('Required');
 			});

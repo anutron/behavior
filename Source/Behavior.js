@@ -61,7 +61,7 @@ provides: [Behavior]
 				error: function(){ this.fireEvent('error', arguments); }.bind(this),
 				fail: function(){
 					var msg = Array.join(arguments, ' ');
-					throw msg;
+					throw new Error(msg);
 				},
 				warn: function(){
 					this.fireEvent('warn', arguments);
@@ -79,7 +79,7 @@ provides: [Behavior]
 		//other methods to your filters. For example, a method to close a popup
 		//for filters presented inside popups.
 		passMethod: function(method, fn){
-			if (this.API.prototype[method]) throw 'Cannot overwrite API method ' + method + ' as it already exists';
+			if (this.API.prototype[method]) throw new Error('Cannot overwrite API method ' + method + ' as it already exists');
 			this.API.implement(method, fn);
 			return this;
 		},
@@ -192,7 +192,7 @@ provides: [Behavior]
 				//apply the filter
 				var result = filter.setup(element, api, _pluginTargetResult);
 				if (filter.config.returns && !instanceOf(result, filter.config.returns)){
-					throw "Filter " + filter.name + " did not return a valid instance.";
+					throw new Error("Filter " + filter.name + " did not return a valid instance.");
 				}
 				element.store('Behavior Filter result:' + filter.name, result);
 				//and mark it as having been previously applied
@@ -252,7 +252,7 @@ provides: [Behavior]
 	//overwrite - (boolean) if true, will overwrite existing filter if one exists; defaults to false.
 	var addFilter = function(name, fn, overwrite){
 		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
-		else throw 'Could not add the Behavior filter "' + name  +'" as a previous trigger by that same name exists.';
+		else throw new Error('Could not add the Behavior filter "' + name  +'" as a previous trigger by that same name exists.');
 	};
 	
 	var addFilters = function(obj, overwrite){
@@ -268,7 +268,7 @@ provides: [Behavior]
 	var addPlugin = function(filterName, name, setup, overwrite){
 		if (!this._plugins[filterName]) this._plugins[filterName] = {};
 		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, setup);
-		else throw 'Could not add the Behavior filter plugin "' + name  +'" as a previous trigger by that same name exists.';
+		else throw new Error('Could not add the Behavior filter plugin "' + name  +'" as a previous trigger by that same name exists.');
 	};
 	
 	var addPlugins = function(obj, overwrite){

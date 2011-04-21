@@ -104,21 +104,21 @@ if (window.describe){
 					api.require('notThere');
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch(e) {
-					expect(e).toBe('Could not retrieve filtername-notThere option from element.');
+					expect(e.message).toBe('Could not retrieve filtername-notThere option from element.');
 				}
 
 				try {
 					api.requireAs(Number, 'true');
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch(e) {
-					expect(e).toBe('Could not retrieve value \'true\' as the specified type. Its value is: true');
+					expect(e.message).toBe('Could not retrieve value \'true\' as the specified type. Its value is: true');
 				}
 
 				try {
 					api.requireAs(Boolean, 'number');
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown
 				} catch(e) {
-					expect(e).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
+					expect(e.message).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
 				}
 
 				try {
@@ -128,7 +128,7 @@ if (window.describe){
 						'number': Boolean
 					});
 				} catch(e){
-					expect(e).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
+					expect(e.message).toBe('Could not retrieve value \'number\' as the specified type. Its value is: 0');
 				}
 			});
 
