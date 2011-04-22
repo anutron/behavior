@@ -385,6 +385,28 @@ if (window.describe){
 				}
 			});
 
+			it('should parse deprecated values', function(){
+				target.setData('some-thing', 'some value');
+				var depApi;
+				behaviorInstance.addFilter('Deprecated', {
+					deprecated: {
+						'test': 'some-thing'
+					},
+					setup: function(element, api){
+						depAPI = api;
+					}
+				});
+				target.addDataFilter('Deprecated');
+				behaviorInstance.apply(container);
+				expect(depAPI.get('test')).toBe('some value');
+				behaviorInstance.options.enableDeprecation = false;
+				behaviorInstance.apply(container, true);
+				expect(depAPI.get('test')).toBe(undefined);
+				behaviorInstance.options.enableDeprecation = true;
+				target.removeDataFilter('Deprecated');
+			});
+
+
 			// plugins
 
 			it('should define a global plugin', function(){

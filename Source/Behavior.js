@@ -24,7 +24,26 @@ provides: [Behavior]
 	//since it's included first. This sets it asside, declares the Behavior class, and then puts it
 	//back.
 	var API;
-	if (window.Behavior) API = window.Behavior.API;
+	if (window.Behavior) {
+		API = window.Behavior.API;
+		if (API) {
+			API.implement({
+				deprecate: function(deprecated, asJSON){
+					var set,
+					    values = {};
+					Object.each(deprecated, function(prop, key){
+						var value = this.element[ asJSON ? 'getJSONData' : 'getData'](prop);
+						if (value !== undefined){
+							set = true;
+							values[key] = value;
+						}
+					}, this);
+					this.setDefault(values);
+					return this;
+				}
+			});
+		}
+	}
 
 	this.Behavior = new Class({
 
@@ -38,7 +57,8 @@ provides: [Behavior]
 
 			//default error behavior when a filter cannot be applied
 			onError: getLog('error'),
-			onWarn: getLog('warn')
+			onWarn: getLog('warn'),
+			enableDeprecation: true
 		},
 
 		initialize: function(options){
@@ -180,14 +200,17 @@ provides: [Behavior]
 					filter.markForCleanup(element, fn);
 				};
 
+				if (filter.config.deprecated && this.options.enableDeprecation) api.deprecate(filter.config.deprecated);
+				if (filter.config.deprecateAsJSON && this.options.enableDeprecation) api.deprecate(filter.config.deprecatedAsJSON, true);
+
 				//deal with requirements and defaults
 				if (filter.config.requireAs){
 					api.requireAs(filter.config.requireAs);
 				} else if (filter.config.require){
 					api.require.apply(api, Array.from(filter.config.require));
-				} if (filter.config.defaults){
-					api.setDefault(filter.config.defaults);
 				}
+
+				if (filter.config.defaults) api.setDefault(filter.config.defaults);
 
 				//apply the filter
 				var result = filter.setup(element, api, _pluginTargetResult);

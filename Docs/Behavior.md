@@ -17,8 +17,8 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 ### Options
 
-* breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
-* container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to *document.body*;
+* breakOnErrors - (*boolean*) By default errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to `document.body`;
 
 ### Events
 
