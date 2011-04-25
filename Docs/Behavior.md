@@ -79,6 +79,7 @@ By default, Behavior passes the following methods to filters in addition to the 
 * getContainerSize - returns the value of getContentElement().getSize(); Note that if that element is not in the DOM this will return zeros.
 * error - fires the behavior instance's `error` event with the arguments passed.
 * fail - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
+* onCleanup - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
 * See the [Behavior.API][] for additional methods passed by default.
 
 You can add any other methods that our filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
