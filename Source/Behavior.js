@@ -253,8 +253,6 @@ provides: [Behavior]
 
 	});
 
-	if (API) BehaviorAPI = API;
-
 	//Returns the applied behaviors for an element.
 	var getApplied = function(el){
 		return el.retrieve('_appliedBehaviors', {});
