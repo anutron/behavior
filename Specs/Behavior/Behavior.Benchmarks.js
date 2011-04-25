@@ -14,7 +14,7 @@ provides: [Behavior.Benchmarks]
 		filterName: 'BenchmarkFilter',
 		desc: 'Applies an empty filter',
 		content: '<div data-filters="BenchmarkFilter"></div>',
-		noSpecs: true
+		specs: false
 	});
 
 })();

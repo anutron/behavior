@@ -123,11 +123,11 @@ ClassAdder.makeAdder = function(className){
 			desc: "Creates an Accordion with 20 sections." //a description of the test
 			returns: Fx.Accordion, //a pointer to the class instantiated and returned; if nothing is returned, omit
 			content: "<div>...</div>", //the HTML string or DOM tree to run behaviorInstance.apply() against
-			//expectations is an array of functions passed the element filtered and the instance created
-			//write any Jasmine style expectation string you like; run after the filter is applied
-			expectations: [function(element, instanceReturedByFilter){ expects(something).toBe(whatever); }],
-			noSpecs: true/false, //excludes from specs tests if true
-			noBenchmark: true/false //excludes from benchmarks if true
+			//expects is a function passed the element filtered and the instance created
+			//write any Jasmine style expectation string you like; this is run after the filter is applied
+			expectation: function(element, instanceReturedByFilter){ expects(something).toBe(whatever); },
+			specs: true/false, //excludes from specs tests if false; optional
+			benchmarks: true/false //excludes from benchmarks if false; optional
 		*/
 
 	Behavior.addFilterTest = function(options){
@@ -136,26 +136,22 @@ ClassAdder.makeAdder = function(className){
 		}
 		//if we're in the benchmark suite, add a benchmark
 		if (window.MooBench){
-			//unless noBenchmark is specified
-			if (!options.noBenchmark) MooBench.addBehaviorTest(options);
+			//unless benchmarks: false is specified
+			if (options.benchmarks === false) MooBench.addBehaviorTest(options);
 		} else if (window.describe){
-			//else we're in specs; add spec test unless noSpecs is specified
-			if (!options.noSpecs) Behavior.addSpecsTest(options);
+			//else we're in specs; add spec test unless specs:false is specified
+			if (options.specs === false) Behavior.addSpecsTest(options);
 		}
 	};
 
-	//run any expectations specified in the options
+	//run any additional tests specified in the options
 	/**
 		options - the options object passed to addSpecsTest
 		element - the element the filter was applied to
 		instance - the widget instance returned by the filter (if any)
 		*/
 	var checkExpectations = function(options, element, instance){
-		if (options.expectations){
-			options.expectations.each(function(expectation){
-				expectation(element, instance);
-			});
-		}
+		if (options.expect) options.expect(element, instance);
 	};
 
 	Behavior.addSpecsTest = function(options){
