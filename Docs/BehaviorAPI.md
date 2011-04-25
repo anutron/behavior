@@ -1,11 +1,11 @@
-Class: Behavior.API {#Behavior.API}
+Class: BehaviorAPI {#BehaviorAPI}
 ==========================
 
 Provides methods to read values from annotated HTML configured for the [Behavior][] class and its associated [Filters](Behavior.md#Behavior.Filter).
 
 ### Syntax
 
-	new Behavior.API(element[, prefix]);
+	new BehaviorAPI(element[, prefix]);
 
 ### Arguments
 
@@ -25,7 +25,7 @@ The `-options` value is parsed as JSON first (it's slightly more permissive in t
 
 If you attempt to read a value that isn't defined in this options object, the property name is attempted to be read from the property directly (e.g. `data-filtername-prop`). This value is *always* a string unless you specify a type. If a type is specified the value is run through the JSON parser and validated against that type.
 
-Behavior.API Method: get {#Behavior.API:getAs}
+BehaviorAPI Method: get {#BehaviorAPI:getAs}
 ------------------------------------------
 
 Gets a value for the specified name.
@@ -40,17 +40,17 @@ Gets a value for the specified name.
 
 ### Example
 
-	var api = new Behavior.API(target, 'foo');
+	var api = new BehaviorAPI(target, 'foo');
 	api.get('bar'); //returns the value of data-foo-bar or null
 	api.get('bar', 'baz'); //returns {bar: 'value', baz: 'value'}
 
 ### Returns
 
 * (*mixed*) Values defined as strings will be returned as strings. Values defined in JSON will be returned as their
-  type is evaluated. When you expect anything other than a string it's better to use [getAs](#Behavior.API:getAs).
+  type is evaluated. When you expect anything other than a string it's better to use [getAs](#BehaviorAPI:getAs).
   When more than one name is specified you'll receive an object response with key/value pairs for the name/property values.
 
-Behavior.API Method: getAs {#Behavior.API:getAs}
+BehaviorAPI Method: getAs {#BehaviorAPI:getAs}
 ------------------------------------------
 
 Gets a value for the specified name and runs it through [JSON.decode][] and verifies that the value is parsed as the specified type (specifically a MooTools Type: [String](http://mootools.net/docs/core/Types/String), [Function](http://mootools.net/docs/core/Types/Function), [Array](http://mootools.net/docs/core/Types/Array), [Date](http://mootools.net/docs/more/Types/Date), etc.).
@@ -67,14 +67,14 @@ Gets a value for the specified name and runs it through [JSON.decode][] and veri
 
 ### Example
 
-	var api = new Behavior.API(target, 'foo');
+	var api = new BehaviorAPI(target, 'foo');
 	api.getAs(Number, 'some-number');
 
 ### Returns
 
 * (*mixed*) Either returns the value as the Type you specified, the default (if provided), or undefined.
 
-Behavior.API Method: require {#Behavior.API:require}
+BehaviorAPI Method: require {#BehaviorAPI:require}
 ------------------------------------------
 
 Validates that an element has a value set for a given name. Throws an error if the value is not found.
@@ -89,15 +89,15 @@ Validates that an element has a value set for a given name. Throws an error if t
 
 ### Example
 
-	var api = new Behavior.API(target, 'foo');
+	var api = new BehaviorAPI(target, 'foo');
 	api.require('foo'); //throws an error if data-foo-foo is not set
 	api.require('foo', 'bar'); //throws an error if data-foo-foo or data-foo-bar are not set
 
 ### Returns
 
-* *object* - the instance of Behavior.API.
+* *object* - the instance of BehaviorAPI.
 
-Behavior.API Method: requireAs {#Behavior.API:requireAs}
+BehaviorAPI Method: requireAs {#BehaviorAPI:requireAs}
 ------------------------------------------
 
 Requires that an element has a value set for a given name that can be parsed into a given type (using [JSON.decode][]). If a value is not present or does not parse to the specified Type an error is thrown.
@@ -119,9 +119,9 @@ Requires that an element has a value set for a given name that can be parsed int
 
 ### Returns
 
-* *object* - the instance of Behavior.API.
+* *object* - the instance of BehaviorAPI.
 
-Behavior.API Method: setDefault {#Behavior.API:setDefault}
+BehaviorAPI Method: setDefault {#BehaviorAPI:setDefault}
 ------------------------------------------
 
 Sets the default values. Note that setting defaults for required properties is not useful.
@@ -150,9 +150,9 @@ OR
 
 ### Returns
 
-* *object* - the instance of Behavior.API.
+* *object* - the instance of BehaviorAPI.
 
-Behavior.API Method: refreshAPI {#Behavior.API:refreshAPI}
+BehaviorAPI Method: refreshAPI {#BehaviorAPI:refreshAPI}
 ------------------------------------------
 
 The API class caches values read from the element to avoid the cost of DOM interaction. Once you read a value, it is never read from the element again. If you wish to refresh this to re-read the element properties, invoke this method. Note that default values are maintained.
@@ -163,7 +163,7 @@ The API class caches values read from the element to avoid the cost of DOM inter
 
 ### Returns
 
-* *object* - the instance of Behavior.API.
+* *object* - the instance of BehaviorAPI.
 
 [Behavior]: Behavior.md
 [JSON.decode]: http://mootools.net/docs/core/Utilities/JSON#JSON:decode

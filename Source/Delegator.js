@@ -84,7 +84,7 @@ provides: [Delegator]
 		},
 
 		_trigger: function(trigger, element, event){
-			var api = new Behavior.API(element, trigger.name);
+			var api = new BehaviorAPI(element, trigger.name);
 			if (trigger.requireAs){
 				api.requireAs(trigger.requireAs);
 			} else if (trigger.require){

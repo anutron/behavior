@@ -1,20 +1,17 @@
 /*
 ---
-name: Behavior.API
+name: BehaviorAPI
 description: HTML getters for Behavior's API model.
 requires: [Core/Class, /Element.Data]
-provides: [Behavior.API]
+provides: [BehaviorAPI]
 ...
 */
 
 
 (function(){
-	//see Docs/Behavior.API.md for documentation of public methods.
+	//see Docs/BehaviorAPI.md for documentation of public methods.
 	
-	//this namespace is added because Behavior depends on this file, so we declare an empty namespace temporarily.
-	if (!window.Behavior) window.Behavior = {};
-
-	Behavior.API = new Class({
+	window.BehaviorAPI = new Class({
 		element: null,
 		prefix: '',
 		defaults: {},

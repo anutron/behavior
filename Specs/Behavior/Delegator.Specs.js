@@ -109,7 +109,7 @@ provides: [Delegator.Specs]
 			});
 
 
-			it('should use Behavior.API to read element properties', function(){
+			it('should use BehaviorAPI to read element properties', function(){
 				var readerAPI;
 				target.addTrigger('Reader');
 				instance.register('click', 'Reader', function(event, target, api){

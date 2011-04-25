@@ -70,7 +70,7 @@ Configuration.source = {
 			'mootools-more/Source/Core/More',
 			'mootools-more/Source/Utilities/Table',
 			'../Source/Behavior',
-			'../Source/Behavior.API',
+			'../Source/BehaviorAPI',
 			'../Source/Element.Data'
 		]
 	}

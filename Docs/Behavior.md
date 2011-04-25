@@ -17,7 +17,7 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 ### Options
 
-* breakOnErrors - (*boolean*) By default errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
 * container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to `document.body`;
 
 ### Events
@@ -47,7 +47,7 @@ The above example will invoke the registered "Accordion" filter. See the section
 
 ### HTML properties
 
-Behavior uses a clearly defined API to read HTML properties off the elements it configures. See [Behavior.API][] for details as well as [passMethod](#Behavior:passMethod) for methods that Behavior instances themselves provide.
+Behavior uses a clearly defined API to read HTML properties off the elements it configures. See [BehaviorAPI][] for details as well as [passMethod](#Behavior:passMethod) for methods that Behavior instances themselves provide.
 
 ### Using Multiple Filters Together
 
@@ -68,7 +68,7 @@ Defines a method that will be passed to filters. Behavior allows you to create a
 
 ### Notes
 
-By default, Behavior passes the following methods to filters in addition to the methods defined in the [Behavior.API][]
+By default, Behavior passes the following methods to filters in addition to the methods defined in the [BehaviorAPI][]
 
 * addEvent - the addEvent on the behavior instance method provided by the [Events][] class.
 * removeEvent - the removeEvent on the behavior instance method provided by the [Events][] class.
@@ -80,7 +80,7 @@ By default, Behavior passes the following methods to filters in addition to the 
 * error - fires the behavior instance's `error` event with the arguments passed.
 * fail - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
 * onCleanup - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
-* See the [Behavior.API][] for additional methods passed by default.
+* See the [BehaviorAPI][] for additional methods passed by default.
 
 You can add any other methods that our filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
 
@@ -319,7 +319,7 @@ Class: Behavior.Filter {#Behavior.Filter}
 
 Behavior Filters are where you define what to do with elements that are marked with that filter. Elements can have numerous filters defined and filters can do anything with those elements that they like. In general, filters should only alter the element given, though it is possible to have elements that relate to others (for example, an *Accoridon* filter might set up an instance of `Fx.Accordion` using children that are the togglers and sections).
 
-Typically filters allow for configuration using HTML5 data- properties, classes, and element attributes. See the [Behavior.API][] which automates the reading of these properties.
+Typically filters allow for configuration using HTML5 data- properties, classes, and element attributes. See the [BehaviorAPI][] which automates the reading of these properties.
 
 An important rule of filters is that they cannot know about each other or be in any way dependent on each other. When two filters need to be managed differently when both are present, use a [plugin](#Behavior.Filter:plugins) (this should be rare).
 
@@ -454,7 +454,7 @@ While is common (and recommended) for filters to be declared using Behavior's [a
 ### Arguments
 
 1. name - (*string*) The name of this filter. This is not used directly by the filter, though Behavior instances use it. Stored as `this.name` on the instance of the filter.
-2. filter - (*function* or *object*) Can be a single function or an object with the config options listed below. The function (which must be present either as the argument or as the `.setup` property on the object) expect to be invoked with an element and an instance of [Behavior.API][] passed to it. Filters in general expect this API object to be provided by a Behavior instance which also adds additional methods (see [Behavior.passMethod](#Behavior:passMethod)) for more details.
+2. filter - (*function* or *object*) Can be a single function or an object with the config options listed below. The function (which must be present either as the argument or as the `.setup` property on the object) expect to be invoked with an element and an instance of [BehaviorAPI][] passed to it. Filters in general expect this API object to be provided by a Behavior instance which also adds additional methods (see [Behavior.passMethod](#Behavior:passMethod)) for more details.
 
 ### Configuration
 
@@ -628,4 +628,4 @@ Filters generally return the instance of the widget they instantiate. This metho
 [Options]: http://mootools.net/docs/core/Class/Class.Extras#Options
 [Events]: http://mootools.net/docs/core/Class/Class.Extras#Events
 [Behavior.Filter]: #Behavior.Filter
-[Behavior.API]: Behavior.API
+[BehaviorAPI]: BehaviorAPI

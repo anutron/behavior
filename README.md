@@ -17,7 +17,7 @@ Behavior attempts to abstract that DomReady code into something you only write o
 See markdown files in the *Docs* directory.
 
 * [Behavior](Docs/Behavior.md)
-* [Behavior.API](Docs/Behavior.API.md)
+* [BehaviorAPI](Docs/BehaviorAPI.md)
 * [Element.Data](Docs/Element.Data.md)
 
 ## Notes

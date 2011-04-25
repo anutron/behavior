@@ -2,7 +2,7 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, More/Table, /Element.Data, /Behavior.API]
+requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, More/Table, /Element.Data, /BehaviorAPI]
 provides: [Behavior]
 ...
 */
@@ -20,30 +20,21 @@ provides: [Behavior]
 
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
 
-	//Behavior depends on Behavior.API. Behavior.API declares a temporary namespace for Behavior
-	//since it's included first. This sets it asside, declares the Behavior class, and then puts it
-	//back.
-	var API;
-	if (window.Behavior) {
-		API = window.Behavior.API;
-		if (API) {
-			API.implement({
-				deprecate: function(deprecated, asJSON){
-					var set,
-					    values = {};
-					Object.each(deprecated, function(prop, key){
-						var value = this.element[ asJSON ? 'getJSONData' : 'getData'](prop);
-						if (value !== undefined){
-							set = true;
-							values[key] = value;
-						}
-					}, this);
-					this.setDefault(values);
-					return this;
+	BehaviorAPI.implement({
+		deprecate: function(deprecated, asJSON){
+			var set,
+			    values = {};
+			Object.each(deprecated, function(prop, key){
+				var value = this.element[ asJSON ? 'getJSONData' : 'getData'](prop);
+				if (value !== undefined){
+					set = true;
+					values[key] = value;
 				}
-			});
+			}, this);
+			this.setDefault(values);
+			return this;
 		}
-	}
+	});
 
 	this.Behavior = new Class({
 
@@ -63,7 +54,7 @@ provides: [Behavior]
 
 		initialize: function(options){
 			this.setOptions(options);
-			this.API = new Class({ Extends: Behavior.API });
+			this.API = new Class({ Extends: BehaviorAPI });
 			this.passMethods({
 				addEvent: this.addEvent.bind(this), 
 				removeEvent: this.removeEvent.bind(this),
@@ -262,7 +253,7 @@ provides: [Behavior]
 
 	});
 
-	if (API) Behavior.API = API;
+	if (API) BehaviorAPI = API;
 
 	//Returns the applied behaviors for an element.
 	var getApplied = function(el){

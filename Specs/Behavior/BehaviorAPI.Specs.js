@@ -1,9 +1,9 @@
 /*
 ---
-name: Behavior.API.Specs
+name: BehaviorAPI.Specs
 description: n/a
-requires: [Behavior/Behavior.API]
-provides: [Behavior.API.Specs]
+requires: [Behavior/BehaviorAPI]
+provides: [BehaviorAPI.Specs]
 ...
 */
 if (window.describe){
@@ -15,10 +15,10 @@ if (window.describe){
 			'data-filtername-false': 'false'
 		});
 
-		describe('Behavior.API', function(){
+		describe('BehaviorAPI', function(){
 
 			it('should get a data properties from an element', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.get('number')).toBe('0');
 				expect(api.get('number', 'true', 'false')).toEqual({
 					'number': '0', 'true': 'true', 'false': 'false'
@@ -26,23 +26,23 @@ if (window.describe){
 			});
 
 			it('should get a data property from an element as a number', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.getAs(Number, 'number')).toBe(0);
 			});
 
 			it('should get a data property from an element as a boolean', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.getAs(Boolean, 'true')).toBe(true);
 				expect(api.getAs(Boolean, 'false')).toBe(false);
 			});
 
 			it('should not fail when using getAs on a property that isn\'t present', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.getAs(Boolean, 'notHere')).toBe(undefined);
 			});
 
 			it('should read JSON values', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.get('foo')).toBe('bar');
 				expect(api.get('nine')).toBe(9);
 				expect(api.get('arr')).toEqual([1,2,3]);
@@ -51,14 +51,14 @@ if (window.describe){
 				var target2 = new Element('div', {
 					'data-filtername-options':'"foo": "bar", "nine": 9, "arr": [1, 2, 3]'
 				});
-				var api2 = new Behavior.API(target2, 'filtername');
+				var api2 = new BehaviorAPI(target2, 'filtername');
 				expect(api2.get('foo')).toBe('bar');
 				expect(api2.get('nine')).toBe(9);
 				expect(api2.get('arr')).toEqual([1,2,3]);
 			});
 
 			it('should set a default value', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				api.setDefault('foo', 'baz');
 				expect(api.get('foo')).toBe('bar');
 
@@ -75,7 +75,7 @@ if (window.describe){
 
 			it('should reset cached values', function(){
 				var clone = target.clone(true, true);
-				var api = new Behavior.API(clone, 'filtername');
+				var api = new BehaviorAPI(clone, 'filtername');
 				api.setDefault('fred', 'flintsone');
 				expect(api.get('number')).toBe('0');
 				clone.setData('filtername-number', '5');
@@ -86,7 +86,7 @@ if (window.describe){
 
 
 			it('should require an option that is present', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				api.require('number');
 				api.requireAs(Number, 'number');
 
@@ -99,7 +99,7 @@ if (window.describe){
 			});
 
 			it('should require an option that is NOT present', function(){
-				var api = new Behavior.API(target, 'filtername');
+				var api = new BehaviorAPI(target, 'filtername');
 				try {
 					api.require('notThere');
 					expect(true).toBe(false); //this shouldn't get this far as an error should be thrown

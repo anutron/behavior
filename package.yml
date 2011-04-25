@@ -15,4 +15,4 @@ sources:
   - "Source/Element.Data.js"
   - "Source/Event.Mock.js"
   - "Source/Behavior.js"
-  - "Source/Behavior.API.js"
+  - "Source/BehaviorAPI.js"

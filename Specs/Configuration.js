@@ -39,7 +39,7 @@ Configuration.sets = {
 			'Behavior.SpecsHelpers',
 			'Behavior.Specs',
 			'Element.Data.Specs',
-			'Behavior.API.Specs'
+			'BehaviorAPI.Specs'
 		]
 	}
 
@@ -76,7 +76,7 @@ Configuration.source = {
 			'mootools-more/Source/Utilities/Table',
 			'../Source/Behavior',
 			'../Source/Element.Data',
-			'../Source/Behavior.API'
+			'../Source/BehaviorAPI'
 		]
 	}
 

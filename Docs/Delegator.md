@@ -46,7 +46,7 @@ This should not be confused with deferred Behavior filters (which can be run at 
 
 ### HTML properties
 
-Delegator uses a clearly defined API to read HTML properties off the elements it configures. See [Behavior.API][] for details.
+Delegator uses a clearly defined API to read HTML properties off the elements it configures. See [BehaviorAPI][] for details.
 
 ### Using Multiple Triggers Together
 
@@ -69,7 +69,7 @@ This is both a static method and an instance method. Using the static method (`D
 
 1. eventTypes - (*string* or *array*) The event type this trigger monitors. *It is not advised to ever use mouseout or mouseover*.
 2. name - (*string*) The name of this trigger.
-3. handler - (*function* or *object*) The event handler for this trigger. Passed the element, the event, and an instance of [Behavior.API][]. See Note about extended declaration for this argument.
+3. handler - (*function* or *object*) The event handler for this trigger. Passed the element, the event, and an instance of [BehaviorAPI][]. See Note about extended declaration for this argument.
 4. overwrite - (*boolean*) If *true* and a trigger by this name already exists, it will be overwritten. Defaults to *false*.
 
 ### Alternate Arguments
@@ -102,7 +102,7 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Extended handlers
 
-Handlers, much like Behavior's filter declaration, are passed an instance of [Behavior.API][] as they often have additional configuration properties (for example, a selector to find *which* form to submit or hide or what-have-you). You can declare a handler in object notation with values for defaults and required properties. Example:
+Handlers, much like Behavior's filter declaration, are passed an instance of [BehaviorAPI][] as they often have additional configuration properties (for example, a selector to find *which* form to submit or hide or what-have-you). You can declare a handler in object notation with values for defaults and required properties. Example:
 
 	myDelegator.register('click', 'HideTarget', {
 		require: ['target'],
