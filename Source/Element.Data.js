@@ -29,13 +29,12 @@ script: Element.Data.js
 
 		getData: function(name, defaultValue){
 			var value = this.get('data-' + name);
-			if (value){
+			if (value != undefined){
 				return value;
-			} else if (defaultValue != null){
+			} else if (defaultValue != undefined){
 				this.setData(name, defaultValue);
 				return defaultValue;
 			}
-			return null;
 		},
 
 		/* 
@@ -57,9 +56,13 @@ script: Element.Data.js
 		*/
 		getJSONData: function(name, strict, defaultValue){
 			var value = this.get('data-' + name);
-			if (value){
-				return JSON.isSecure(value) ? JSON.decode(value, strict) : null;
-			} else if (defaultValue){
+			if (value != undefined){
+				if (value && JSON.isSecure(value)) {
+					return JSON.decode(value, strict);
+				} else {
+					return value;
+				}
+			} else if (defaultValue != undefined){
 				this.setJSONData(name, defaultValue);
 				return defaultValue;
 			}
