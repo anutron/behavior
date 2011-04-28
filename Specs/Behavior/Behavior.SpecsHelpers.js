@@ -137,10 +137,10 @@ ClassAdder.makeAdder = function(className){
 		//if we're in the benchmark suite, add a benchmark
 		if (window.MooBench){
 			//unless benchmarks: false is specified
-			if (options.benchmarks === false) MooBench.addBehaviorTest(options);
+			if (options.benchmarks !== false) MooBench.addBehaviorTest(options);
 		} else if (window.describe){
 			//else we're in specs; add spec test unless specs:false is specified
-			if (options.specs === false) Behavior.addSpecsTest(options);
+			if (options.specs !== false) Behavior.addSpecsTest(options);
 		}
 	};
 
@@ -161,7 +161,7 @@ ClassAdder.makeAdder = function(className){
 				//new instance of behavior for each specs test
 				var behaviorInstance = new Behavior();
 				var tester,
-				    container = new Element('div');
+				    container = new Element('div').inject(document.body);
 				//content wrapper
 				if (typeOf(options.content) == 'string') container.set('html', options.content);
 				else container.adopt(options.content);
@@ -187,23 +187,27 @@ ClassAdder.makeAdder = function(className){
 					runs(function(){
 						checkCreated();
 						checkExpectations(options, filterElement, filterReturned);
+						container.dispose();
 					});
 				} else if (filter.config.delayUntil){
 					container.getElements('[data-filters]').fireEvent(filter.config.delayUntil, true);
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
+					container.dispose();
 				} else if (filter.config.initializer){
 					container.getElement('[data-filters]').each(function(element){
 						if (element.hasDataFilter(filter.name)){
 							behaviorInstance.applyFilter(element, filter);
 							checkCreated();
 							checkExpectations(options, filterElement, filterReturned);
+							container.dispose();
 						}
 					});
 				} else {
 					//not deffered
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
+					container.dispose();
 				}
 			});
 		});
