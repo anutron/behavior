@@ -9,7 +9,7 @@ provides: [BehaviorAPI.Specs]
 if (window.describe){
 	(function(){
 		var target = new Element('div', {
-			'data-filtername-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}',
+			'data-filtername-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3], "i-have-hyphens": "sweet"}',
 			'data-filtername-number': '0',
 			'data-filtername-true': 'true',
 			'data-filtername-false': 'false'
@@ -20,9 +20,10 @@ if (window.describe){
 			it('should get a data properties from an element', function(){
 				var api = new BehaviorAPI(target, 'filtername');
 				expect(api.get('number')).toBe('0');
-				expect(api.get('number', 'true', 'false')).toEqual({
-					'number': '0', 'true': 'true', 'false': 'false'
+				expect(api.get('number', 'true', 'false', 'iHaveHyphens')).toEqual({
+					'number': '0', 'true': 'true', 'false': 'false', 'iHaveHyphens': 'sweet'
 				});
+				expect(api.get('i-have-hyphens')).toBe('sweet');
 			});
 
 			it('should get a data property from an element as a number', function(){

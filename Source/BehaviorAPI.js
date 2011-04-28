@@ -63,6 +63,7 @@ provides: [BehaviorAPI]
 				}
 				return;
 			}
+			name = name.camelCase();
 			this.defaults[name] = value;
 			if (this._getValue(name) == null){
 				var options = this._getOptions();
@@ -96,14 +97,18 @@ provides: [BehaviorAPI]
 				var options = this.element.getData(this.prefix + '-options', '{}');
 				if (options && options[0] != '{') options = '{' + options + '}';
 				this.options = JSON.isSecure(options) ? JSON.decode(options) : {};
+				for (option in this.options) {
+					this.options[option.camelCase()] = this.options[option];
+				}
 			}
 			return this.options;
 		},
 		//given a name (string) returns the value for it
 		_getValue: function(name){
+			name = name.camelCase();
 			var options = this._getOptions();
 			if (!options.hasOwnProperty(name)){
-				var inline = this.element.getData(this.prefix + '-' + name);
+				var inline = this.element.getData(this.prefix + '-' + name.hyphenate());
 				if (inline) options[name] = inline;
 			}
 			return options[name];

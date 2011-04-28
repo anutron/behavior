@@ -10,6 +10,7 @@ provides: [Element.Data.Specs]
 (function(){
 	var target = new Element('div', {
 		'data-filters': 'Test1 Test2',
+		'data-i-have-hyphens': 'sweet',
 		'data-json':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}'
 	});
 
@@ -19,6 +20,12 @@ provides: [Element.Data.Specs]
 		it('should get a data property from an element', function(){
 			expect(target.getData('filters')).toBe('Test1 Test2');
 		});
+
+		it('should get a data property from an element using hyphens or camelcase', function(){
+			expect(target.getData('i-have-hyphens')).toBe('sweet');
+			expect(target.getData('iHaveHyphens')).toBe('sweet');
+		});
+
 
 		it('should set a data property on an element', function(){
 			target.setData('foo', 'bar');
@@ -42,8 +49,8 @@ provides: [Element.Data.Specs]
 			expect(json.arr).toEqual([1,2,3]);
 		});
 
-		it('should return null for a non-defined property', function(){
-			expect(target.getData('baz')).toBeNull();
+		it('should return undefined for a non-defined property', function(){
+			expect(target.getData('baz')).toBeUndefined();
 		});
 
 	});

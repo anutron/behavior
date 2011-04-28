@@ -24,11 +24,11 @@ script: Element.Data.js
 				value - (string, number) the value to store.
 		*/
 		setData: function(name, value){
-			return this.set('data-' + name, value);
+			return this.set('data-' + name.hyphenate(), value);
 		},
 
 		getData: function(name, defaultValue){
-			var value = this.get('data-' + name);
+			var value = this.get('data-' + name.hyphenate());
 			if (value != undefined){
 				return value;
 			} else if (defaultValue != undefined){
