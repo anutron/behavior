@@ -33,7 +33,7 @@ This should not be confused with deferred Behavior filters (which can be run at 
 
 	var myDelegator = new Delegator();
 	Delegator.attach(myContainerElement);
-	Delegator.register('click', 'HideTarget', function(element, event, api){
+	Delegator.register('click', 'HideTarget', function(event, element, api){
 		event.preventDefault();
 		var target = element.getElement(api.get('target'));
 		if (target) target.hide();
@@ -84,7 +84,7 @@ This is both a static method and an instance method. Using the static method (`D
 	var myDelegator = new Delegator();
 	myDelegator.attach(myContainerElement);
 	//this adds a global trigger
-	Delegator.register('click', 'HideTarget', function(element, event, api){
+	Delegator.register('click', 'HideTarget', function(event, element, api){
 		event.preventDefault();
 		var target = element.getElement(api.get('target'));
 		if (target) target.hide();
@@ -113,7 +113,7 @@ Handlers, much like Behavior's filter declaration, are passed an instance of [Be
 		defaults: {
 			someSelector: '#foo'
 		},
-		handler: function(element, event, api){...}
+		handler: function(event, element, api){...}
 	});
 
 Elements that fail to provide the required attributes will have these filters ignored. These triggers throw errors but by default these are caught unless you set `options.breakOnErrors` to *false*.
