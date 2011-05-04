@@ -18,6 +18,25 @@ provides: [Behavior]
 		};
 	};
 
+	var PassMethods = new Class({
+		//pass a method pointer through to a filter
+		//by default the methods for add/remove events are passed to the filter
+		//pointed to this instance of behavior. you could use this to pass along
+		//other methods to your filters. For example, a method to close a popup
+		//for filters presented inside popups.
+		passMethod: function(method, fn){
+			if (this.API.prototype[method]) throw new Error('Cannot overwrite API method ' + method + ' as it already exists');
+			this.API.implement(method, fn);
+			return this;
+		},
+
+		passMethods: function(methods){
+			for (method in methods) this.passMethod(method, methods[method]);
+			return this;
+		}
+
+	});
+
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
 
 	BehaviorAPI.implement({
@@ -38,7 +57,7 @@ provides: [Behavior]
 
 	this.Behavior = new Class({
 
-		Implements: [Options, Events],
+		Implements: [Options, Events, PassMethods],
 
 		options: {
 			//by default, errors thrown by filters are caught; the onError event is fired.
@@ -83,23 +102,6 @@ provides: [Behavior]
 		getContentElement: function(){
 			return this.options.container || document.body;
 		},
-
-		//pass a method pointer through to a filter
-		//by default the methods for add/remove events are passed to the filter
-		//pointed to this instance of behavior. you could use this to pass along
-		//other methods to your filters. For example, a method to close a popup
-		//for filters presented inside popups.
-		passMethod: function(method, fn){
-			if (this.API.prototype[method]) throw new Error('Cannot overwrite API method ' + method + ' as it already exists');
-			this.API.implement(method, fn);
-			return this;
-		},
-
-		passMethods: function(methods){
-			for (method in methods) this.passMethod(method, methods[method]);
-			return this;
-		},
-
 
 		//Applies all the behavior filters for an element.
 		//container - (element) an element to apply the filters registered with this Behavior instance to.
@@ -252,6 +254,11 @@ provides: [Behavior]
 		}
 
 	});
+
+	//Export these for use elsewhere (notabily: Delegator).
+	Behavior.getLog = getLog;
+	Behavior.PassMethods = PassMethods;
+
 
 	//Returns the applied behaviors for an element.
 	var getApplied = function(el){

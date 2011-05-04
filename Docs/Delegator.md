@@ -52,6 +52,54 @@ Delegator uses a clearly defined API to read HTML properties off the elements it
 
 It's possible to declare more than one data trigger property for a single element (`data-trigger="DisableMe SubmitParentForm"`)
 
+
+Delegator Method: passMethod {#Delegator:passMethod}
+--------------------------------------------------
+
+Defines a method that will be passed to triggers. Delegator allows you to create a well defined API for triggers to reference which increases their reusability. You define this API by explicitly passing named functions to them through the Delegator instance.
+
+### Syntax
+
+	myDelegatorInstance.passMethod(name, function);
+
+### Returns
+
+* (*object*) this instance of Delegator
+
+### Notes
+
+By default, Delegator passes the following methods to triggers in addition to the methods defined in the [BehaviorAPI][]
+
+* addEvent - the addEvent on the behavior instance method provided by the [Events][] class.
+* removeEvent - the removeEvent on the behavior instance method provided by the [Events][] class.
+* addEvents - the addEvents on the behavior instance method provided by the [Events][] class.
+* removeEvents - the removeEvents on the behavior instance method provided by the [Events][] class.
+* fireEvents - the fireEvents on the behavior instance method provided by the [Events][] class.
+* attach - the [attach](#Delegator:attach) method provided by this Delegator instance.
+* trigger - the [trigger](#Delegator:trigger) method provided by this Delegator instance.
+* error - fires the Delegator instance's `error` event with the arguments passed.
+* fail - stops the trigger and passes a message through to the error logger. Takes a string for the message as its only argument.
+* See the [BehaviorAPI][] for additional methods passed by default.
+
+You can add any other methods that your triggers require. In general, your filters shouldn't reference anything in your environment except these methods.
+
+Delegator Method: passMethods {#Delegator:passMethods}
+--------------------------------------------------
+
+Iterates over an object of key/values passing them to the [passMethod](#Delegator:passMethod) method.
+
+### Syntax
+
+	myDelegatorInstance.passMethods(obj);
+
+### Arguments
+
+1. obj - (*object*) a set of name/function pairs to pass to the passMethod method.
+
+### Returns
+
+* (*object*) this instance of Delegator
+
 Delegator Method: register {#Delegator:register}
 --------------------------------------------------
 

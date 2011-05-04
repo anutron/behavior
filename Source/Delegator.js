@@ -2,7 +2,7 @@
 ---
 name: Delegator
 description: Allows for the registration of delegated events on a container.
-requires: [More/Element.Delegation, Core/Options, Core/Events, /Event.Mock]
+requires: [More/Element.Delegation, Core/Options, Core/Events, /Event.Mock, /Behavior]
 provides: [Delegator]
 ...
 */
@@ -12,16 +12,12 @@ provides: [Delegator]
 
 	window.Delegator = new Class({
 
-		Implements: [Options, Events],
+		Implements: [Options, Events, Behavior.PassMethods],
 
 		options: {
 			// breakOnErrors: false,
-			onError: function(){
-				if (window.console && console[method]){
-					if(console.warn.apply) console[method].apply(console, arguments);
-					else console[method](Array.from(arguments).join(' '));
-				}
-			}
+			onError: Behavior.getLog('error'),
+			onWarn: Behavior.getLog('warn')
 		},
 
 		initialize: function(options){
@@ -33,6 +29,24 @@ provides: [Delegator]
 			Object.each(Delegator._triggers, function(trigger){
 				this._eventTypes.combine(trigger.types);
 			}, this);
+			this.API = new Class({ Extends: BehaviorAPI });
+			this.passMethods({
+				addEvent: this.addEvent.bind(this), 
+				removeEvent: this.removeEvent.bind(this),
+				addEvents: this.addEvents.bind(this), 
+				removeEvents: this.removeEvents.bind(this),
+				fireEvent: this.fireEvent.bind(this),
+				attach: this.attach.bind(this),
+				trigger: this.trigger.bind(this),
+				error: function(){ this.fireEvent('error', arguments); }.bind(this),
+				fail: function(){
+					var msg = Array.join(arguments, ' ');
+					throw new Error(msg);
+				},
+				warn: function(){
+					this.fireEvent('warn', arguments);
+				}.bind(this)
+			});
 		},
 
 		attach: function(target, _method){
@@ -84,7 +98,7 @@ provides: [Delegator]
 		},
 
 		_trigger: function(trigger, element, event){
-			var api = new BehaviorAPI(element, trigger.name);
+			var api = new this.API(element, trigger.name);
 			if (trigger.requireAs){
 				api.requireAs(trigger.requireAs);
 			} else if (trigger.require){

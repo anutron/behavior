@@ -82,7 +82,7 @@ By default, Behavior passes the following methods to filters in addition to the 
 * onCleanup - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
 * See the [BehaviorAPI][] for additional methods passed by default.
 
-You can add any other methods that our filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
+You can add any other methods that your filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
 
 Behavior Method: passMethods {#Behavior:passMethods}
 --------------------------------------------------
