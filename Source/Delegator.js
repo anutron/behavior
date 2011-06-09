@@ -16,6 +16,7 @@ provides: [Delegator]
 
 		options: {
 			// breakOnErrors: false,
+			getBehavior: function(){},
 			onError: Behavior.getLog('error'),
 			onWarn: Behavior.getLog('warn')
 		},
@@ -47,6 +48,39 @@ provides: [Delegator]
 					this.fireEvent('warn', arguments);
 				}.bind(this)
 			});
+
+			this.bindToBehavior(this.options.getBehavior());
+		},
+
+		bindToBehavior: function(behavior){
+			if (!behavior) return;
+			this.unbindFromBehavior();
+			this._behavior = behavior;
+			if (!this._behaviorEvents){
+				var self = this;
+				this._behaviorEvents = {
+					destroyDom: function(elements){
+						Array.from(elements).each(function(element){
+							self._behavior.cleanup(element);
+						});
+					},
+					ammendDom: function(container){
+						self._behavior.apply(container);
+					}
+				};
+			}
+			this.addEvents(this._behaviorEvents);
+		},
+
+		getBehavior: function(){
+			return this._behavior;
+		},
+
+		unbindFromBehavior: function(){
+			if (this._behaviorEvents && this._behavior){
+				this._behavior.removeEvents(this._behaviorEvents);
+				delete this._behavior;
+			}
 		},
 
 		attach: function(target, _method){

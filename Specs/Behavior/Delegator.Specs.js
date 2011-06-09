@@ -2,7 +2,7 @@
 ---
 name: Delegator.Specs
 description: n/a
-requires: [Behavior/Delegator, Core/DomReady]
+requires: [Behavior/Delegator, Behavior/Behavior, Core/DomReady]
 provides: [Delegator.Specs]
 ...
 */
@@ -87,7 +87,20 @@ provides: [Delegator.Specs]
 			}, true);
 			expect(instance._getTrigger('Test3').handler).toBe(test4);
 		});
-		
+
+		it('should bind to a behavior instance', function(){
+			var b = new Behavior();
+			var d = new Delegator({
+				getBehavior: function(){ return b; }
+			});
+			expect(d.getBehavior()).toBe(b);
+			var b2 = new Behavior();
+			d.bindToBehavior(b2);
+			expect(d.getBehavior()).toBe(b2);
+			d.unbindFromBehavior(b2);
+			expect(d.getBehavior()).toBeFalsy();
+		});
+
 		// Only run this spec in browsers other than IE6-8 because they can't properly simulate bubbling events
 		if (window.addEventListener){
 
