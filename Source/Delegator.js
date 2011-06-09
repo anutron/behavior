@@ -106,15 +106,16 @@ provides: [Delegator]
 			} if (trigger.defaults){
 				api.setDefault(trigger.defaults);
 			}
-			trigger.handler(event, element, api);
+			trigger.handler.apply(this, [event, element, api]);
+			this.fireEvent('trigger', [trigger, element, event]);
 		},
 
 		_eventHandler: function(event, target){
 			var triggers = target.getTriggers();
-			if (triggers.contains('EventStop')) event.stop();
+			if (triggers.contains('Stop')) event.stop();
 			if (triggers.contains('PreventDefault')) event.preventDefault();
 			triggers.each(function(trigger){
-				this.trigger(trigger, target, event);
+				if (trigger != "Stop" && trigger != "PreventDefault") this.trigger(trigger, target, event);
 			}, this);
 		},
 
