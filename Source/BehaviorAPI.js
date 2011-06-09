@@ -96,7 +96,9 @@ provides: [BehaviorAPI]
 			if (!this.options){
 				var options = this.element.getData(this.prefix + '-options', '{}');
 				if (options && options[0] != '{') options = '{' + options + '}';
-				this.options = JSON.isSecure(options) ? JSON.decode(options) : {};
+				var isSecure = JSON.isSecure(options);
+				if (!isSecure) throw new Error('warning, options value for element is not parsable, check your JSON format for quotes, etc.');
+				this.options = isSecure ? JSON.decode(options) : {};
 				for (option in this.options) {
 					this.options[option.camelCase()] = this.options[option];
 				}
