@@ -166,6 +166,13 @@ Handlers, much like Behavior's filter declaration, are passed an instance of [Be
 
 Elements that fail to provide the required attributes will have these filters ignored. These triggers throw errors but by default these are caught unless you set `options.breakOnErrors` to *false*.
 
+### Included handlers
+
+Delegator includes two handlers:
+
+* `Stop` - calls `event.stop()` on the event for you; this is typically done in the registered trigger, but can be done at the element level if you include this trigger in your HTML declaration.
+* `PreventDefault` - similar to `Stop`, this calls `event.preventDefault()`.
+
 Delegator Method: attach {#Delegator:attach}
 --------------------------------------------------
 
