@@ -18,10 +18,14 @@ Manager for generic (DOM) event handlers.
 ### Options
 
 * breakOnErrors - (*boolean*) By default, errors thrown by triggers are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* getBehavior - (*function*) Returns an instance of [Behavior](Behavior.md) so that triggers can integrate with it.
 
 ### Events
 
-* error - function invoked when a trigger is not found. Defaults to console errors if console.error is available.
+* error - function invoked when a trigger is not found. Defaults to console errors if console.error is available. Also able to be invoked by triggers as `api.error`.
+* warn - function invoked when a trigger calls `api.warn`. Defaults to `console.warn` if present.
+* destroyDom - function invoked when a trigger destroys a portion of the DOM. Automatically integrated w/ Behavior's `cleanup` method if you set one in the options. Passed the element destroyed as an argument.
+* ammendDom - function invoked when a trigger ammends a portion of the DOM. Automatically integrated w/ Behavior's `apply` method if you set one in the options. Passed two arguments: the parent node that contains all the updated elements and an array of those elements updated.
 
 ### Usage
 
@@ -51,6 +55,16 @@ Delegator uses a clearly defined API to read HTML properties off the elements it
 ### Using Multiple Triggers Together
 
 It's possible to declare more than one data trigger property for a single element (`data-trigger="DisableMe SubmitParentForm"`)
+
+### Integrating with Behavior
+
+If you're using [Behavior](Behavior.md) you should connect the two so that links that Delegator uses to update the DOM can have their response run through your Behavior instance's `apply` method. Example:
+
+	var myBehavior = new Behavior().apply(document.body);
+	var myDelegator = new Delegator({
+		getBehavior: function(){ return myBehavior; }
+	}).attach(document.body);
+
 
 
 Delegator Method: passMethod {#Delegator:passMethod}
@@ -172,6 +186,12 @@ Delegator includes two handlers:
 
 * `Stop` - calls `event.stop()` on the event for you; this is typically done in the registered trigger, but can be done at the element level if you include this trigger in your HTML declaration.
 * `PreventDefault` - similar to `Stop`, this calls `event.preventDefault()`.
+
+### Events of note
+
+Triggers can fire events on the instance of Delegator that invokes them. See the Events section above regarding the events supported by default. In particular, if you're using this class with Behavior you should take care to connect the two and to use the `destroyDom` and `ammendDom` events.
+
+You can also have your triggers fire any other arbitrary event that you like to facilitate integration with other triggers or external objects that attach to Delegator's event model.
 
 Delegator Method: attach {#Delegator:attach}
 --------------------------------------------------
