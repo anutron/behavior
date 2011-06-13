@@ -9,7 +9,7 @@ provides: [Element.Data.Specs]
 
 (function(){
 	var target = new Element('div', {
-		'data-filters': 'Test1 Test2',
+		'data-behavior': 'Test1 Test2',
 		'data-i-have-hyphens': 'sweet',
 		'data-json':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}'
 	});
@@ -18,7 +18,7 @@ provides: [Element.Data.Specs]
 	describe('Element.Data', function(){
 
 		it('should get a data property from an element', function(){
-			expect(target.getData('filters')).toBe('Test1 Test2');
+			expect(target.getData('behavior')).toBe('Test1 Test2');
 		});
 
 		it('should get a data property from an element using hyphens or camelcase', function(){

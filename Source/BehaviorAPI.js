@@ -91,7 +91,7 @@ provides: [BehaviorAPI]
 			}, this);
 			return obj;
 		},
-		//gets the data-filtername-options object and parses it as JSON
+		//gets the data-behaviorname-options object and parses it as JSON
 		_getOptions: function(){
 			if (!this.options){
 				var options = this.element.getData(this.prefix + '-options', '{}');

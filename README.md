@@ -26,8 +26,8 @@ Below are some notes regarding the implementation. The documentation should prob
 
 * Only one selector is ever run; adding 1,000 filters doesn't affect performance.
 * Nodes can have numerous filters.
-* Nodes can have an arbitrary number of supported options for each filter (`data-filterame-foo="bar"`).
-* Nodes can define options as JSON (this is actually the preferred implementation - `data-filtername-options="<your JSON>"`).
+* Nodes can have an arbitrary number of supported options for each filter (`data-behaviorame-foo="bar"`).
+* Nodes can define options as JSON (this is actually the preferred implementation - `data-behaviorname-options="<your JSON>"`).
 * Elements can be retired w/ custom destruction; cleaning up an element also cleans up all the children of that element that have had behaviors applied.
 * Behaviors are only ever applied once to an element; if you call `myBehavior.apply(document.body)` a dozen times, the elements with filters will only have those filters applied once (can be forced to override and re-apply).
 * Filters are instances of classes that are applied to any number of elements. They are named uniquely.

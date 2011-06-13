@@ -19,6 +19,7 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 * breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
 * container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to `document.body`;
+* selector - (*string* or *function*; optional) The CSS selector used to find all elements with behaviors defined; defaults to `[data-behavior]`. This can also be a `function` which, when executed, returns the elements as an Elements collection; it is passed the container option if present. **Important** If you use a different `data-` property than `behavior` you need to also change `Behavior.elementDataProperty` to match. This property defaults to `behavior`, meaning that elements have a property defined for `data-behavior`. If you wanted to use `data-be` for example, you would need to set the selector option here to `[data-be]` AND include `Behavior.elementDataProperty = "be";` in your code.
 
 ### Events
 
@@ -27,7 +28,7 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 ### Usage
 
-Behavior is applied to an element whenever you want to parse that element's DOM for filters declared in the HTML of that element. Behavior then finds all elements with a "data-filters" property defined, invoking the filters named there. It will only invoke a filter once, so it's safe to run it more than once (if the DOM changes, for example).
+Behavior is applied to an element whenever you want to parse that element's DOM for filters declared in the HTML of that element. Behavior then finds all elements with a "data-behavior" property defined, invoking the filters named there. It will only invoke a filter once, so it's safe to run it more than once (if the DOM changes, for example).
 
 ### Example Usage
 
@@ -36,7 +37,7 @@ Behavior is applied to an element whenever you want to parse that element's DOM 
 
 ### Example HTML
 
-	<div data-filters="Accordion">
+	<div data-behavior="Accordion">
 		<div class="toggle">Toggle 1</div>
 		<div class="target">This area is controlled by Toggle 1.</div>
 		<div class="toggle">Toggle 2</div>
@@ -51,7 +52,7 @@ Behavior uses a clearly defined API to read HTML properties off the elements it 
 
 ### Using Multiple Filters Together
 
-It's possible to declare more than one data filter property for a single element (`data-filters="FormRequest FormValidator"`)
+It's possible to declare more than one data filter property for a single element (`data-behavior="FormRequest FormValidator"`)
 
 Behavior Method: passMethod {#Behavior:passMethod}
 --------------------------------------------------
@@ -192,7 +193,7 @@ Garbage collects the specified element, cleaning up all the filters applied to i
 Filters
 =======
 
-Behavior applies all the registered filters to the element you specify (and its children). This requires that each element that should have a behavior applied name the filters it needs in its `data-filters` property. It also means that every named filter must be registered.
+Behavior applies all the registered filters to the element you specify (and its children). This requires that each element that should have a behavior applied name the filters it needs in its `data-behavior` property. It also means that every named filter must be registered.
 
 Filters can be registered to an *instance* of Behavior or to the global Behavior namespace. So if you register a "Foo" filter globally, all instance of Behavior get that filter. If a specific instance of Behavior defines a "Foo" filter, then the local instance is used regardless of the presence of a global filter.
 
@@ -344,7 +345,7 @@ Filters nearly always return instances of classes (this is essentially their pur
 	});
 
 	/* the matching HTML
-	<div data-filters="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
+	<div data-behavior="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
 	  <div class="toggle">Toggle 1</div>
 	  <div class="target">This area is controlled by Toggle 1.</div>
 	</div> */
@@ -437,7 +438,7 @@ Behavior has a way to [define API methods passed to filters for their use](#Beha
 	});
 	var myBehaviorInstance = new Behavior();
 	myBehaviorInstance.apply(document.body); //applies all filters named in your content
-	//let's assume there's an element with the data-filters property set to MeasureOnResize
+	//let's assume there's an element with the data-behavior property set to MeasureOnResize
 	myBehaviorInstance.fireEvent('resize');
 
 As you can see in the example above, we add an event whenever the Behavior instance fires a "resize" method. We also clean up that event with the [markForCleanup](#Behavior.Filter:markForCleanup) method which is passed through the api object as "onCleanup".
@@ -464,7 +465,7 @@ If the second argument passed to the constructor is an object, the following opt
 * delay - (*integer*; optional) If specified, the filter is to be delayed *by the caller* (typically Behavior instances) by this duration.
 * delayUntil (*string*; optional) If specified, the filter is to be deferred until the event is fired upon the element the filter is applied to. This configuration is applied *by the caller*.
 * initializer - (*function*; optional) If specified, the caller (e.g. a Behavior instance) does *not* call the setup function but instead calls this function, passing in the element and the api object. The api object has an additional method, `api.runSetup`, which this initializer can invoke when it pleases (or not at all).
-* require - (*array*) an array of strings (names) of required attributes on the element. If the element does not have these attributes, the filter fails. Note that the actual attribute name is data-filtername-name (example: data-Accordion-togglers); the data-filtername- portion is not specified in this list of required names, just the suffix (in this example, just "togglers").
+* require - (*array*) an array of strings (names) of required attributes on the element. If the element does not have these attributes, the filter fails. Note that the actual attribute name is data-behaviorname-name (example: data-Accordion-togglers); the data-behaviorname- portion is not specified in this list of required names, just the suffix (in this example, just "togglers").
 * requireAs - (*object*) a list of required attribute names mapped to their types. The types here being MooTools Type objects (String, Number, Function, etc); actual pointers to the actual Type instance (i.e. not a string).
 * defaults - (*object*) a set of name / default value pairs. Note that setting defaults for required properties makes no sense.
 
@@ -482,7 +483,7 @@ Adds a function to invoke when the element referenced is cleaned up by the Behav
 
 ### Arguments
 
-1. element - The element passed in to your filter function; the element with the data-filter applied to it.
+1. element - The element passed in to your filter function; the element with the data-behavior applied to it.
 2. fn - (*function*) the function invoked when that element is garbage collected.
 
 
@@ -502,7 +503,7 @@ Garbage collects the specific filter instance for a given element. This is typic
 
 ### Arguments
 
-1. element - The element passed in to your filter function; the element with the data-filter applied to it.
+1. element - The element passed in to your filter function; the element with the data-behavior applied to it.
 
 
 Filter Plugins {#FilterPlugins}
@@ -542,14 +543,14 @@ Element Methods
 
 Behavior implements the following helper methods on the Element prototype.
 
-Element Method: addDataFilter {#Element:addDataFilter}
+Element Method: addBehavior {#Element:addBehavior}
 ------------------------------------------------------
 
 Adds a data filter to the element.
 
 ### Syntax
 
-	myElement.addDataFilter(name);
+	myElement.addBehavior(name);
 
 ### Arguments
 
@@ -559,14 +560,14 @@ Adds a data filter to the element.
 
 * (*element*) This element.
 
-Element Method: removeDataFilter {#Element:removeDataFilter}
+Element Method: removeBehavior {#Element:removeBehavior}
 ------------------------------------------------------
 
 Removes a data filter to the element.
 
 ### Syntax
 
-	myElement.removeDataFilter(name);
+	myElement.removeBehavior(name);
 
 ### Arguments
 
@@ -577,27 +578,27 @@ Removes a data filter to the element.
 * (*element*) This element.
 
 
-Element Method: getDataFilters {#Element:getDataFilters}
+Element Method: getBehaviors {#Element:getBehaviors}
 ------------------------------------------------------
 
 Gets an array of data filters specified on an element.
 
 ### Syntax
 
-	myElement.getDataFilters();
+	myElement.getBehaviors();
 
 ### Returns
 
 * (*array*) A list of data filter names.
 
-Element Method: hasDataFilter {#Element:hasDataFilter}
+Element Method: hasBehavior {#Element:hasBehavior}
 ------------------------------------------------------
 
 Returns `true` if the element has the specified data filter.
 
 ### Syntax
 
-	myElement.hasDataFilter(name);
+	myElement.hasBehavior(name);
 
 ### Arguments
 
@@ -607,14 +608,14 @@ Returns `true` if the element has the specified data filter.
 
 * (*boolean*) Returns `true` if the element has the specified data filter.
 
-Element Method: getFilterResult {#Element:getFilterResult}
+Element Method: getBehaviorResult {#Element:getBehaviorResult}
 ------------------------------------------------------
 
 Filters generally return the instance of the widget they instantiate. This method allows you to access that widget.
 
 ### Syntax
 
-	myElement.getFilterResult(name);
+	myElement.getBehaviorResult(name);
 
 ### Arguments
 

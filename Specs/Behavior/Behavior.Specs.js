@@ -10,7 +10,7 @@ if (window.describe){
 	(function(){
 		var container = new Element('div');
 		var target = new Element('div', {
-			'data-filters': 'Test1 Test2',
+			'data-behavior': 'Test1 Test2',
 			'data-defaults-options':'{"foo":"bar"}',
 			'data-require-options':'{"foo": "bar", "nine": 9, "arr": [1, 2, 3]}',
 			'data-require-number': '0',
@@ -60,7 +60,7 @@ if (window.describe){
 		
 			it('should invoke a filter', function(){
 				behaviorInstance.applyFilter(target, behaviorInstance.getFilter('Test1'));
-				expect(target.getFilterResult('Test1')).toBeTruthy();
+				expect(target.getBehaviorResult('Test1')).toBeTruthy();
 			});
 		
 			it('should store the filter result', function(){
@@ -70,10 +70,10 @@ if (window.describe){
 						return new SimpleClass();
 					}
 				});
-				target.addDataFilter('SimpleClass');
+				target.addBehavior('SimpleClass');
 				behaviorInstance.apply(container);
-				target.removeDataFilter('SimpleClass');
-				expect(target.getFilterResult('SimpleClass')).toBeTruthy();
+				target.removeBehavior('SimpleClass');
+				expect(target.getBehaviorResult('SimpleClass')).toBeTruthy();
 			});
 		
 			it('should fail if a filter fails to return a proper instance', function(){
@@ -84,7 +84,7 @@ if (window.describe){
 						new SimpleClass();
 					}
 				});
-				target.addDataFilter('SimpleClass2');
+				target.addBehavior('SimpleClass2');
 				behaviorInstance.options.breakOnErrors = true;
 				try {
 					behaviorInstance.apply(container);
@@ -93,8 +93,8 @@ if (window.describe){
 					expect(e.message).toBe("Filter SimpleClass2 did not return a valid instance.");
 				}
 				behaviorInstance.options.breakOnErrors = false;
-				target.removeDataFilter('SimpleClass2');
-				expect(target.getFilterResult('SimpleClass2')).toBeFalsy();
+				target.removeBehavior('SimpleClass2');
+				expect(target.getBehaviorResult('SimpleClass2')).toBeFalsy();
 			});
 
 
@@ -104,7 +104,7 @@ if (window.describe){
 						api.fail('this thing is totally broken');
 					}
 				});
-				target.addDataFilter('Failure');
+				target.addBehavior('Failure');
 				behaviorInstance.options.breakOnErrors = true;
 				try {
 					behaviorInstance.apply(container);
@@ -113,7 +113,7 @@ if (window.describe){
 					expect(e.message).toBe("this thing is totally broken");
 				}
 				behaviorInstance.options.breakOnErrors = false;
-				target.removeDataFilter('Failure');
+				target.removeBehavior('Failure');
 			});
 
 			it('should create a filter that warns', function(){
@@ -127,28 +127,28 @@ if (window.describe){
 						api.warn("you've been warned");
 					}
 				});
-				target.addDataFilter('Warn');
+				target.addBehavior('Warn');
 				behaviorInstance.apply(container);
 				behaviorInstance.removeEvent('warn', warner);
 				expect(warning).toBe("you've been warned");
-				target.removeDataFilter('Warn');
+				target.removeBehavior('Warn');
 			});
 
 			it('should not invoke a filter twice unless forced', function(){
 				behaviorInstance.applyFilter(target, behaviorInstance.getFilter('Test1'));
-				expect(target.getFilterResult('Test1').getCount()).toBe(1);
+				expect(target.getBehaviorResult('Test1').getCount()).toBe(1);
 				behaviorInstance.applyFilter(target, behaviorInstance.getFilter('Test1'), true);
-				expect(target.getFilterResult('Test1').getCount()).toBe(2);
+				expect(target.getBehaviorResult('Test1').getCount()).toBe(2);
 			});
 		
 			it('should clean up a filter', function(){
 				behaviorInstance.cleanup(target);
-				expect(target.getFilterResult('Test1')).toBeNull();
+				expect(target.getBehaviorResult('Test1')).toBeNull();
 				expect(target.hasClass('one')).toBe(false);
 			});
 		
 			it('should set the defaults for a filter', function(){
-				target.addDataFilter('Defaults');
+				target.addBehavior('Defaults');
 				Behavior.addGlobalFilter('Defaults', {
 					defaults: {
 						foo: 'baz',
@@ -160,7 +160,7 @@ if (window.describe){
 					}
 				});
 				behaviorInstance.apply(container);
-				target.removeDataFilter('Defaults');
+				target.removeBehavior('Defaults');
 			});
 		
 		
@@ -178,7 +178,7 @@ if (window.describe){
 					if (options.requireAs) filter.requireAs = options.requireAs;
 		
 					Behavior.addGlobalFilter('Require', filter, true);
-					target.addDataFilter('Require');
+					target.addBehavior('Require');
 					if (options.catcher) {
 						try {
 							behaviorInstance.apply(container, true);
@@ -189,10 +189,10 @@ if (window.describe){
 					} else {
 						behaviorInstance.apply(container, true);
 					}
-					if (options.truthy) expect(instanceOf(target.getFilterResult('Require'), SimpleClass)).toBeTruthy();
-					else expect(target.getFilterResult('Require')).toBeFalsy();
+					if (options.truthy) expect(instanceOf(target.getBehaviorResult('Require'), SimpleClass)).toBeTruthy();
+					else expect(target.getBehaviorResult('Require')).toBeFalsy();
 					target.eliminate('Behavior Filter result:Require');
-					target.removeDataFilter('Require');
+					target.removeBehavior('Require');
 		
 					behaviorInstance.options.breakOnErrors = false;
 				};
@@ -263,41 +263,41 @@ if (window.describe){
 			});
 		
 			it('should return the data filters on an element', function(){
-				expect(target.getDataFilters()).toEqual(['Test1', 'Test2']);
+				expect(target.getBehaviors()).toEqual(['Test1', 'Test2']);
 			});
 		
 			it('should log an error when a filter that isn\'t defined is encountered', function(){
 				var logged = false,
 				    log = function(){ logged = true; };
 				behaviorInstance.addEvent('error', log);
-				target.addDataFilter('Test3');
+				target.addBehavior('Test3');
 				behaviorInstance.apply(container);
 				expect(logged).toBe(true);
 				behaviorInstance.cleanup(container);
 				behaviorInstance.removeEvent('error', log);
-				target.removeDataFilter('Test3');
+				target.removeBehavior('Test3');
 			});
 		
 			it('should add a filter to an element', function(){
-				target.addDataFilter('Test3');
-				expect(target.getDataFilters()).toEqual(['Test1', 'Test2', 'Test3']);
-				target.removeDataFilter('Test3');
+				target.addBehavior('Test3');
+				expect(target.getBehaviors()).toEqual(['Test1', 'Test2', 'Test3']);
+				target.removeBehavior('Test3');
 			});
 		
 			it('should tell you if an element has a filter', function(){
-				target.addDataFilter('Test3');
-				expect(target.hasDataFilter('Test3')).toBe(true);
-				target.removeDataFilter('Test3');
+				target.addBehavior('Test3');
+				expect(target.hasBehavior('Test3')).toBe(true);
+				target.removeBehavior('Test3');
 			});
 		
 			it('should remove a data filter', function(){
-				target.addDataFilter('Test3');
-				target.removeDataFilter('Test3');
-				expect(target.hasDataFilter('Test3')).toBe(false);
+				target.addBehavior('Test3');
+				target.removeBehavior('Test3');
+				expect(target.hasBehavior('Test3')).toBe(false);
 			});
 
 			it('should create a delayed filter', function(){
-				target.addDataFilter('Delayed');
+				target.addBehavior('Delayed');
 				Behavior.addGlobalFilter('Delayed', {
 					delay: 100,
 					setup: function(element, API){
@@ -310,12 +310,12 @@ if (window.describe){
 				runs(function(){
 					expect(target.hasClass('wasdelayed')).toBe(true);
 					target.removeClass('wasdelayed');
-					target.removeDataFilter('Delayed');
+					target.removeBehavior('Delayed');
 				});
 			});
 
 			it('should create a filter that is run on mouseover', function(){
-				target.addDataFilter('MouseOver');
+				target.addBehavior('MouseOver');
 				var event;
 				Behavior.addGlobalFilter('MouseOver', {
 					delayUntil: 'mouseover',
@@ -331,11 +331,11 @@ if (window.describe){
 				expect(target.hasClass('wasmousedover')).toBe(true);
 				expect(event).toBe(true);
 				target.removeClass('wasmousedover');
-				target.removeDataFilter('MouseOver');
+				target.removeBehavior('MouseOver');
 			});
 
 			it('should create a filter with a custom initializer', function(){
-				target.addDataFilter('CustomInit');
+				target.addBehavior('CustomInit');
 				Behavior.addGlobalFilter('CustomInit', {
 					initializer: function(element, api){
 						var timer = (function(){
@@ -357,7 +357,7 @@ if (window.describe){
 					expect(target.hasClass('custom_init-ed')).toBe(true);
 					target.removeClass('custom_init-ed');
 					target.removeClass('custom_init');
-					target.removeDataFilter('CustomInit');
+					target.removeBehavior('CustomInit');
 				});
 			
 			});
@@ -367,13 +367,13 @@ if (window.describe){
 				behaviorInstance.passMethod('changeVal', function(){
 					val = true;
 				});
-				target.addDataFilter('PassedMethod');
+				target.addBehavior('PassedMethod');
 				Behavior.addGlobalFilter('PassedMethod', function(el, api){
 					api.changeVal();
 				});
 				behaviorInstance.apply(container);
 				expect(val).toBe(true);
-				target.removeDataFilter('PassedMethod');
+				target.removeBehavior('PassedMethod');
 			});
 
 			it('should throw an error when attempting to pass a method that is already defined', function(){
@@ -396,14 +396,14 @@ if (window.describe){
 						depAPI = api;
 					}
 				});
-				target.addDataFilter('Deprecated');
+				target.addBehavior('Deprecated');
 				behaviorInstance.apply(container);
 				expect(depAPI.get('test')).toBe('some value');
 				behaviorInstance.options.enableDeprecation = false;
 				behaviorInstance.apply(container, true);
 				expect(depAPI.get('test')).toBe(undefined);
 				behaviorInstance.options.enableDeprecation = true;
-				target.removeDataFilter('Deprecated');
+				target.removeBehavior('Deprecated');
 			});
 
 

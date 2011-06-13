@@ -190,13 +190,13 @@ ClassAdder.makeAdder = function(className){
 						container.dispose();
 					});
 				} else if (filter.config.delayUntil){
-					container.getElements('[data-filters]').fireEvent(filter.config.delayUntil, true);
+					container.getElements('[data-behavior]').fireEvent(filter.config.delayUntil, true);
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
 					container.dispose();
 				} else if (filter.config.initializer){
-					container.getElement('[data-filters]').each(function(element){
-						if (element.hasDataFilter(filter.name)){
+					container.getElement('[data-behavior]').each(function(element){
+						if (element.hasBehavior(filter.name)){
 							behaviorInstance.applyFilter(element, filter);
 							checkCreated();
 							checkExpectations(options, filterElement, filterReturned);

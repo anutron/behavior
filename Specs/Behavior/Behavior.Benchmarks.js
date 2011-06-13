@@ -13,7 +13,7 @@ provides: [Behavior.Benchmarks]
 	Behavior.addFilterTest({
 		filterName: 'BenchmarkFilter',
 		desc: 'Applies an empty filter',
-		content: '<div data-filters="BenchmarkFilter"></div>',
+		content: '<div data-behavior="BenchmarkFilter"></div>',
 		specs: false
 	});
 

@@ -16,14 +16,14 @@ Provides methods to read values from annotated HTML configured for the [Behavior
 
 Examples of the HTML expressions evaluated are as follows (all of the following produce the same output*):
 
-	<tag data-filters="Filter1 Filter2" data-Filter1-options="{opt1: 'foo', opt2: 'bar', selector: '.selector'}"> //prefered
-	<tag data-filters="Filter1 Filter2" data-Filter1-options="opt1: 'foo', opt2: 'bar', selector: '.selector'"> //no braces on JSON
-	<tag data-filters="Filter1 Filter2" data-Filter1-options="{opt1: 'foo', opt2: 'bar'}" data-Filter1-selector=".selector">
-	<tag data-filters="Filter1 Filter2" data-Filter1-opt1='foo' data-Filter1-opt2='false' data-Filter1-selector=".selector">
+	<tag data-behavior="Filter1 Filter2" data-behavior1-options="{opt1: 'foo', opt2: 'bar', selector: '.selector'}"> //prefered
+	<tag data-behavior="Filter1 Filter2" data-behavior1-options="opt1: 'foo', opt2: 'bar', selector: '.selector'"> //no braces on JSON
+	<tag data-behavior="Filter1 Filter2" data-behavior1-options="{opt1: 'foo', opt2: 'bar'}" data-behavior1-selector=".selector">
+	<tag data-behavior="Filter1 Filter2" data-behavior1-opt1='foo' data-behavior1-opt2='false' data-behavior1-selector=".selector">
 
 The `-options` value is parsed as JSON first (it's slightly more permissive in that 1: you don't have to wrap it in `{}` just for convenience and 2: you don't have to quote all the names). Values defined here are read as defined allowing you to express arrays, numbers, booleans, etc. Functions / callbacks are generally not used by [Behavior][].
 
-If you attempt to read a value that isn't defined in this options object, the property name is attempted to be read from the property directly (e.g. `data-filtername-prop`). This value is *always* a string unless you specify a type. If a type is specified the value is run through the JSON parser and validated against that type.
+If you attempt to read a value that isn't defined in this options object, the property name is attempted to be read from the property directly (e.g. `data-behaviorname-prop`). This value is *always* a string unless you specify a type. If a type is specified the value is run through the JSON parser and validated against that type.
 
 BehaviorAPI Method: get {#BehaviorAPI:getAs}
 ------------------------------------------

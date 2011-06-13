@@ -12,7 +12,7 @@ provides: [Behavior]
 	var getLog = function(method){
 		return function(){
 			if (window.console && console[method]){
-				if(console.warn.apply) console[method].apply(console, arguments);
+				if(console[method].apply) console[method].apply(console, arguments);
 				else console[method](Array.from(arguments).join(' '));
 			}
 		};
@@ -68,7 +68,8 @@ provides: [Behavior]
 			//default error behavior when a filter cannot be applied
 			onError: getLog('error'),
 			onWarn: getLog('warn'),
-			enableDeprecation: true
+			enableDeprecation: true,
+			selector: '[data-behavior]'
 		},
 
 		initialize: function(options){
@@ -107,9 +108,9 @@ provides: [Behavior]
 		//container - (element) an element to apply the filters registered with this Behavior instance to.
 		//force - (boolean; optional) passed through to applyFilter (see it for docs)
 		apply: function(container, force){
-			document.id(container).getElements('[data-filters]').each(function(element){
+		  this._getElements(container).each(function(element){
 				var plugins = [];
-				element.getDataFilters().each(function(name){
+				element.getBehaviors().each(function(name){
 					var filter = this.getFilter(name);
 					if (!filter){
 						this.fireEvent('error', ['There is no filter registered with this name: ', name, element]);
@@ -129,6 +130,11 @@ provides: [Behavior]
 				plugins.each(function(plugin){ plugin(); });
 			}, this);
 			return this;
+		},
+
+		_getElements: function(container){
+			if (typeOf(this.options.selector) == 'function') return this.options.selector(container);
+			else return document.id(container).getElements(this.options.selector);
 		},
 
 		//delays a filter until the event specified in filter.config.delayUntil is fired on the element
@@ -249,7 +255,7 @@ provides: [Behavior]
 				element.eliminate('Behavior Filter result:' + filter);
 				delete applied[filter];
 			}
-			if (!ignoreChildren) element.getElements('[data-filters]').each(this.cleanup, this);
+			if (!ignoreChildren) this._getElements(element).each(this.cleanup, this);
 			return this;
 		}
 
@@ -384,8 +390,8 @@ provides: [Behavior]
 		//you might have a function that removes that enhancement for garbage collection.
 		//You would mark each input matched with its own cleanup function.
 		//NOTE: this MUST be the element passed to the filter - the element with this filters
-		//      name in its data-filter property. I.E.:
-		//<form data-filter="FormValidator">
+		//      name in its data-behavior property. I.E.:
+		//<form data-behavior="FormValidator">
 		//  <input type="text" name="email"/>
 		//</form>
 		//If this filter is FormValidator, you can mark the form for cleanup, but not, for example
@@ -399,7 +405,7 @@ provides: [Behavior]
 		},
 
 		//Garbage collect a specific element.
-		//NOTE: this should be an element that has a data-filter property that matches this filter.
+		//NOTE: this should be an element that has a data-behavior property that matches this filter.
 		cleanup: function(element){
 			var marks = this._cleanupFunctions.get(element);
 			if (marks){
@@ -411,33 +417,29 @@ provides: [Behavior]
 
 	});
 
-	//a selector to find all elements that have behaviors applied to them.
-	Slick.definePseudo('hasBehaviors', function(){
-		return !!Element.retrieve(this, '_appliedBehaviors');
-	});
-
+	Behavior.elementDataProperty = 'behavior';
 
 	Element.implement({
 
-		addDataFilter: function(name){
-			return this.setData('filters', this.getDataFilters().include(name).join(' '));
+		addBehavior: function(name){
+			return this.setData(Behavior.elementDataProperty, this.getBehaviors().include(name).join(' '));
 		},
 
-		removeDataFilter: function(name){
-			return this.setData('filters', this.getDataFilters().erase(name).join(' '));
+		removeBehavior: function(name){
+			return this.setData(Behavior.elementDataProperty, this.getBehaviors().erase(name).join(' '));
 		},
 
-		getDataFilters: function(){
-			var filters = this.getData('filters');
+		getBehaviors: function(){
+			var filters = this.getData(Behavior.elementDataProperty);
 			if (!filters) return [];
 			return filters.trim().split(spaceOrCommaRegex);
 		},
 
-		hasDataFilter: function(name){
-			return this.getDataFilters().contains(name);
+		hasBehavior: function(name){
+			return this.getBehaviors().contains(name);
 		},
 
-		getFilterResult: function(name){
+		getBehaviorResult: function(name){
 			return this.retrieve('Behavior Filter result:' + name);
 		}
 
