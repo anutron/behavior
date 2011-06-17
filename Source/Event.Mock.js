@@ -9,8 +9,7 @@ license: MIT-style
 authors:
 - Arieh Glazer
 
-requires:
-- Core/Event
+requires: Core/Event
 
 provides: [Event.Mock]
 
