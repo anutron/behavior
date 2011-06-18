@@ -10,6 +10,8 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 
 authors: "[Aaron Newton](http://clientcide.com)"
 
+version: "1.1.2"
+
 sources:
   - "Source/Delegator.js"
   - "Source/Element.Data.js"
