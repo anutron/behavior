@@ -123,7 +123,7 @@ provides: [Behavior]
 						} else if(config.initializer){
 							this._customInit(element, filter, force);
 						} else {
-							plugins.extend(this.applyFilter(element, filter, force, true));
+							plugins.append(this.applyFilter(element, filter, force, true));
 						}
 					}
 				}, this);
