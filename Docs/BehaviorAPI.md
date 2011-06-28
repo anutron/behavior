@@ -25,7 +25,7 @@ The `-options` value is parsed as JSON first (it's slightly more permissive in t
 
 If you attempt to read a value that isn't defined in this options object, the property name is attempted to be read from the property directly (e.g. `data-behaviorname-prop`). This value is *always* a string unless you specify a type. If a type is specified the value is run through the JSON parser and validated against that type.
 
-BehaviorAPI Method: get {#BehaviorAPI:getAs}
+BehaviorAPI Method: get {#BehaviorAPI:get}
 ------------------------------------------
 
 Gets a value for the specified name.
