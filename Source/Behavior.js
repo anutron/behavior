@@ -76,9 +76,9 @@ provides: [Behavior]
 			this.setOptions(options);
 			this.API = new Class({ Extends: BehaviorAPI });
 			this.passMethods({
-				addEvent: this.addEvent.bind(this), 
+				addEvent: this.addEvent.bind(this),
 				removeEvent: this.removeEvent.bind(this),
-				addEvents: this.addEvents.bind(this), 
+				addEvents: this.addEvents.bind(this),
 				removeEvents: this.removeEvents.bind(this),
 				fireEvent: this.fireEvent.bind(this),
 				applyFilters: this.apply.bind(this),
@@ -87,7 +87,7 @@ provides: [Behavior]
 				getContainerSize: function(){
 					return this.getContentElement().measure(function(){
 						return this.getSize();
-					}); 
+					});
 				}.bind(this),
 				error: function(){ this.fireEvent('error', arguments); }.bind(this),
 				fail: function(){
@@ -236,7 +236,7 @@ provides: [Behavior]
 
 		//given a name, returns a registered behavior
 		getFilter: function(name){
-			return this._registered[name] || Behavior._registered[name];
+			return this._registered[name] || Behavior.getFilter(name);
 		},
 
 		getPlugins: function(name){
@@ -279,13 +279,13 @@ provides: [Behavior]
 		if (!this._registered[name] || overwrite) this._registered[name] = new Behavior.Filter(name, fn);
 		else throw new Error('Could not add the Behavior filter "' + name  +'" as a previous trigger by that same name exists.');
 	};
-	
+
 	var addFilters = function(obj, overwrite){
 		for (var name in obj){
 			addFilter.apply(this, [name, obj[name], overwrite]);
 		}
 	};
-	
+
 	//Registers a behavior plugin
 	//filterName - (*string*) the filter (or plugin) this is a plugin for
 	//name - (*string*) the name of this plugin
@@ -295,13 +295,18 @@ provides: [Behavior]
 		if (!this._plugins[filterName][name] || overwrite) this._plugins[filterName][name] = new Behavior.Filter(name, setup);
 		else throw new Error('Could not add the Behavior filter plugin "' + name  +'" as a previous trigger by that same name exists.');
 	};
-	
+
 	var addPlugins = function(obj, overwrite){
 		for (var name in obj){
 			addPlugin.apply(this, [obj[name].fitlerName, obj[name].name, obj[name].setup], overwrite);
 		}
 	};
-	
+
+	var setFilterDefaults = function(name, defaults){
+		var filter = this.getFilter(name);
+		Object.append(filter.config.defaults, defaults);
+	};
+
 	//Add methods to the Behavior namespace for global registration.
 	Object.append(Behavior, {
 		_registered: {},
@@ -309,7 +314,11 @@ provides: [Behavior]
 		addGlobalFilter: addFilter,
 		addGlobalFilters: addFilters,
 		addGlobalPlugin: addPlugin,
-		addGlobalPlugins: addPlugins
+		addGlobalPlugins: addPlugins,
+		setFilterDefaults: setFilterDefaults,
+		getFilter: function(name){
+			return this._registered[name];
+		}
 	});
 	//Add methods to the Behavior class for instance registration.
 	Behavior.implement({
@@ -318,7 +327,8 @@ provides: [Behavior]
 		addFilter: addFilter,
 		addFilters: addFilters,
 		addPlugin: addPlugin,
-		addPlugins: addPlugins
+		addPlugins: addPlugins,
+		setFilterDefaults: setFilterDefaults
 	});
 
 	//This class is an actual filter that, given an element, alters it with specific behaviors.

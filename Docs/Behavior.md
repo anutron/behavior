@@ -274,6 +274,20 @@ Adds a group of plugins.
 
 * nothing
 
+Behavior Method: setFilterDefaults {#Behavior:setFilterDefaults}
+--------------------------------------------------
+
+Sets the default values for a filter, overriding any defaults previously defined.
+
+### Syntax
+
+	myBehaviorInstance.setFilterDefaults(name, defaults);
+
+### Arguments
+
+1. name - (*string*) The registered name of a filter.
+2. defaults - (*object*) A key/value pair of defaults.
+
 Static Methods {#StaticMethods}
 ==============
 
@@ -314,6 +328,36 @@ Adds a group of plugins to the global Behavior namespace.
 
 	myBehaviorInstance.addGlobalPlugins(obj[, overwrite]);
 
+Behavior Method: getFilter {#Behavior:getFilter}
+--------------------------------------------------
+
+Given a name, return the registered *global* filter.
+
+### Syntax
+
+	Behavior.getFilter(name);
+
+### Arguments
+
+1. name - (*string*) The registered name of a filter.
+
+### Returns
+
+* (*object*) the instance of [Behavior.Filter][] or `undefined` if one is not found.
+
+Behavior Method: setFilterDefaults {#Behavior:setFilterDefaults}
+--------------------------------------------------
+
+Sets the default values for a filter, overriding any defaults previously defined.
+
+### Syntax
+
+	Behavior.setFilterDefaults(name, defaults);
+
+### Arguments
+
+1. name - (*string*) The registered name of a filter.
+2. defaults - (*object*) A key/value pair of defaults.
 
 Class: Behavior.Filter {#Behavior.Filter}
 ====================================
