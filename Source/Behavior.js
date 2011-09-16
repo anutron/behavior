@@ -84,6 +84,7 @@ provides: [Behavior]
 				applyFilters: this.apply.bind(this),
 				applyFilter: this.applyFilter.bind(this),
 				getContentElement: this.getContentElement.bind(this),
+				cleanup: this.cleanup.bind(this),
 				getContainerSize: function(){
 					return this.getContentElement().measure(function(){
 						return this.getSize();
