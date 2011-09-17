@@ -46,6 +46,9 @@ provides: [Delegator]
 				},
 				warn: function(){
 					this.fireEvent('warn', arguments);
+				}.bind(this),
+				getBehavior: function(){
+					return this.options.getBehavior();
 				}.bind(this)
 			});
 

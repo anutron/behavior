@@ -93,6 +93,7 @@ By default, Delegator passes the following methods to triggers in addition to th
 * trigger - the [trigger](#Delegator:trigger) method provided by this Delegator instance.
 * error - fires the Delegator instance's `error` event with the arguments passed.
 * fail - stops the trigger and passes a message through to the error logger. Takes a string for the message as its only argument.
+* getBehavior - returns the behavior instance defined in the `getBehavior` options object.
 * See the [BehaviorAPI][] for additional methods passed by default.
 
 You can add any other methods that your triggers require. In general, your filters shouldn't reference anything in your environment except these methods.
@@ -151,7 +152,7 @@ This is both a static method and an instance method. Using the static method (`D
 		var target = element.getElement(api.get('target'));
 		if (target) target.hide();
 	});
-	
+
 	//also
 	Delegator.register(['click', 'submit'], {
 		Foo: function(){...},
