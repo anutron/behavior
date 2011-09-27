@@ -181,33 +181,47 @@ ClassAdder.makeAdder = function(className){
 				behaviorInstance.apply(container);
 				//check to see if the filter was deferred; if it was, wait for it or invoke it
 				var filter = behaviorInstance.getFilter(options.filterName);
-				var checkCreated = function(){ expect(created).toBe(true); };
+				var checkCreated = function(){
+					expect(created).toBe(true);
+				};
 				if (filter.config.delay){
 					waits(filter.config.delay + 50);
 					runs(function(){
 						checkCreated();
 						checkExpectations(options, filterElement, filterReturned);
-						container.dispose();
+						runs(function(){
+							behaviorInstance.cleanup(container);
+							container.dispose();
+						});
 					});
 				} else if (filter.config.delayUntil){
 					container.getElements('[data-behavior]').fireEvent(filter.config.delayUntil.split(',')[0], true);
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
-					container.dispose();
+					runs(function(){
+						behaviorInstance.cleanup(container);
+						container.dispose();
+					});
 				} else if (filter.config.initializer){
 					container.getElement('[data-behavior]').each(function(element){
 						if (element.hasBehavior(filter.name)){
 							behaviorInstance.applyFilter(element, filter);
 							checkCreated();
 							checkExpectations(options, filterElement, filterReturned);
-							container.dispose();
+							runs(function(){
+								behaviorInstance.cleanup(container);
+								container.dispose();
+							});
 						}
 					});
 				} else {
 					//not deffered
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
-					container.dispose();
+					runs(function(){
+						behaviorInstance.cleanup(container);
+						container.dispose();
+					});
 				}
 			});
 		});
