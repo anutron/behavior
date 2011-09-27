@@ -140,18 +140,31 @@ provides: [Behavior]
 
 		//delays a filter until the event specified in filter.config.delayUntil is fired on the element
 		_delayFilterUntil: function(element, filter, force){
-			var event = filter.config.delayUntil;
-			var init = function(e){
-				element.removeEvent(event, init);
-				var setup = filter.setup;
-				filter.setup = function(element, api, _pluginResult){
-					api.event = e;
-					setup.apply(filter, [element, api, _pluginResult]);
-				};
-				this.applyFilter(element, filter, force);
-				filter.setup = setup;
-			}.bind(this);
-			element.addEvent(event, init);
+			var events = filter.config.delayUntil.split(','),
+			    attached = {},
+			    inited = false;
+			var clear = function(){
+				events.each(function(event){
+					element.removeEvent(event, attached[event]);
+				});
+				clear = function(){};
+			};
+			events.each(function(event){
+				var init = function(e){
+					clear();
+					if (inited) return;
+					inited = true;
+					var setup = filter.setup;
+					filter.setup = function(element, api, _pluginResult){
+						api.event = e;
+						return setup.apply(filter, [element, api, _pluginResult]);
+					};
+					this.applyFilter(element, filter, force);
+					filter.setup = setup;
+				}.bind(this);
+				element.addEvent(event, init);
+				attached[event] = init;
+			}, this);
 		},
 
 		//runs custom initiliazer defined in filter.config.initializer
@@ -305,6 +318,7 @@ provides: [Behavior]
 
 	var setFilterDefaults = function(name, defaults){
 		var filter = this.getFilter(name);
+		if (!filter.config.defaults) filter.config.defaults = {};
 		Object.append(filter.config.defaults, defaults);
 	};
 

@@ -190,7 +190,7 @@ ClassAdder.makeAdder = function(className){
 						container.dispose();
 					});
 				} else if (filter.config.delayUntil){
-					container.getElements('[data-behavior]').fireEvent(filter.config.delayUntil, true);
+					container.getElements('[data-behavior]').fireEvent(filter.config.delayUntil.split(',')[0], true);
 					checkCreated();
 					checkExpectations(options, filterElement, filterReturned);
 					container.dispose();

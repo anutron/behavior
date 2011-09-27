@@ -446,7 +446,7 @@ A simple filter is just a function and a name ("Accordion") and the function tha
 				return accorion; //note that the instance is always returned!
 			},
 			//don't instantiate this value until the user mouses over the target element
-			delayUntil: 'mouseover',
+			delayUntil: 'mouseover,focus',
 			//OR delay for a specific period
 			delay: 100,
 			//OR let me initialize the function manually
@@ -508,7 +508,7 @@ If the second argument passed to the constructor is an object, the following opt
 
 * setup - (*function*; required) The function to invoke when the filter is applied.
 * delay - (*integer*; optional) If specified, the filter is to be delayed *by the caller* (typically Behavior instances) by this duration.
-* delayUntil (*string*; optional) If specified, the filter is to be deferred until the event is fired upon the element the filter is applied to. This configuration is applied *by the caller*.
+* delayUntil (*string*; optional) If specified, the filter is to be deferred until the event is fired upon the element the filter is applied to. This configuration is applied *by the caller*. Note that you can specify more than one event by separating with a comma (`mouseover,focus`). Whichever happens first will invoke the filter.
 * initializer - (*function*; optional) If specified, the caller (e.g. a Behavior instance) does *not* call the setup function but instead calls this function, passing in the element and the api object. The api object has an additional method, `api.runSetup`, which this initializer can invoke when it pleases (or not at all).
 * require - (*array*) an array of strings (names) of required attributes on the element. If the element does not have these attributes, the filter fails. Note that the actual attribute name is data-behaviorname-name (example: data-Accordion-togglers); the data-behaviorname- portion is not specified in this list of required names, just the suffix (in this example, just "togglers").
 * requireAs - (*object*) a list of required attribute names mapped to their types. The types here being MooTools Type objects (String, Number, Function, etc); actual pointers to the actual Type instance (i.e. not a string).
