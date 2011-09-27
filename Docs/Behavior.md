@@ -514,6 +514,10 @@ If the second argument passed to the constructor is an object, the following opt
 * requireAs - (*object*) a list of required attribute names mapped to their types. The types here being MooTools Type objects (String, Number, Function, etc); actual pointers to the actual Type instance (i.e. not a string).
 * defaults - (*object*) a set of name / default value pairs. Note that setting defaults for required properties makes no sense.
 
+### Note
+
+You can namespace your filters to avoid conflicts. Simply give your filter a name with dots in it (`data-behavior="Foo.Bar"`) and then reference any arguments with dashes (`data-foo-bar-options="..."`).
+
 Behavior.Filter Method: markForCleanup {#Behavior.Filter:markForCleanup}
 --------------------------------------------------
 

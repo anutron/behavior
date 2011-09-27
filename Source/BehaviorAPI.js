@@ -20,7 +20,7 @@ provides: [BehaviorAPI]
 
 		initialize: function(element, prefix){
 			this.element = element;
-			this.prefix = prefix.toLowerCase().replace(reggy, '');
+			this.prefix = prefix.toLowerCase().replace('.', '-', 'g').replace(reggy, '');
 		},
 
 		/******************
