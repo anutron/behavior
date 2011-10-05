@@ -54,6 +54,15 @@ Behavior uses a clearly defined API to read HTML properties off the elements it 
 
 It's possible to declare more than one data filter property for a single element (`data-behavior="FormRequest FormValidator"`)
 
+### Using Your Behavior Instance as an Event Arbiter
+
+When a filter performs an action that other filters might find useful to know about, the preferred usage is to fire an event on your Behavior instance via the `behaviorAPI` object passed to your filter. This provides a non-brittle way for filters to react to each other. For example, a Delegator that fetches new content via AJAX should fire the 'ammendDom' event. This event is also fired on the Behavior instances it's bound to (if it is). These two events are prescribed here, but you can use any you find useful. This allows filters to avoid referencing themselves.
+
+* destroyDom - function invoked when a trigger destroys a portion of the DOM. Automatically integrated w/ Behavior's `cleanup` method if you set one in the options. Passed the element destroyed as an argument.
+* ammendDom - function invoked when a trigger ammends a portion of the DOM. Automatically integrated w/ Behavior's `apply` method if you set one in the options. Passed two arguments: the parent node that contains all the updated elements and an array of those elements updated.
+
+Other events the author has used is to denote layout changes, `layout:changed`, `layout:display`, `layout:size`, etc.
+
 Behavior Method: passMethod {#Behavior:passMethod}
 --------------------------------------------------
 
@@ -71,17 +80,19 @@ Defines a method that will be passed to filters. Behavior allows you to create a
 
 By default, Behavior passes the following methods to filters in addition to the methods defined in the [BehaviorAPI][]
 
-* addEvent - the addEvent on the behavior instance method provided by the [Events][] class.
-* removeEvent - the removeEvent on the behavior instance method provided by the [Events][] class.
-* addEvents - the addEvents on the behavior instance method provided by the [Events][] class.
-* removeEvents - the removeEvents on the behavior instance method provided by the [Events][] class.
-* fireEvents - the fireEvents on the behavior instance method provided by the [Events][] class.
-* getContentElement - returns the "container" element of the Behavior instance. By default this points to *document.body*. Set `options.container` to change it.
-* getContainerSize - returns the value of getContentElement().getSize(); Note that if that element is not in the DOM this will return zeros.
-* error - fires the behavior instance's `error` event with the arguments passed.
-* fail - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
-* cleanup - tells Behavior that you are about to retire a DOM tree and allows it to run any garbage collection methods attached to it. Be ware of circular logic here! See also: [Behavior.cleanup](#Behavior:cleanup)
-* onCleanup - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
+* **addEvent** - the `addEvent` method of the behavior instance provided by the [Events][] class.
+* **removeEvent** - the `removeEvent` method of the behavior instance provided by the [Events][] class.
+* **addEvents** - the `addEvents` method of the behavior instance provided by the [Events][] class.
+* **removeEvents** - the `removeEvents` method of the behavior instance provided by the [Events][] class.
+* **fireEvents** - the `fireEvents` method of the behavior instance provided by the [Events][] class.
+* **applyFilters** - the `apply` method of the behavior instance. This allows a Behavior to create new DOM structures and apply their behavior filters.
+* **applyFilter** - the `applyFilter` method of the behavior instance. Allows you to invoke a specific behavior filter.
+* **getContentElement** - returns the "container" element of the Behavior instance. By default this points to `document.body`. Set `options.container` to change it.
+* **getContainerSize** - returns the value of getContentElement().getSize(); Note that if that element is not in the DOM this will return zeros.
+* **error** - fires the behavior instance's `error` event with the arguments passed.
+* **fail** - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
+* **cleanup** - tells Behavior that you are about to retire a DOM tree and allows it to run any garbage collection methods attached to it. Be ware of circular logic here! See also: [Behavior.cleanup](#Behavior:cleanup)
+* **onCleanup** - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
 * See the [BehaviorAPI][] for additional methods passed by default.
 
 You can add any other methods that your filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
