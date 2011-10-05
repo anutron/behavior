@@ -32,9 +32,9 @@ provides: [Delegator]
 			}, this);
 			this.API = new Class({ Extends: BehaviorAPI });
 			this.passMethods({
-				addEvent: this.addEvent.bind(this), 
+				addEvent: this.addEvent.bind(this),
 				removeEvent: this.removeEvent.bind(this),
-				addEvents: this.addEvents.bind(this), 
+				addEvents: this.addEvents.bind(this),
 				removeEvents: this.removeEvents.bind(this),
 				fireEvent: this.fireEvent.bind(this),
 				attach: this.attach.bind(this),
@@ -65,10 +65,12 @@ provides: [Delegator]
 					destroyDom: function(elements){
 						Array.from(elements).each(function(element){
 							self._behavior.cleanup(element);
+							self._behavior.fireEvent('destroyDom', element);
 						});
 					},
 					ammendDom: function(container){
 						self._behavior.apply(container);
+						self._behavior.fireEvent('ammendDom', container);
 					}
 				};
 			}
