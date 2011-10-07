@@ -2,7 +2,7 @@
 ---
 name: Delegator
 description: Allows for the registration of delegated events on a container.
-requires: [More/Element.Delegation, Core/Options, Core/Events, /Event.Mock, /Behavior]
+requires: [Core/Element.Delegation, Core/Options, Core/Events, /Event.Mock, /Behavior]
 provides: [Delegator]
 ...
 */
