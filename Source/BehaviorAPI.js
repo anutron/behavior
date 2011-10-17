@@ -97,7 +97,7 @@ provides: [BehaviorAPI]
 		_getOptions: function(){
 			if (!this.options){
 				var options = this.element.getData(this.prefix + '-options', '{}');
-				if (options && options[0] != '{') options = '{' + options + '}';
+				if (options && options.substring(0,1) != '{') options = '{' + options + '}';
 				var isSecure = JSON.isSecure(options);
 				if (!isSecure) throw new Error('warning, options value for element is not parsable, check your JSON format for quotes, etc.');
 				this.options = isSecure ? JSON.decode(options) : {};
