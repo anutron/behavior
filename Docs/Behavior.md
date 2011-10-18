@@ -603,14 +603,14 @@ Element Methods
 
 Behavior implements the following helper methods on the Element prototype.
 
-Element Method: addBehavior {#Element:addBehavior}
+Element Method: addBehaviorFilter {#Element:addBehaviorFilter}
 ------------------------------------------------------
 
 Adds a data filter to the element.
 
 ### Syntax
 
-	myElement.addBehavior(name);
+	myElement.addBehaviorFilter(name);
 
 ### Arguments
 
@@ -620,14 +620,14 @@ Adds a data filter to the element.
 
 * (*element*) This element.
 
-Element Method: removeBehavior {#Element:removeBehavior}
+Element Method: removeBehaviorFilter {#Element:removeBehaviorFilter}
 ------------------------------------------------------
 
 Removes a data filter to the element.
 
 ### Syntax
 
-	myElement.removeBehavior(name);
+	myElement.removeBehaviorFilter(name);
 
 ### Arguments
 

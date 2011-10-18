@@ -446,11 +446,11 @@ provides: [Behavior]
 
 	Element.implement({
 
-		addBehavior: function(name){
+		addBehaviorFilter: function(name){
 			return this.setData(Behavior.elementDataProperty, this.getBehaviors().include(name).join(' '));
 		},
 
-		removeBehavior: function(name){
+		removeBehaviorFilter: function(name){
 			return this.setData(Behavior.elementDataProperty, this.getBehaviors().erase(name).join(' '));
 		},
 

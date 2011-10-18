@@ -70,9 +70,9 @@ if (window.describe){
 						return new SimpleClass();
 					}
 				});
-				target.addBehavior('SimpleClass');
+				target.addBehaviorFilter('SimpleClass');
 				behaviorInstance.apply(container);
-				target.removeBehavior('SimpleClass');
+				target.removeBehaviorFilter('SimpleClass');
 				expect(target.getBehaviorResult('SimpleClass')).toBeTruthy();
 			});
 
@@ -84,7 +84,7 @@ if (window.describe){
 						new SimpleClass();
 					}
 				});
-				target.addBehavior('SimpleClass2');
+				target.addBehaviorFilter('SimpleClass2');
 				behaviorInstance.options.breakOnErrors = true;
 				try {
 					behaviorInstance.apply(container);
@@ -93,7 +93,7 @@ if (window.describe){
 					expect(e.message).toBe("Filter SimpleClass2 did not return a valid instance.");
 				}
 				behaviorInstance.options.breakOnErrors = false;
-				target.removeBehavior('SimpleClass2');
+				target.removeBehaviorFilter('SimpleClass2');
 				expect(target.getBehaviorResult('SimpleClass2')).toBeFalsy();
 			});
 
@@ -104,7 +104,7 @@ if (window.describe){
 						api.fail('this thing is totally broken');
 					}
 				});
-				target.addBehavior('Failure');
+				target.addBehaviorFilter('Failure');
 				behaviorInstance.options.breakOnErrors = true;
 				try {
 					behaviorInstance.apply(container);
@@ -113,7 +113,7 @@ if (window.describe){
 					expect(e.message).toBe("this thing is totally broken");
 				}
 				behaviorInstance.options.breakOnErrors = false;
-				target.removeBehavior('Failure');
+				target.removeBehaviorFilter('Failure');
 			});
 
 			it('should create a filter that warns', function(){
@@ -127,11 +127,11 @@ if (window.describe){
 						api.warn("you've been warned");
 					}
 				});
-				target.addBehavior('Warn');
+				target.addBehaviorFilter('Warn');
 				behaviorInstance.apply(container);
 				behaviorInstance.removeEvent('warn', warner);
 				expect(warning).toBe("you've been warned");
-				target.removeBehavior('Warn');
+				target.removeBehaviorFilter('Warn');
 			});
 
 			it('should not invoke a filter twice unless forced', function(){
@@ -148,7 +148,7 @@ if (window.describe){
 			});
 
 			it('should set the defaults for a filter', function(){
-				target.addBehavior('Defaults');
+				target.addBehaviorFilter('Defaults');
 				Behavior.addGlobalFilter('Defaults', {
 					defaults: {
 						foo: 'baz',
@@ -160,7 +160,7 @@ if (window.describe){
 					}
 				});
 				behaviorInstance.apply(container);
-				target.removeBehavior('Defaults');
+				target.removeBehaviorFilter('Defaults');
 			});
 
 
@@ -178,7 +178,7 @@ if (window.describe){
 					if (options.requireAs) filter.requireAs = options.requireAs;
 
 					Behavior.addGlobalFilter('Require', filter, true);
-					target.addBehavior('Require');
+					target.addBehaviorFilter('Require');
 					if (options.catcher) {
 						try {
 							behaviorInstance.apply(container, true);
@@ -192,7 +192,7 @@ if (window.describe){
 					if (options.truthy) expect(instanceOf(target.getBehaviorResult('Require'), SimpleClass)).toBeTruthy();
 					else expect(target.getBehaviorResult('Require')).toBeFalsy();
 					target.eliminate('Behavior Filter result:Require');
-					target.removeBehavior('Require');
+					target.removeBehaviorFilter('Require');
 
 					behaviorInstance.options.breakOnErrors = false;
 				};
@@ -270,34 +270,34 @@ if (window.describe){
 				var logged = false,
 				    log = function(){ logged = true; };
 				behaviorInstance.addEvent('error', log);
-				target.addBehavior('Test3');
+				target.addBehaviorFilter('Test3');
 				behaviorInstance.apply(container);
 				expect(logged).toBe(true);
 				behaviorInstance.cleanup(container);
 				behaviorInstance.removeEvent('error', log);
-				target.removeBehavior('Test3');
+				target.removeBehaviorFilter('Test3');
 			});
 
 			it('should add a filter to an element', function(){
-				target.addBehavior('Test3');
+				target.addBehaviorFilter('Test3');
 				expect(target.getBehaviors()).toEqual(['Test1', 'Test2', 'Test3']);
-				target.removeBehavior('Test3');
+				target.removeBehaviorFilter('Test3');
 			});
 
 			it('should tell you if an element has a filter', function(){
-				target.addBehavior('Test3');
+				target.addBehaviorFilter('Test3');
 				expect(target.hasBehavior('Test3')).toBe(true);
-				target.removeBehavior('Test3');
+				target.removeBehaviorFilter('Test3');
 			});
 
 			it('should remove a data filter', function(){
-				target.addBehavior('Test3');
-				target.removeBehavior('Test3');
+				target.addBehaviorFilter('Test3');
+				target.removeBehaviorFilter('Test3');
 				expect(target.hasBehavior('Test3')).toBe(false);
 			});
 
 			it('should create a delayed filter', function(){
-				target.addBehavior('Delayed');
+				target.addBehaviorFilter('Delayed');
 				Behavior.addGlobalFilter('Delayed', {
 					delay: 100,
 					setup: function(element, API){
@@ -315,7 +315,7 @@ if (window.describe){
 			});
 
 			it('should create a filter that is run on mouseover', function(){
-				target.addBehavior('MouseOver');
+				target.addBehaviorFilter('MouseOver');
 				var event;
 				Behavior.addGlobalFilter('MouseOver', {
 					delayUntil: 'mouseover',
@@ -331,11 +331,11 @@ if (window.describe){
 				expect(target.hasClass('wasmousedover')).toBe(true);
 				expect(event).toBe(true);
 				target.removeClass('wasmousedover');
-				target.removeBehavior('MouseOver');
+				target.removeBehaviorFilter('MouseOver');
 			});
 
 			it('should create a filter with a custom initializer', function(){
-				target.addBehavior('CustomInit');
+				target.addBehaviorFilter('CustomInit');
 				Behavior.addGlobalFilter('CustomInit', {
 					initializer: function(element, api){
 						var timer = (function(){
@@ -357,7 +357,7 @@ if (window.describe){
 					expect(target.hasClass('custom_init-ed')).toBe(true);
 					target.removeClass('custom_init-ed');
 					target.removeClass('custom_init');
-					target.removeBehavior('CustomInit');
+					target.removeBehaviorFilter('CustomInit');
 				});
 
 			});
@@ -367,13 +367,13 @@ if (window.describe){
 				behaviorInstance.passMethod('changeVal', function(){
 					val = true;
 				});
-				target.addBehavior('PassedMethod');
+				target.addBehaviorFilter('PassedMethod');
 				Behavior.addGlobalFilter('PassedMethod', function(el, api){
 					api.changeVal();
 				});
 				behaviorInstance.apply(container);
 				expect(val).toBe(true);
-				target.removeBehavior('PassedMethod');
+				target.removeBehaviorFilter('PassedMethod');
 			});
 
 			it('should throw an error when attempting to pass a method that is already defined', function(){
@@ -396,14 +396,14 @@ if (window.describe){
 						depAPI = api;
 					}
 				});
-				target.addBehavior('Deprecated');
+				target.addBehaviorFilter('Deprecated');
 				behaviorInstance.apply(container);
 				expect(depAPI.get('test')).toBe('some value');
 				behaviorInstance.options.enableDeprecation = false;
 				behaviorInstance.apply(container, true);
 				expect(depAPI.get('test')).toBe(undefined);
 				behaviorInstance.options.enableDeprecation = true;
-				target.removeBehavior('Deprecated');
+				target.removeBehaviorFilter('Deprecated');
 			});
 
 			it('should get a global filter', function(){
