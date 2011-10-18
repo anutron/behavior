@@ -25,9 +25,12 @@ provides: [Event.Mock]
  *
  */
 Event.Mock = function(target,type){
-	var e = window.event;
-
 	type = type || 'click';
+
+	var e = {
+		type: type,
+		target: target
+	};
 
 	if (document.createEvent){
 		e = document.createEvent('HTMLEvents');
