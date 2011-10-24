@@ -310,7 +310,7 @@ if (window.describe){
 				runs(function(){
 					expect(target.hasClass('wasdelayed')).toBe(true);
 					target.removeClass('wasdelayed');
-					target.removeBehavior('Delayed');
+					target.removeBehaviorFilter('Delayed');
 				});
 			});
 
