@@ -40,31 +40,33 @@ provides: [Delegator.Specs]
 			expect(target.getTriggers()).toEqual(['Test1', 'Test2', 'Test3']);
 			target.removeTrigger('Test3');
 		});
-		
+
 		it('should tell you if an element has a trigger', function(){
 			target.addTrigger('Test3');
 			expect(target.hasTrigger('Test3')).toBe(true);
 			target.removeTrigger('Test3');
 		});
-		
+
 		it('should remove a trigger', function(){
 			target.addTrigger('Test3');
 			target.removeTrigger('Test3');
 			expect(target.hasTrigger('Test3')).toBe(false);
 		});
-		
+
 		it('should register a global trigger', function(){
 			var test3 = function(){};
 			Delegator.register('click', 'Test3', test3);
-			expect(instance._getTrigger('Test3').handler).toBe(test3);
+			expect(instance.getTrigger('Test3').handler).toBe(test3);
+			expect(Delegator.getTrigger('Test3').handler).toBe(test3);
 		});
-		
+
 		it('should register a local trigger', function(){
 			var test3 = function(){};
 			instance.register('click', 'Test3', test3);
-			expect(instance._getTrigger('Test3').handler).toBe(test3);
+			expect(instance.getTrigger('Test3').handler).toBe(test3);
+			expect(Delegator.getTrigger('Test3').handler).toNotBe(test3);
 		});
-		
+
 		it('should fail to overwrite a filter', function(){
 			var test3 = function(){};
 			try {
@@ -73,19 +75,19 @@ provides: [Delegator.Specs]
 			} catch(e){
 				expect(e.message).toBe('Could add the trigger "Test3" as a previous trigger by that same name exists.');
 			}
-			expect(instance._getTrigger('Test3').handler).toNotBe(test3);
+			expect(instance.getTrigger('Test3').handler).toNotBe(test3);
 		});
-		
+
 		it('should overwrite a filter', function(){
 			var overwrite = function(){};
 			instance.register('click', 'Test2', overwrite, true);
-			expect(instance._getTrigger('Test2').handler).toBe(overwrite);
-		
+			expect(instance.getTrigger('Test2').handler).toBe(overwrite);
+
 			var test4 = function(){};
 			instance.register('click', {
 				Test3: test4
 			}, true);
-			expect(instance._getTrigger('Test3').handler).toBe(test4);
+			expect(instance.getTrigger('Test3').handler).toBe(test4);
 		});
 
 		it('should bind to a behavior instance', function(){

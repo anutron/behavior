@@ -162,6 +162,44 @@ This is both a static method and an instance method. Using the static method (`D
 		}
 	});
 
+Delegator Method: getTrigger {#Delegator:getTrigger}
+--------------------------------------------------
+
+This is both a static method and an instance method. Using the static method (`Delegator.getTrigger(...)`) will return a *global* trigger. Using the instance method will return a *local* trigger or, if not found, the global one.
+
+### Syntax
+
+  Delegator.getTrigger(name);
+  myDelegator.getTrigger(name);
+
+### Arguments
+
+1. name - (*string*) the name of the trigger to retrieve.
+
+### Returns
+
+* trigger - (*object* or *null*) the trigger instance if found.
+
+### Examples
+
+  //this is the same example as the one at the top of the page
+	var myDelegator = new Delegator();
+	myDelegator.attach(myContainerElement);
+	//this adds a global trigger
+	Delegator.register('click', 'HideTarget', function(event, element, api){
+		//...
+	});
+
+	Delegator.getTrigger('HideTarget'); //returns the GLOBAL trigger instance
+	myDelegator.getTrigger('HideTarget'); //returns the GLOBAL trigger instance
+
+	//but if we add a local one
+	myDelegator.register('click', 'HideTarget', function(event, element, api){
+		//... local version by the same name
+	});
+
+	Delegator.getTrigger('HideTarget'); //returns the GLOBAL trigger instance
+	myDelegator.getTrigger('HideTarget'); //returns the LOCAL trigger instance
 
 ### Extended handlers
 

@@ -111,7 +111,7 @@ provides: [Delegator]
 
 		trigger: function(name, element, event){
 			if (!event || typeOf(event) == "string") event = new Event.Mock(element, event);
-			var trigger = this._getTrigger(name);
+			var trigger = this.getTrigger(name);
 			if (trigger && trigger.types.contains(event.type)) {
 				if (this.options.breakOnErrors){
 					this._trigger(trigger, element, event);
@@ -128,13 +128,13 @@ provides: [Delegator]
 			return this;
 		},
 
+		getTrigger: function(name){
+			return this._triggers[name] || Delegator._triggers[name];
+		},
+
 		/******************
 		 * PRIVATE METHODS
 		 ******************/
-
-		_getTrigger: function(name){
-			return this._triggers[name] || Delegator._triggers[name];
-		},
 
 		_trigger: function(trigger, element, event){
 			var api = new this.API(element, trigger.name);
@@ -206,6 +206,10 @@ provides: [Delegator]
 			throw new Error('Could add the trigger "' + name  +'" as a previous trigger by that same name exists.');
 		}
 		return this;
+	};
+
+	Delegator.getTrigger = function(name){
+		return this._triggers[name];
 	};
 
 	Delegator.implement('register', Delegator.register);
