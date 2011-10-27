@@ -25,9 +25,11 @@ The `-options` value is parsed as JSON first (it's slightly more permissive in t
 
 If you attempt to read a value that isn't defined in this options object, the property name is attempted to be read from the property directly (e.g. `data-behaviorname-prop`). This value is *always* a string unless you specify a type. If a type is specified the value is run through the JSON parser and validated against that type.
 
-Note that filter names that contain characters other than A-Z, 0-9, or dash are stripped and what remains is case insensitive. Dots are turned to dashes. So, for example, you would express the following:
+Note that filter names that contain characters other than A-Z, 0-9, or dash are stripped and what remains is case insensitive. Dots are turned to dashes. Further, camelCase properties are hyphenated to camel-case. So, for example, you would express the following:
 
-  <tag data-behavior="Foo.Bar" data-foo-bar-options="...">
+  <tag data-behavior="Foo.Bar" data-foo-bar-options="'someThing': true">
+  //and - note the hyphenation
+  <tag data-behavior="Foo.Bar" data-foo-bar-some-thing="true">
 
 BehaviorAPI Method: get {#BehaviorAPI:get}
 ------------------------------------------
