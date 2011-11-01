@@ -88,17 +88,6 @@ provides: [Delegator]
 			}
 		},
 
-		monitorEvents: function(eventTypes){
-			Array.from(eventTypes).each(function(eventType){
-				if (!this._eventTypes.contains(eventType)){
-					this._attachedTo.each(function(element){
-						element.addEvent(eventType + ':relay([data-trigger])', this._bound.eventHandler);
-					}, this);
-				}
-				this._eventTypes.include(eventType);
-			}, this);
-		},
-
 		attach: function(target, _method){
 			_method = _method || 'addEvent';
 			target = document.id(target);
@@ -169,6 +158,17 @@ provides: [Delegator]
 			}, this);
 		},
 
+		_onRegister: function(eventTypes){
+			eventTypes.each(function(eventType){
+				if (!this._eventTypes.contains(eventType)){
+					this._attachedTo.each(function(element){
+						element.addEvent(eventType + ':relay([data-trigger])', this._bound.eventHandler);
+					}, this);
+				}
+				this._eventTypes.include(eventType);
+			}, this);
+		},
+
 		_attachedTo: [],
 		_eventTypes: [],
 		_triggers: {}
@@ -177,9 +177,9 @@ provides: [Delegator]
 
 	Delegator._triggers = {};
 	Delegator._instances = [];
-	Delegator.monitorEvents = function(eventTypes){
+	Delegator._onRegister = function(eventType){
 		this._instances.each(function(instance){
-			instance.monitorEvents(eventTypes);
+			instance._onRegister(eventType);
 		});
 	};
 
@@ -201,7 +201,7 @@ provides: [Delegator]
 			handler.types = eventTypes;
 			handler.name = name;
 			this._triggers[name] = handler;
-			this.monitorEvents(eventTypes);
+			this._onRegister(eventTypes);
 		} else {
 			throw new Error('Could add the trigger "' + name  +'" as a previous trigger by that same name exists.');
 		}
