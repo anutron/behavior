@@ -266,6 +266,29 @@ Detaches the appropriate event listeners from the provided container or, if none
 
 * (*object*) this instance of Delegator
 
+Delegator Method: monitorEvents {#Delegator:monitorEvents}
+--------------------------------------------------
+
+Monitors the attached elements for specified events. By default, event types are declared for triggers when they are registered, but you can amend this manually to make additional events trigger them.
+
+For example, let's say you have a delegator that captures clicks and deletes the target element from the DOM. If you wanted to also have this trigger fire when the user checks a checkbox, you might wish to monitor the `change` event. Even though the trigger doesn't declare the `change` event when it calls the `addTrigger` method, if you use this method you can add `change` to the list of events monitored. Be cautious, some events occur so often as to overload the client (`mouseover`, `mousemove`, for examples).
+
+### Syntax
+
+	myDelegator.monitorEvents(events);
+
+### Arguments
+
+1. events - (*array*) a list of event types (strings).
+
+### Example
+
+	myDelegator.monitorEvents(['blur', 'change']);
+
+### Returns
+
+* (*object*) this instance of Delegator
+
 Delegator Method: trigger {#Delegator:trigger}
 --------------------------------------------------
 
