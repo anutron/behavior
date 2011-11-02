@@ -132,6 +132,11 @@ provides: [Delegator]
 			return this._triggers[name] || Delegator._triggers[name];
 		},
 
+		addEventTypes: function(triggerName, types){
+			this.getTrigger(triggerName).types.combine(Array.from(types));
+			return this;
+		},
+
 		/******************
 		 * PRIVATE METHODS
 		 ******************/
@@ -211,6 +216,12 @@ provides: [Delegator]
 	Delegator.getTrigger = function(name){
 		return this._triggers[name];
 	};
+
+	Delegator.addEventTypes = function(triggerName, types){
+		this.getTrigger(triggerName).types.combine(Array.from(types));
+		return this;
+	};
+
 
 	Delegator.implement('register', Delegator.register);
 

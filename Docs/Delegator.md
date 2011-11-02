@@ -232,6 +232,20 @@ Triggers can fire events on the instance of Delegator that invokes them. See the
 
 You can also have your triggers fire any other arbitrary event that you like to facilitate integration with other triggers or external objects that attach to Delegator's event model.
 
+Delegator Method: addEventTypes {#Delegator:addEventTypes}
+----------------------------------------------------------
+
+Adds event types to a registered trigger.
+
+### Syntax
+
+	myDelegator.addEventTypes(triggerName, types);
+
+### Arguments
+
+1. triggerName - (*string*) the name of the trigger.
+2. types - (*array*) the event types to add (`blur`, `click`, etc).
+
 Delegator Method: attach {#Delegator:attach}
 --------------------------------------------------
 
