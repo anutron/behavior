@@ -95,15 +95,19 @@ provides: [BehaviorAPI]
 		},
 		//gets the data-behaviorname-options object and parses it as JSON
 		_getOptions: function(){
-			if (!this.options){
-				var options = this.element.getData(this.prefix + '-options', '{}');
-				if (options && options.substring(0,1) != '{') options = '{' + options + '}';
-				var isSecure = JSON.isSecure(options);
-				if (!isSecure) throw new Error('warning, options value for element is not parsable, check your JSON format for quotes, etc.');
-				this.options = isSecure ? JSON.decode(options) : {};
-				for (option in this.options) {
-					this.options[option.camelCase()] = this.options[option];
+			try {
+				if (!this.options){
+					var options = this.element.getData(this.prefix + '-options', '{}');
+					if (options && options.substring(0,1) != '{') options = '{' + options + '}';
+					var isSecure = JSON.isSecure(options);
+					if (!isSecure) throw new Error('warning, options value for element is not parsable, check your JSON format for quotes, etc.');
+					this.options = isSecure ? JSON.decode(options) : {};
+					for (option in this.options) {
+						this.options[option.camelCase()] = this.options[option];
+					}
 				}
+			} catch (e){
+				throw new Error('Could not get options from element; check your syntax. ' + this.prefix + '-options: "' + this.element.getData(this.prefix + '-options', '{}') + '"');
 			}
 			return this.options;
 		},
