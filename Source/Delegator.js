@@ -110,20 +110,22 @@ provides: [Delegator]
 		},
 
 		trigger: function(name, element, event){
-			if (!event || typeOf(event) == "string") event = new Event.Mock(element, event);
+			var e = event;
+			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
+
 			var trigger = this.getTrigger(name);
-			if (trigger && trigger.types.contains(event.type)) {
+			if (trigger && (!event || (event && trigger.types.contains(e.type)))) {
 				if (this.options.breakOnErrors){
-					this._trigger(trigger, element, event);
+					this._trigger(trigger, element, e);
 				} else {
 					try {
-						this._trigger(trigger, element, event);
-					} catch(e) {
-						this.fireEvent('error', ['Could not apply the trigger', name, e]);
+						this._trigger(trigger, element, e);
+					} catch(error) {
+						this.fireEvent('error', ['Could not apply the trigger', name, error]);
 					}
 				}
 			} else {
-				this.fireEvent('error', 'Could not find a trigger with the name ' + name + ' for event: ' + event.type);
+				this.fireEvent('error', 'Could not find a trigger with the name ' + name + ' for event: ' + e.type);
 			}
 			return this;
 		},

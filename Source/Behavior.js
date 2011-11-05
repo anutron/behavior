@@ -76,6 +76,7 @@ provides: [Behavior]
 			this.setOptions(options);
 			this.API = new Class({ Extends: BehaviorAPI });
 			this.passMethods({
+				getDelegator: this.getDelegator.bind(this),
 				addEvent: this.addEvent.bind(this),
 				removeEvent: this.removeEvent.bind(this),
 				addEvents: this.addEvents.bind(this),
@@ -99,6 +100,16 @@ provides: [Behavior]
 					this.fireEvent('warn', arguments);
 				}.bind(this)
 			});
+		},
+
+		getDelegator: function(){
+			return this.delegator;
+		},
+
+		setDelegator: function(delegator){
+			if (!instanceOf(delegator, Delegator)) throw new Error('Behavior.setDelegator only accepts instances of Delegator.');
+			this.delegator = delegator;
+			return this;
 		},
 
 		getContentElement: function(){

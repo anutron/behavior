@@ -88,7 +88,8 @@ By default, Behavior passes the following methods to filters in addition to the 
 * **applyFilters** - the `apply` method of the behavior instance. This allows a Behavior to create new DOM structures and apply their behavior filters.
 * **applyFilter** - the `applyFilter` method of the behavior instance. Allows you to invoke a specific behavior filter.
 * **getContentElement** - returns the "container" element of the Behavior instance. By default this points to `document.body`. Set `options.container` to change it.
-* **getContainerSize** - returns the value of getContentElement().getSize(); Note that if that element is not in the DOM this will return zeros.
+* **getContainerSize** - returns the value of `getContentElement().getSize();` Note that if that element is not in the DOM this will return zeros.
+* **getDelegator** - returns the instance of [Delegator][] set with the `setDelegator` method.
 * **error** - fires the behavior instance's `error` event with the arguments passed.
 * **fail** - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
 * **cleanup** - tells Behavior that you are about to retire a DOM tree and allows it to run any garbage collection methods attached to it. Be ware of circular logic here! See also: [Behavior.cleanup](#Behavior:cleanup)
@@ -299,6 +300,36 @@ Sets the default values for a filter, overriding any defaults previously defined
 
 1. name - (*string*) The registered name of a filter.
 2. defaults - (*object*) A key/value pair of defaults.
+
+Behavior Method: setDelegator {#Behavior:setDelegator}
+--------------------------------------------------
+
+Stores a reference to a [Delegator][] instance that is returned by `api.getDelegator()`.
+
+### Syntax
+
+	myBehavior.setDelegator(myDelegator);
+
+### Arguments
+
+1. myDelegator - (*object*) an instance of [Delegator][]
+
+### Returns
+
+* (*object*) this instance of Behavior.
+
+Behavior Method: getDelegator {#Behavior:getDelegator}
+--------------------------------------------------
+
+Returns a reference to the [Delegator][] instance that was set with `setDelegator`.
+
+### Syntax
+
+	myBehavior.getDelegator();
+
+### Returns
+
+* (*object* or *null*) whatever was set with `setDelegator`.
 
 Static Methods {#StaticMethods}
 ==============

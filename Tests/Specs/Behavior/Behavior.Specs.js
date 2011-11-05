@@ -24,6 +24,19 @@ if (window.describe){
 
 		describe('Behavior', function(){
 
+			it('should register a delegator', function(){
+				var d = new Delegator();
+				behaviorInstance.setDelegator(d);
+				expect(behaviorInstance.getDelegator()).toBe(d);
+				var error;
+				try {
+					behaviorInstance.setDelegator({});
+				} catch(e){
+					error = true;
+				}
+				expect(error).toBe(true);
+			});
+
 			it('should register a filter', function(){
 				var test1 = ClassAdder.makeAdder('one');
 				Behavior.addGlobalFilter('Test1', test1);

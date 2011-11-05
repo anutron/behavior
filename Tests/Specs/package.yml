@@ -17,3 +17,4 @@ sources:
   - "Behavior/Behavior.SpecsHelpers.js"
   - "Behavior/Delegator.Specs.js"
   - "Behavior/Element.Data.Specs.js"
+  - "Behavior/Behavior.Startup.Specs.js"
