@@ -132,7 +132,7 @@ This is both a static method and an instance method. Using the static method (`D
 
 1. eventTypes - (*string* or *array*) The event type this trigger monitors. *It is not advised to ever use mouseout or mouseover*.
 2. name - (*string*) The name of this trigger.
-3. handler - (*function* or *object*) The event handler for this trigger. Passed the element, the event, and an instance of [BehaviorAPI][]. See Note about extended declaration for this argument.
+3. handler - (*function* or *object*) The event handler for this trigger. Passed the event, the element, and an instance of [BehaviorAPI][]. See Note about extended declaration for this argument.
 4. overwrite - (*boolean*) If *true* and a trigger by this name already exists, it will be overwritten. Defaults to *false*.
 
 ### Alternate Arguments
