@@ -103,10 +103,10 @@ provides: [Delegator]
 		detach: function(target){
 			if (target){
 				this.attach(target, 'removeEvent');
-				return this;
 			} else {
 				this._attachedTo.each(this.detach, this);
 			}
+			return this;
 		},
 
 		trigger: function(name, element, event){
@@ -124,8 +124,6 @@ provides: [Delegator]
 						this.fireEvent('error', ['Could not apply the trigger', name, error]);
 					}
 				}
-			} else {
-				this.fireEvent('error', 'Could not find a trigger with the name ' + name + ' for event: ' + e.type);
 			}
 			return this;
 		},
