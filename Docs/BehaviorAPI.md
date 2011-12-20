@@ -27,9 +27,9 @@ If you attempt to read a value that isn't defined in this options object, the pr
 
 Note that filter names that contain characters other than A-Z, 0-9, or dash are stripped and what remains is case insensitive. Dots are turned to dashes. Further, camelCase properties are hyphenated to camel-case. So, for example, you would express the following:
 
-  <tag data-behavior="Foo.Bar" data-foo-bar-options="'someThing': true">
-  //and - note the hyphenation
-  <tag data-behavior="Foo.Bar" data-foo-bar-some-thing="true">
+	<tag data-behavior="Foo.Bar" data-foo-bar-options="'someThing': true">
+	//and - note the hyphenation
+	<tag data-behavior="Foo.Bar" data-foo-bar-some-thing="true">
 
 BehaviorAPI Method: get {#BehaviorAPI:get}
 ------------------------------------------
@@ -53,8 +53,8 @@ Gets a value for the specified name.
 ### Returns
 
 * (*mixed*) Values defined as strings will be returned as strings. Values defined in JSON will be returned as their
-  type is evaluated. When you expect anything other than a string it's better to use [getAs](#BehaviorAPI:getAs).
-  When more than one name is specified you'll receive an object response with key/value pairs for the name/property values.
+	type is evaluated. When you expect anything other than a string it's better to use [getAs](#BehaviorAPI:getAs).
+	When more than one name is specified you'll receive an object response with key/value pairs for the name/property values.
 
 BehaviorAPI Method: getAs {#BehaviorAPI:getAs}
 ------------------------------------------

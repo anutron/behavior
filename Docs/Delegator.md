@@ -169,8 +169,8 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Syntax
 
-  Delegator.getTrigger(name);
-  myDelegator.getTrigger(name);
+	Delegator.getTrigger(name);
+	myDelegator.getTrigger(name);
 
 ### Arguments
 
@@ -182,7 +182,7 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Examples
 
-  //this is the same example as the one at the top of the page
+	//this is the same example as the one at the top of the page
 	var myDelegator = new Delegator();
 	myDelegator.attach(myContainerElement);
 	//this adds a global trigger

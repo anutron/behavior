@@ -433,8 +433,8 @@ Filters nearly always return instances of classes (this is essentially their pur
 
 	/* the matching HTML
 	<div data-behavior="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
-	  <div class="toggle">Toggle 1</div>
-	  <div class="target">This area is controlled by Toggle 1.</div>
+		<div class="toggle">Toggle 1</div>
+	<div class="target">This area is controlled by Toggle 1.</div>
 	</div> */
 
 In the example above our filter finds the sections and togglers and validates that there is at least one of each. If there aren't it calls `api.fail` - this stops the filter's execution and Behavior.js catches it and calls its `onError` event (which defaults to `console.error`). It also checks if the number of togglers and the number of sections are equal and calls `api.warn` if they are off. This does *not* top execution; it only fires the `onWarn` event on Behavior (which defaults to `console.warn`).
