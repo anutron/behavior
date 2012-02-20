@@ -204,18 +204,6 @@ provides: [Delegator.Specs]
 				});
 			});
 
-			it('should fire an error when a trigger is named that is not registered', function(){
-				target.addTrigger('Missing');
-				var msg;
-				instance.addEvent('error', function(message){
-					msg = message;
-				});
-				simulateEvent('click', [{}, target], function(){
-					expect(msg).toBe('Could not find a trigger with the name Missing for event: click');
-					target.removeTrigger('Missing');
-				});
-			});
-
 			it('should detach from a previously attached container', function(){
 				instance.detach(container);
 				var test1current = test1count;
