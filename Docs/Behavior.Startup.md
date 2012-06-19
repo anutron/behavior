@@ -37,7 +37,9 @@ Each delegator listed will be invoked if their conditional is true. The delegato
 * method - (*string*) a method on the target element to invoke. Passed as arguments the `arguments` array (see below). Do not use with the `property` option.
 * arguments - (*array* of *strings*) arguments passed to the method of the target element specified in the `method` option. Ignored if the `property` option is used.
 * value - (*string*) A value to compare to either the value of the `property` of the target or the result of the `method` invoked upon it.
+* delay - (*number*) If set, the trigger will be invoked after this many milliseconds have passed.
 
 ### Notes
 
-This behavior (like all others) is only applied once (on startup or when new content is run through `Behavior.apply`). Be careful as this adds a startup cost to delegators; use wisely.
+* delegator conditionals that do not have a `property` OR `method` setting will always be invoked.
+* This behavior (like all others) is only applied once (on startup or when new content is run through `Behavior.apply`). Be careful as this adds a startup cost to delegators; use wisely.

@@ -23,6 +23,7 @@ provides: [Behavior.Startup]
 		return targets.some(function(target){
 			if (conditional.property) return target.get(conditional.property) === conditional.value;
 			else if (conditional.method) return target[method].apply(element, conditional.arguments || []) === conditiona.value;
+			else return (!conditional.method && !conditional.property)
 		});
 	};
 	Behavior.addGlobalFilter('Startup', {
@@ -32,7 +33,11 @@ provides: [Behavior.Startup]
 			if (delegators){
 				Object.each(delegators, function(conditional, delegator){
 					//if any were true, fire the delegator ON THIS ELEMENT
-					if (check(el, conditional, delegator, api)) api.getDelegator().trigger(delegator, el);
+					if (check(el, conditional, delegator, api)) {
+						(function(){
+							api.getDelegator().trigger(delegator, el);
+						}).delay(conditional.delay || 0);
+					}
 				});
 			}
 		}
