@@ -114,7 +114,21 @@ provides: [Delegator]
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
 
 			var trigger = this.getTrigger(name);
-			if (trigger && (!event || (event && trigger.types.contains(e.type)))) {
+
+			var checkEvent = function(event){
+				if (!event) return true;
+				return trigger.types.some(function(type){
+					var elementEvent = Element.Events[type];
+					if (elementEvent && elementEvent.condition){
+						return elementEvent.condition.call(element, event, type);
+					} else {
+						var eventType = elementEvent && elementEvent.base ? elementEvent.base : event.type;
+						return eventType == e.type;
+					}
+				});
+			};
+
+			if (trigger && checkEvent(e)) {
 				if (this.options.breakOnErrors){
 					this._trigger(trigger, element, e);
 				} else {
@@ -208,7 +222,7 @@ provides: [Delegator]
 			this._triggers[name] = handler;
 			this._onRegister(eventTypes);
 		} else {
-			throw new Error('Could add the trigger "' + name  +'" as a previous trigger by that same name exists.');
+			throw new Error('Could add the trigger "' + name +'" as a previous trigger by that same name exists.');
 		}
 		return this;
 	};
