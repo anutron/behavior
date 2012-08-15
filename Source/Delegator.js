@@ -123,7 +123,7 @@ provides: [Delegator]
 						return elementEvent.condition.call(element, event, type);
 					} else {
 						var eventType = elementEvent && elementEvent.base ? elementEvent.base : event.type;
-						return eventType == e.type;
+						return eventType == type;
 					}
 				});
 			};
