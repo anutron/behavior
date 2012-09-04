@@ -26,6 +26,7 @@ Manager for generic (DOM) event handlers.
 * warn - function invoked when a trigger calls `api.warn`. Defaults to `console.warn` if present.
 * destroyDom - function invoked when a trigger destroys a portion of the DOM. Automatically integrated w/ Behavior's `cleanup` method if you set one in the options. Passed the element destroyed as an argument.
 * ammendDom - function invoked when a trigger ammends a portion of the DOM. Automatically integrated w/ Behavior's `apply` method if you set one in the options. Passed two arguments: the parent node that contains all the updated elements and an array of those elements updated.
+* trigger - function invoked whenever a trigger is called. Passed four arguments: `trigger` (the name of the trigger invoked), `element` (the element on which it was invoked), `event` (the event object), `result` (anything returned by the trigger's handler).
 
 ### Usage
 

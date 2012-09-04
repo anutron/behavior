@@ -10,12 +10,26 @@ provides: [Delegator]
 
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
 
+	var checkEvent = function(trigger, element, event){
+		if (!event) return true;
+		return trigger.types.some(function(type){
+			var elementEvent = Element.Events[type];
+			if (elementEvent && elementEvent.condition){
+				return elementEvent.condition.call(element, event, type);
+			} else {
+				var eventType = elementEvent && elementEvent.base ? elementEvent.base : event.type;
+				return eventType == type;
+			}
+		});
+	};
+
 	window.Delegator = new Class({
 
 		Implements: [Options, Events, Behavior.PassMethods],
 
 		options: {
 			// breakOnErrors: false,
+			// onTrigger: function(trigger, element, event, result){},
 			getBehavior: function(){},
 			onError: Behavior.getLog('error'),
 			onWarn: Behavior.getLog('warn')
@@ -114,21 +128,9 @@ provides: [Delegator]
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
 
 			var trigger = this.getTrigger(name);
-
-			var checkEvent = function(event){
-				if (!event) return true;
-				return trigger.types.some(function(type){
-					var elementEvent = Element.Events[type];
-					if (elementEvent && elementEvent.condition){
-						return elementEvent.condition.call(element, event, type);
-					} else {
-						var eventType = elementEvent && elementEvent.base ? elementEvent.base : event.type;
-						return eventType == type;
-					}
-				});
-			};
-
-			if (trigger && checkEvent(e)) {
+			if (!trigger){
+				this.fireEvent('warn', 'Could not find a trigger by the name of ' + name);
+			} else if (checkEvent(trigger, element, e)) {
 				if (this.options.breakOnErrors){
 					this._trigger(trigger, element, e);
 				} else {
@@ -164,8 +166,8 @@ provides: [Delegator]
 			} if (trigger.defaults){
 				api.setDefault(trigger.defaults);
 			}
-			trigger.handler.apply(this, [event, element, api]);
-			this.fireEvent('trigger', [trigger, element, event]);
+			var result = trigger.handler.apply(this, [event, element, api]);
+			this.fireEvent('trigger', [trigger, element, event, result]);
 		},
 
 		_eventHandler: function(event, target){
