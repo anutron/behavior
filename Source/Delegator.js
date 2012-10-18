@@ -127,21 +127,22 @@ provides: [Delegator]
 			var e = event;
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
 
-			var trigger = this.getTrigger(name);
+			var result,
+					trigger = this.getTrigger(name);
 			if (!trigger){
 				this.fireEvent('warn', 'Could not find a trigger by the name of ' + name);
 			} else if (checkEvent(trigger, element, e)) {
 				if (this.options.breakOnErrors){
-					this._trigger(trigger, element, e);
+					result = this._trigger(trigger, element, e);
 				} else {
 					try {
-						this._trigger(trigger, element, e);
+						result = this._trigger(trigger, element, e);
 					} catch(error) {
 						this.fireEvent('error', ['Could not apply the trigger', name, error]);
 					}
 				}
 			}
-			return this;
+			return result;
 		},
 
 		getTrigger: function(name){
@@ -168,6 +169,7 @@ provides: [Delegator]
 			}
 			var result = trigger.handler.apply(this, [event, element, api]);
 			this.fireEvent('trigger', [trigger, element, event, result]);
+			return result;
 		},
 
 		_eventHandler: function(event, target){

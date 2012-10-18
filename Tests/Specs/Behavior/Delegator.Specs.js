@@ -35,12 +35,6 @@ provides: [Delegator.Specs]
 			target.removeTrigger('Test3');
 		});
 
-		it('should add a trigger to an element', function(){
-			target.addTrigger('Test3');
-			expect(target.getTriggers()).toEqual(['Test1', 'Test2', 'Test3']);
-			target.removeTrigger('Test3');
-		});
-
 		it('should tell you if an element has a trigger', function(){
 			target.addTrigger('Test3');
 			expect(target.hasTrigger('Test3')).toBe(true);
@@ -101,6 +95,24 @@ provides: [Delegator.Specs]
 			expect(d.getBehavior()).toBe(b2);
 			d.unbindFromBehavior(b2);
 			expect(d.getBehavior()).toBeFalsy();
+		});
+
+		it('should return the value that the trigger returns', function(){
+
+			Delegator.register('click', {
+				Test4: function(){
+					return 'test4';
+				},
+				Test5: function(){},
+				Test6: function(event, target, api){
+					return api.trigger('Test4');
+				}
+			});
+
+			expect(instance.trigger('Test4')).toEqual('test4');
+			expect(instance.trigger('Test5')).toBe(undefined);
+			expect(instance.trigger('Test6')).toEqual('test4');
+
 		});
 
 		// Only run this spec in browsers other than IE6-8 because they can't properly simulate bubbling events
