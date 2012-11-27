@@ -11,7 +11,8 @@ provides: [BehaviorAPI]
 (function(){
 	//see Docs/BehaviorAPI.md for documentation of public methods.
 
-	var reggy = /[^a-z0-9\-]/gi;
+	var reggy = /[^a-z0-9\-]/gi,
+	    dots = /\./g;
 
 	window.BehaviorAPI = new Class({
 		element: null,
@@ -20,7 +21,7 @@ provides: [BehaviorAPI]
 
 		initialize: function(element, prefix){
 			this.element = element;
-			this.prefix = prefix.toLowerCase().replace('.', '-', 'g').replace(reggy, '');
+			this.prefix = prefix.toLowerCase().replace(dots, '-').replace(reggy, '');
 		},
 
 		/******************
