@@ -34,9 +34,12 @@ provides: [Behavior.Startup]
 				Object.each(delegators, function(conditional, delegator){
 					//if any were true, fire the delegator ON THIS ELEMENT
 					if (check(el, conditional, delegator, api)) {
-						(function(){
+						var timer = (function(){
 							api.getDelegator().trigger(delegator, el);
 						}).delay(conditional.delay || 0);
+						api.onCleanup(function(){
+							clearTimeout(timer);
+						});
 					}
 				});
 			}
