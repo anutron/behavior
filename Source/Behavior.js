@@ -200,7 +200,7 @@ provides: [Behavior]
 				try {
 					pluginsToReturn = this._applyFilter.apply(this, arguments);
 				} catch (e){
-					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e]);
+					this.fireEvent('error', ['Could not apply the behavior ' + filter.name, e.message]);
 				}
 			}
 			return _returnPlugins ? pluginsToReturn : this;
