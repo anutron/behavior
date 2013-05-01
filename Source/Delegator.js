@@ -138,7 +138,7 @@ provides: [Delegator]
 					try {
 						result = this._trigger(trigger, element, e);
 					} catch(error) {
-						this.fireEvent('error', ['Could not apply the trigger', name, error]);
+						this.fireEvent('error', ['Could not apply the trigger', name, error.message]);
 					}
 				}
 			}
