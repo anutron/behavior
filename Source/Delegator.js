@@ -31,6 +31,7 @@ provides: [Delegator]
 			// breakOnErrors: false,
 			// onTrigger: function(trigger, element, event, result){},
 			getBehavior: function(){},
+			onLog: Behavior.getLog('info'),
 			onError: Behavior.getLog('error'),
 			onWarn: Behavior.getLog('warn')
 		},
@@ -73,6 +74,7 @@ provides: [Delegator]
 			if (!behavior) return;
 			this.unbindFromBehavior();
 			this._behavior = behavior;
+			if (this._behavior.options.verbose) this.options.verbose = true;
 			if (!this._behaviorEvents){
 				var self = this;
 				this._behaviorEvents = {
@@ -126,7 +128,7 @@ provides: [Delegator]
 		trigger: function(name, element, event){
 			var e = event;
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
-
+			if (this.options.verbose) this.fireEvent('log', ['Applying trigger: ', name, element, event]);
 			var result,
 					trigger = this.getTrigger(name);
 			if (!trigger){
@@ -142,6 +144,8 @@ provides: [Delegator]
 					}
 				}
 			}
+			if (this.options.verbose && result) this.fireEvent('log', ['Successfully applied trigger: ', name, element, event]);
+			else if (this.options.verbose) this.fireEvent('log', ['Trigger applied, but did not return a result: ', name, element, event]);
 			return result;
 		},
 
@@ -167,6 +171,7 @@ provides: [Delegator]
 			} if (trigger.defaults){
 				api.setDefault(trigger.defaults);
 			}
+			if (Delegator.debugging && Delegator.debugging.contains(name)) debugger;
 			var result = trigger.handler.apply(this, [event, element, api]);
 			this.fireEvent('trigger', [trigger, element, event, result]);
 			return result;
@@ -238,6 +243,11 @@ provides: [Delegator]
 	Delegator.addEventTypes = function(triggerName, types){
 		this.getTrigger(triggerName).types.combine(Array.from(types));
 		return this;
+	};
+
+	Delegator.debug = function(name){
+		if (!Delegator.debugging) Delegator.debugging = [];
+		Delegator.debugging.push(name);
 	};
 
 

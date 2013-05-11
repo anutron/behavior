@@ -66,6 +66,7 @@ provides: [Behavior]
 			// container: document.body,
 
 			//default error behavior when a filter cannot be applied
+			onLog: getLog('info'),
 			onError: getLog('error'),
 			onWarn: getLog('warn'),
 			enableDeprecation: true,
@@ -139,7 +140,10 @@ provides: [Behavior]
 						}
 					}
 				}, this);
-				plugins.each(function(plugin){ plugin(); });
+				plugins.each(function(plugin){
+					if (this.options.verbose) this.fireEvent('log', ['Firing plugin...']);
+					plugin();
+				}, this);
 			}, this);
 			return this;
 		},
@@ -214,6 +218,7 @@ provides: [Behavior]
 			var applied = getApplied(element);
 			//if this filter is not yet applied to the element, or we are forcing the filter
 			if (!applied[filter.name] || force){
+				if (this.options.verbose) this.fireEvent('log', ['Applying behavior: ', filter.name, element]);
 				//if it was previously applied, garbage collect it
 				if (applied[filter.name]) applied[filter.name].cleanup(element);
 				var api = new this.API(element, filter.name);
@@ -237,11 +242,17 @@ provides: [Behavior]
 				if (filter.config.defaults) api.setDefault(filter.config.defaults);
 
 				//apply the filter
+				if (Behavior.debugging && Behavior.debugging.contains(filter.name)) debugger;
 				var result = filter.setup(element, api, _pluginTargetResult);
 				if (filter.config.returns && !instanceOf(result, filter.config.returns)){
 					throw new Error("Filter " + filter.name + " did not return a valid instance.");
 				}
 				element.store('Behavior Filter result:' + filter.name, result);
+				if (this.options.verbose){
+					if (result && !_pluginTargetResult) this.fireEvent('log', ['Successfully applied behavior: ', filter.name, element, result]);
+					else this.fireEvent('warn', ['Behavior applied, but did not return result: ', filter.name, element, result]);
+				}
+
 				//and mark it as having been previously applied
 				applied[filter.name] = filter;
 				//apply all the plugins for this filter
@@ -452,6 +463,11 @@ provides: [Behavior]
 		}
 
 	});
+
+	Behavior.debug = function(name){
+		if (!Behavior.debugging) Behavior.debugging = [];
+		Behavior.debugging.push(name);
+	};
 
 	Behavior.elementDataProperty = 'behavior';
 

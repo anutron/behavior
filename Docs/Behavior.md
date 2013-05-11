@@ -18,6 +18,7 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 ### Options
 
 * breakOnErrors - (*boolean*) By default, errors thrown by filters are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* verbose - (*boolean*) If *true*, Behavior logs its activity to the console. This can create a lot of output. Defaults to *false*.
 * container - (*element*; optional) The DOM element (or its ID) that contains all the applied behavior filters. Defaults to `document.body`;
 * selector - (*string* or *function*; optional) The CSS selector used to find all elements with behaviors defined; defaults to `[data-behavior]`. This can also be a `function` which, when executed, returns the elements as an Elements collection; it is passed the container option if present. **Important** If you use a different `data-` property than `behavior` you need to also change `Behavior.elementDataProperty` to match. This property defaults to `behavior`, meaning that elements have a property defined for `data-behavior`. If you wanted to use `data-be` for example, you would need to set the selector option here to `[data-be]` AND include `Behavior.elementDataProperty = "be";` in your code.
 
@@ -333,6 +334,20 @@ Returns a reference to the [Delegator][] instance that was set with `setDelegato
 
 Static Methods {#StaticMethods}
 ==============
+
+Behavior Method: debug {#Behavior:debug}
+--------------------------------------------------
+
+Will invoke `debugger` before executing any filter that matches that name, allowing you to walk through that filter's invocation.
+
+### Syntax
+
+	Behavior.debug(pluginName);
+
+### Arguments
+
+1. pluginName - (*string*) The name of the plugin.
+
 
 Behavior Method: addGlobalFilter {#Behavior:addGlobalFilter}
 --------------------------------------------------

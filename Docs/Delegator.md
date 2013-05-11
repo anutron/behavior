@@ -18,6 +18,7 @@ Manager for generic (DOM) event handlers.
 ### Options
 
 * breakOnErrors - (*boolean*) By default, errors thrown by triggers are caught; the onError event is fired. Set this to `true` to NOT catch these errors to allow them to be handled by the browser.
+* verbose - (*boolean*) If *true*, Delegator logs its activity to the console. This can create a lot of output. Defaults to *false*.
 * getBehavior - (*function*) Returns an instance of [Behavior](Behavior.md) so that triggers can integrate with it.
 
 ### Events
@@ -303,6 +304,25 @@ Invokes a specific trigger manually.
 ### Returns
 
 * (*mixed*) - Whatever the trigger invoked returns.
+
+Static Methods
+==============
+
+In addition to those listed above that are both static and instance methods...
+
+Delegator Method: debug {#Delegator:debug}
+--------------------------------------------------
+
+Will invoke `debugger` before executing any trigger that matches that name, allowing you to walk through that filter's invocation.
+
+### Syntax
+
+	Delegator.debug(pluginName);
+
+### Arguments
+
+1. pluginName - (*string*) The name of the plugin.
+
 
 Element Methods
 ===============
