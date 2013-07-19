@@ -37,6 +37,32 @@ provides: [Behavior]
 
 	});
 
+	var GetAPI = new Class({
+		_getAPI: function(element, filter){
+			var api = new this.API(element, filter.name);
+			api.getElement = function(apiKey, breakIfNotFound){
+				var elements = api.getElements(apiKey, breakIfNotFound);
+				return elements ? elements[0] : null;
+			};
+			api.getElements = function(apiKey, warnOrFail){
+				var method = warnOrFail || "fail";
+				var selector = api.get(apiKey);
+				if (!selector){
+					api[method]("Could not find selector for " + apiKey);
+					return;
+				}
+
+				if (selector == 'window') return window;
+				else if (selector == 'self') return element;
+
+				var targets = element.getElements(selector);
+				if (!targets.length) api[method]("Could not find any elements for target '" + apiKey + "' using selector '" + selector + "'");
+				return targets;
+			};
+			return api;
+		}
+	});
+
 	var spaceOrCommaRegex = /\s*,\s*|\s+/g;
 
 	BehaviorAPI.implement({
@@ -57,7 +83,7 @@ provides: [Behavior]
 
 	this.Behavior = new Class({
 
-		Implements: [Options, Events, PassMethods],
+		Implements: [Options, Events, PassMethods, GetAPI],
 
 		options: {
 			//by default, errors thrown by filters are caught; the onError event is fired.
@@ -76,6 +102,7 @@ provides: [Behavior]
 		initialize: function(options){
 			this.setOptions(options);
 			this.API = new Class({ Extends: BehaviorAPI });
+			var self = this;
 			this.passMethods({
 				getDelegator: this.getDelegator.bind(this),
 				addEvent: this.addEvent.bind(this),
@@ -184,7 +211,7 @@ provides: [Behavior]
 
 		//runs custom initiliazer defined in filter.config.initializer
 		_customInit: function(element, filter, force){
-			var api = new this.API(element, filter.name);
+			var api = this._getAPI(element, filter);
 			api.runSetup = this.applyFilter.pass([element, filter, force], this);
 			filter.config.initializer(element, api);
 		},
@@ -221,7 +248,7 @@ provides: [Behavior]
 				if (this.options.verbose) this.fireEvent('log', ['Applying behavior: ', filter.name, element]);
 				//if it was previously applied, garbage collect it
 				if (applied[filter.name]) applied[filter.name].cleanup(element);
-				var api = new this.API(element, filter.name);
+				var api = this._getAPI(element, filter);
 
 				//deprecated
 				api.markForCleanup = filter.markForCleanup.bind(filter);
@@ -300,6 +327,7 @@ provides: [Behavior]
 	//Export these for use elsewhere (notabily: Delegator).
 	Behavior.getLog = getLog;
 	Behavior.PassMethods = PassMethods;
+	Behavior.GetAPI = GetAPI;
 
 
 	//Returns the applied behaviors for an element.

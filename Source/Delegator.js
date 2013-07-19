@@ -25,7 +25,7 @@ provides: [Delegator]
 
 	window.Delegator = new Class({
 
-		Implements: [Options, Events, Behavior.PassMethods],
+		Implements: [Options, Events, Behavior.PassMethods, Behavior.GetAPI],
 
 		options: {
 			// breakOnErrors: false,
@@ -163,7 +163,7 @@ provides: [Delegator]
 		 ******************/
 
 		_trigger: function(trigger, element, event){
-			var api = new this.API(element, trigger.name);
+			var api = this._getAPI(element, trigger);
 			if (trigger.requireAs){
 				api.requireAs(trigger.requireAs);
 			} else if (trigger.require){

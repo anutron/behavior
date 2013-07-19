@@ -88,6 +88,8 @@ By default, Behavior passes the following methods to filters in addition to the 
 * **fireEvents** - the `fireEvents` method of the behavior instance provided by the [Events][] class.
 * **applyFilters** - the `apply` method of the behavior instance. This allows a Behavior to create new DOM structures and apply their behavior filters.
 * **applyFilter** - the `applyFilter` method of the behavior instance. Allows you to invoke a specific behavior filter.
+* **getElement** - a method to retrieve an element given a selector relative to the element with the filter. I.e. if your filter has a "target" option you can call `api.get('target')` and it'll get the element from the DOM using `.getElement` and the value for the `target` setting. Calls `api.fail` if not found and stops execution of your filter. Call `api.get('target', true)` to have it just warn on that error and return `null`.
+* **getELements** - Same as `.getElement` but returns and array of matches for the selector.
 * **getContentElement** - returns the "container" element of the Behavior instance. By default this points to `document.body`. Set `options.container` to change it.
 * **getContainerSize** - returns the value of `getContentElement().getSize();` Note that if that element is not in the DOM this will return zeros.
 * **getDelegator** - returns the instance of [Delegator][] set with the `setDelegator` method.
