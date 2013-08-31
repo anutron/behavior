@@ -185,7 +185,7 @@ provides: [Delegator.Specs]
 				}, true);
 				simulateEvent('click', [{}, target], function(){
 					expect(success).toBeFalsy();
-					expect(msg).toBe('Could not apply the trigger Required Error: Could not retrieve required-missing option from element.');
+					expect(msg).toBe('Could not apply the trigger Required Could not retrieve required-missing option from element.');
 					target.removeTrigger('Required');
 				});
 			});
