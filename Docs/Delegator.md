@@ -289,7 +289,7 @@ Invokes a specific trigger manually.
 
 ### Syntax
 
-	myDelegator.trigger(trigger, element[, event]);
+	myDelegator.trigger(trigger, element[, event, ignoreTypes]);
 
 ### Example
 
@@ -300,6 +300,7 @@ Invokes a specific trigger manually.
 1. trigger - (*string*) The name of the registered trigger to invoke.
 2. element - (*element*) A DOM element (or its ID) for the trigger's target.
 3. event - (*event* or *string*; optional) An optional event to pass to the trigger. If you pass in a string, a mock event will be created for that type. If none is provided a mock event is created as a "click" event.
+4. ignoreTypes - (*boolean*) if `true` does not check the event type to see if it matches the trigger's specified supported methods.
 
 ### Returns
 

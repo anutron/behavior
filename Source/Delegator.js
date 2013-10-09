@@ -125,7 +125,7 @@ provides: [Delegator]
 			return this;
 		},
 
-		trigger: function(name, element, event){
+		trigger: function(name, element, event, ignoreTypes){
 			var e = event;
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
 			if (this.options.verbose) this.fireEvent('log', ['Applying trigger: ', name, element, event]);
@@ -133,7 +133,7 @@ provides: [Delegator]
 					trigger = this.getTrigger(name);
 			if (!trigger){
 				this.fireEvent('warn', 'Could not find a trigger by the name of ' + name);
-			} else if (checkEvent(trigger, element, e)) {
+			} else if (ignoreTypes || checkEvent(trigger, element, e)) {
 				if (this.options.breakOnErrors){
 					result = this._trigger(trigger, element, e);
 				} else {
