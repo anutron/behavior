@@ -52,8 +52,8 @@ provides: [Behavior]
 					return;
 				}
 
-				if (selector == 'window') return window;
-				else if (selector == 'self') return element;
+				if (selector == 'window') return [window];
+				else if (selector == 'self') return [element];
 
 				var targets = element.getElements(selector);
 				if (!targets.length) api[method]("Could not find any elements for target '" + apiKey + "' using selector '" + selector + "'");
