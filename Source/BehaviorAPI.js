@@ -64,7 +64,7 @@ provides: [BehaviorAPI]
 				for (var objName in arguments[0]){
 					this.setDefault(objName, arguments[0][objName]);
 				}
-				return;
+				return this;
 			}
 			name = name.camelCase();
 			this.defaults[name] = value;

@@ -37,27 +37,25 @@ provides: [Behavior]
 
 	});
 
+
+
 	var GetAPI = new Class({
 		_getAPI: function(element, filter){
 			var api = new this.API(element, filter.name);
-			api.getElement = function(apiKey, breakIfNotFound){
-				var elements = api.getElements(apiKey, breakIfNotFound);
-				return elements ? elements[0] : null;
-			};
-			api.getElements = function(apiKey, warnOrFail){
+			var getElements = function(apiKey, warnOrFail, multi){
 				var method = warnOrFail || "fail";
 				var selector = api.get(apiKey);
-				if (!selector){
-					api[method]("Could not find selector for " + apiKey);
-					return;
-				}
+				if (!selector) api[method]("Could not find selector for " + apiKey);
 
-				if (selector == 'window') return [window];
-				else if (selector == 'self') return [element];
-
-				var targets = element.getElements(selector);
-				if (!targets.length) api[method]("Could not find any elements for target '" + apiKey + "' using selector '" + selector + "'");
-				return targets;
+				var result = Behavior[multi ? 'getTargets' : 'getTarget'](element, selector);
+				if (!result || (multi && !result.length)) api[method]("Could not find any elements for target '" + apiKey + "' using selector '" + selector + "'");
+				return result;
+			};
+			api.getElement = function(apiKey, warnOrFail){
+				return getElements(apiKey, warnOrFail);
+			};
+			api.getElements = function(apiKey, warnOrFail){
+				return getElements(apiKey, warnOrFail, true);
 			};
 			return api;
 		}
@@ -148,7 +146,7 @@ provides: [Behavior]
 		//container - (element) an element to apply the filters registered with this Behavior instance to.
 		//force - (boolean; optional) passed through to applyFilter (see it for docs)
 		apply: function(container, force){
-		  this._getElements(container).each(function(element){
+			this._getElements(container).each(function(element){
 				var plugins = [];
 				element.getBehaviors().each(function(name){
 					var filter = this.getFilter(name);
@@ -498,6 +496,38 @@ provides: [Behavior]
 	};
 
 	Behavior.elementDataProperty = 'behavior';
+
+	// element fetching
+
+	/*
+		private method
+		give an element and a selector, fetches elements relative to
+		that element. boolean 'multi' determins if its getElement or getElements
+		special cases for when the selector == 'window' (returns the window)
+		and selector == 'self' (returns the element)
+		- for both of those, if multi is true returns
+		  new Elements([self]) or new Elements([window])
+	*/
+	var getTargets = function(element, selector, multi){
+		// get the targets
+		if (selector && selector != 'self' && selector != 'window') return element[multi ? 'getElements' : 'getElement'](selector);
+		if (selector == 'window') return multi ? new Elements([window]) : window;
+		return multi ? new Elements([element]) : element;
+	};
+
+	/*
+		see above; public interface for getting a single element
+	*/
+	Behavior.getTarget = function(element, selector){
+		return getTargets(element, selector, false);
+	};
+
+	/*
+		see above; public interface for getting numerous elements
+	*/
+	Behavior.getTargets = function(element, selector){
+		return getTargets(element, selector, true);
+	};
 
 	Element.implement({
 

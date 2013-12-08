@@ -88,8 +88,6 @@ By default, Behavior passes the following methods to filters in addition to the 
 * **fireEvents** - the `fireEvents` method of the behavior instance provided by the [Events][] class.
 * **applyFilters** - the `apply` method of the behavior instance. This allows a Behavior to create new DOM structures and apply their behavior filters.
 * **applyFilter** - the `applyFilter` method of the behavior instance. Allows you to invoke a specific behavior filter.
-* **getElement** - a method to retrieve an element given a selector relative to the element with the filter. I.e. if your filter has a "target" option you can call `api.get('target')` and it'll get the element from the DOM using `.getElement` and the value for the `target` setting. Calls `api.fail` if not found and stops execution of your filter. Call `api.get('target', true)` to have it just warn on that error and return `null`.
-* **getELements** - Same as `.getElement` but returns and array of matches for the selector.
 * **getContentElement** - returns the "container" element of the Behavior instance. By default this points to `document.body`. Set `options.container` to change it.
 * **getContainerSize** - returns the value of `getContentElement().getSize();` Note that if that element is not in the DOM this will return zeros.
 * **getDelegator** - returns the instance of [Delegator][] set with the `setDelegator` method.
@@ -97,9 +95,60 @@ By default, Behavior passes the following methods to filters in addition to the 
 * **fail** - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
 * **cleanup** - tells Behavior that you are about to retire a DOM tree and allows it to run any garbage collection methods attached to it. Be ware of circular logic here! See also: [Behavior.cleanup](#Behavior:cleanup)
 * **onCleanup** - accepts as its only argument a function that is run when the element is removed from the DOM and passed to [Behavior.cleanup](#Behavior:cleanup)
+* getElement - see note on getElement below.
+* getElements - see note on getElements below.
 * See the [BehaviorAPI][] for additional methods passed by default.
 
 You can add any other methods that your filters require. In general, your filters shouldn't reference anything in your environment except these methods and those methods defined in [Behavior.Filter][].
+
+### api.getElement and api.getElements
+
+Behavior provides two methods to help you get elements relative to the one with the trigger on it: `getElement` and `getElements`. These methods, given an option key, look up the key's value and find the first element using that value as a selector. This search is relative to the api's element (so, for example, to find an element by ID anywhere on the page, you'd pass `!body #the-id`). Returns the first element found or `null`. `getElements` returns an `Elements` instance with the result while `getElement` just returns the first.
+
+By default, these methods will throw an error (quietly, in the console, unless the `breakOnErrors` option on the Behavior instance is `true`) if the option key is not defined or no element is found, stopping execution of the trigger. Pass in an optional second argument to have it only throw the warning in the console but continue execution.
+
+#### Examples
+
+	<a data-behavior="addClass" data-addclass-options="
+		'target': 'span.foo',
+		'className': 'bar'
+	"><span class="foo">some stuff</span></a>
+
+	<script>
+		Behavior.addGlobalFilter('addClass', {
+			setup: function(element, api){
+				// get the first element using whatever the 'target' option is set to
+				// as a selector; in this case, "span.foo" and call `.addClass()` on it
+				api.getElement('target').addClass(api.get('className'));
+			}
+		});
+	</script>
+
+If the user did not configure a target in the options or if the selector specified in that option were to fail to find a result, execution would be stopped and an error logged to console (or thrown if `breakOnErrors` is true).
+
+	<a data-behavior="addClass" data-addclass-options="
+		'target': 'span.foo',
+		'className': 'bar'
+	"><span class="foo">some stuff</span></a>
+
+	<script>
+		Behavior.addGlobalFilter('addClass', {
+			setup: function(element, api){
+				// here we tell the api not to stop execution and only warn in the console
+				var target = api.getElement('target', 'warn');
+				// if the target wasn't found, we alter the element (just an example)
+				if (!target) element.addClass(api.get('className'));
+				// otherwise alter the target
+				else target.addClass(api.get('className'));
+			}
+		});
+	</script>
+
+`getElements` works the same way, but instead returns an array-like `Elements` object with all elements that match the selector.
+
+#### Special selectors `self` and `window`
+
+For convenience, Delegator provides two special selectors: `self` and `window`. `self` returns the element itself, while `window` returns the window. Unlike regular selectors which can contain pseudo-selectors and commas (i.e. `.foo:focused, .bar`), the `self` and `window` selectors must be on their own with no adornment. The reason for this is that some filters (like the first example above) require that there be a selector given for an option. If the user wants to invoke the filter's action on the element clicked, they need a way to reference it. Likewise, if they want reference the window (like scrolling it for example) they need a way to reference it.
 
 Behavior Method: passMethods {#Behavior:passMethods}
 --------------------------------------------------
@@ -336,6 +385,46 @@ Returns a reference to the [Delegator][] instance that was set with `setDelegato
 
 Static Methods {#StaticMethods}
 ==============
+
+Behavior Method: getTarget {#Behavior:getTarget}
+--------------------------------------------------
+
+Fetches a single element given a selector. Equivalent to `Element::getElement` except that it allows for two special selectors:
+`self` and `window`, where `self` returns the element itself and `window` returns the window. All selectors are valid,
+including multiple selectors seperated by commas and spaces. However, the `self` and `window` selectors must be passed
+alone, otherwise they are ignored.
+
+### Syntax
+
+	Behavior.getTarget(element, selector);
+
+### Arguments
+
+1. element - (*element*) The element from which to search.
+2. selector - (*string*) Any valid Slick / CSS3 selector, plus `self` and `window` (see description)
+
+### Returns
+
+* (*element*) - the element that matched or null if none was found.
+
+Behavior Method: getTargets {#Behavior:getTargets}
+--------------------------------------------------
+
+Same as `Behvior.getTarget` above, except that it returns an `Elements` instance. If you pass in the special
+selectors `self` or `window` it returns an `Elements` instance that contains only the element or the window.
+
+### Syntax
+
+	Behavior.getTargets(element, selector);
+
+### Arguments
+
+1. element - (*element*) The element from which to search.
+2. selector - (*string*) Any valid Slick / CSS3 selector, plus `self` and `window` (see description)
+
+### Returns
+
+* (*array*) - an `Elements` instance with the elements that matched
 
 Behavior Method: debug {#Behavior:debug}
 --------------------------------------------------

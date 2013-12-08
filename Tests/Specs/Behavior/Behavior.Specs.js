@@ -469,6 +469,40 @@ if (window.describe){
 				expect(target.hasClass('one_plugin')).toBe(true);
 			});
 
+			it('should get the specified element via the api key', function(){
+				target.addBehaviorFilter('testGetElements');
+				var firstSpan = new Element('span.foo#one').inject(target);
+				var anotherSpan = new Element('span.foo#two').inject(target);
+
+				target.setJSONData('testgetelements-options', {
+					span: 'span',
+					spanfoo: 'span.foo',
+					self: 'self',
+					win: 'window'
+				});
+
+				var logged = false,
+				    log = function(){ logged = true; };
+				behaviorInstance.addEvent('error', log);
+				Behavior.addGlobalFilter('testGetElements', function(element, api){
+					expect(api.getElement('span')).toEqual(firstSpan);
+					expect(api.getElement('spanfoo')).toEqual(firstSpan);
+					expect(api.getElements('span')[0]).toEqual(firstSpan);
+					expect(api.getElements('span')[1]).toEqual(anotherSpan);
+					expect(api.getElements('span').length).toEqual(2);
+					expect(api.getElement('self')).toEqual(target);
+					expect(api.getElements('self')[0]).toEqual(target);
+					expect(api.getElements('self').length).toEqual(1);
+					expect(api.getElement('win')).toEqual(window);
+					expect(api.getElements('win')[0]).toEqual(window);
+					expect(api.getElements('win').length).toEqual(1);
+				});
+				behaviorInstance.apply(container);
+				if (logged) expect("ERROR").toEqual("api.getElements failed; check console");
+				behaviorInstance.cleanup(container);
+				target.removeBehaviorFilter('testGetElements');
+			});
+
 		});
 
 	})();

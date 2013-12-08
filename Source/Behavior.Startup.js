@@ -15,7 +15,7 @@ provides: [Behavior.Startup]
 				Object.each(delegators, function(conditional, delegator){
 					var timer =(function(){
 						//if any were true, fire the delegator ON THIS ELEMENT
-						if (Delegator.verifyTargets(el, conditional, delegator, api)) {
+						if (Delegator.verifyTargets(el, conditional, api)) {
 							api.getDelegator().trigger(delegator, el);
 						}
 					}).delay(conditional.delay || 0)
