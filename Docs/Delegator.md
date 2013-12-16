@@ -74,7 +74,7 @@ If you're using [Behavior](Behavior.md) you should connect the two so that links
 
 ### Conditionals
 
-Delegator also allows any trigger's options to include conditoinals that will prevent the trigger from being invoked if they match. These conditionals are run at event time, allowing you to program your UI for different states.
+Delegator also allows any trigger's options to include conditionals that will prevent or allow the trigger from being invoked if they match. These conditionals are run at event time, allowing you to program your UI for different states. Delegator provides two conditionals - `if` and `unless`. In theory this could be extended to include others like less than or greater than at some point.
 
 #### Examples
 
@@ -166,7 +166,7 @@ Here we have 3 different Delegator triggers we are invoking when the user clicks
 
 Finally, Delegator offers a special trigger called a `switch`. These allow you to define multiple sets of triggers to execute when a condition is met. If the user clicks this button and some radio button is selected, execute these triggers on THAT group of elements, else execute these OTHER triggers on these OTHER elements.
 
-There are two types of switches: `first` and `any`. The `first` switch iterates over your switch groups and executes the first group whose condition is `true`, while the `any` switch iterates over all the trigger groups, executing any whose condition is true. As with all triggers, a group with no condition is treated as one that is `true` and executed.
+There are two types of switches: `first` and `any`. The `first` switch iterates over your switch groups (in the order they are declared) and executes the first group whose condition is `true`, while the `any` switch iterates over all the trigger groups, executing any whose condition is true. As with all triggers, a group with no condition is treated as one that is `true` and executed.
 
 #### Examples
 
@@ -176,7 +176,7 @@ There are two types of switches: `first` and `any`. The `first` switch iterates 
 				'div.foo::hasClass':['baz']
 			},
 			triggers: [
-				'.foo::switch1'
+				'.foo::trigger1'
 			]
 		},
 		{
@@ -184,12 +184,12 @@ There are two types of switches: `first` and `any`. The `first` switch iterates 
 				'div.foo::hasClass':['baz']
 			},
 			triggers: [
-				'.foo::switch2'
+				'.foo::trigger2'
 			]
 		},
 		{
 			triggers: [
-				'.foo::switch3'
+				'.foo::trigger3'
 			]
 		}
 	]">...</a>
@@ -202,7 +202,7 @@ In the above example, Delegator iterates over the array of trigger groups define
 				'div.foo::hasClass':['baz']
 			},
 			triggers: [
-				'.foo::switch1'
+				'.foo::trigger1'
 			]
 		},
 		{
@@ -210,12 +210,12 @@ In the above example, Delegator iterates over the array of trigger groups define
 				'div.foo::hasClass':['baz']
 			},
 			triggers: [
-				'.foo::switch2'
+				'.foo::trigger2'
 			]
 		},
 		{
 			triggers: [
-				'.foo::switch3'
+				'.foo::trigger3'
 			]
 		}
 	]">...</a>
@@ -233,12 +233,12 @@ Note that, as with any trigger, you can have a conditional for the switch itself
 					'div.foo::hasClass':['baz']
 				},
 				triggers: [
-					'.foo::switch1'
+					'.foo::trigger1'
 				]
 			},
 			{
 				triggers: [
-					'.foo::switch3'
+					'.foo::trigger3'
 				]
 			}
 		],

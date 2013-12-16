@@ -272,7 +272,7 @@ provides: [Delegator]
 		_eventHandler: function(event, target){
 			// get the triggers from the target element
 			var triggers = target.getTriggers();
-			// if the trigger is of the special types handles by delegator itself,
+			// if the trigger is of the special types handled by delegator itself,
 			// run those and remove them from the list of triggers
 			if (triggers.contains('Stop')) triggers.erase('Stop') && event.stop();
 			if (triggers.contains('PreventDefault')) triggers.erase('PreventDefault') && event.preventDefault();
@@ -297,7 +297,7 @@ provides: [Delegator]
 
 			// get the triggers (required)
 			var triggers = api.getAs(Array, 'triggers');
-			// if they're there and there are any, run them
+			// if there are triggers, run them
 			if (triggers && triggers.length) this._runMultipleTriggers(element, event, triggers);
 		},
 

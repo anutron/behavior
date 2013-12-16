@@ -501,8 +501,8 @@ provides: [Behavior]
 
 	/*
 		private method
-		give an element and a selector, fetches elements relative to
-		that element. boolean 'multi' determins if its getElement or getElements
+		given an element and a selector, fetches elements relative to
+		that element. boolean 'multi' determines if its getElement or getElements
 		special cases for when the selector == 'window' (returns the window)
 		and selector == 'self' (returns the element)
 		- for both of those, if multi is true returns
