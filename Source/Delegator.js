@@ -482,7 +482,10 @@ provides: [Delegator]
 	};
 
 	Delegator.addEventTypes = function(triggerName, types){
-		this.getTrigger(triggerName).types.combine(Array.from(types));
+		var eventTypes = Array.from(types);
+		var trigger = this.getTrigger(triggerName);
+		if (trigger) trigger.types.combine(eventTypes);
+		this._onRegister(eventTypes);
 		return this;
 	};
 
