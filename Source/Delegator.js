@@ -344,7 +344,7 @@ provides: [Delegator]
 				if (config) api = this._getAPI(target, trigger).setDefault(config);
 				// invoke the trigger
 				this.trigger(trigger.name, target, event, true, api);
-			}, this)
+			}, this);
 		},
 
 		/*
