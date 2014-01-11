@@ -311,14 +311,14 @@ provides: [Delegator]
 				// if it's a string, invoke it
 				// example: '.selector::trigger' << finds .selector and calls 'trigger' delegator on it
 				if (typeOf(trigger) == 'string'){
-					this._invokeMultiTrigger(element, trigger);
+					this._invokeMultiTrigger(element, event, trigger);
 				} else if (typeOf(trigger) == 'object'){
 					// if it's an object, iterate over it's keys and config
 					// example:
 					// { '.selector::trigger': {'arg':'whatevs'} } << same as above, but passes ['arg'] as argument
 					//                                                to the trigger as *defaults* for the trigger
 					Object.each(trigger, function(config, key){
-						this._invokeMultiTrigger(element, key, config);
+						this._invokeMultiTrigger(element, event, key, config);
 					}, this);
 				}
 			}, this);
@@ -329,7 +329,7 @@ provides: [Delegator]
 			found for the trigger.
 			trigger example: '.selector::trigger' << find .selector and invoke 'trigger' delegator
 		*/
-		_invokeMultiTrigger: function(element, trigger, config){
+		_invokeMultiTrigger: function(element, event, trigger, config){
 			// split the trigger name
 			trigger = this._splitTriggerName(trigger);
 			if (!trigger) return; //craps out if the trigger is mal-formed
