@@ -16,7 +16,7 @@ provides: [Event.Mock]
 ...
 */
 
-(function($,window,undef){
+(function($, window, undef){
 
 /**
  * creates a Mock event to be used with fire event
@@ -24,28 +24,25 @@ provides: [Event.Mock]
  *  @param string type the type of the event to be fired. Will not be used by IE - not required.
  *
  */
-Event.Mock = function(target,type){
-	type = type || 'click';
+Event.Mock = function(target, type){
+	var e = window.event;
 
-	var e = {
-		type: type,
-		target: target
-	};
+	type = type || 'click';
 
 	if (document.createEvent){
 		e = document.createEvent('HTMLEvents');
 		e.initEvent(
-			type //event type
-			, false //bubbles - set to false because the event should like normal fireEvent
-			, true //cancelable
+			type, //Event type
+			false, //Bubbles - set to false because the event should like normal fireEvent
+			true //Cancelable
 		);
 	}
 
-	e = new Event(e);
+	e = new DOMEvent(e);
 
 	e.target = target;
 
 	return e;
-};
+}
 
-})(document.id,window);
+})(document.id, window);
