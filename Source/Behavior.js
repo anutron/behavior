@@ -88,7 +88,7 @@ provides: [Behavior]
 			//set this to *true* to NOT catch these errors to allow them to be handled by the browser.
 			// breakOnErrors: false,
 			// container: document.body,
-
+			// onApply: function(elements){},
 			//default error behavior when a filter cannot be applied
 			onLog: getLog('info'),
 			onError: getLog('error'),
@@ -146,7 +146,7 @@ provides: [Behavior]
 		//container - (element) an element to apply the filters registered with this Behavior instance to.
 		//force - (boolean; optional) passed through to applyFilter (see it for docs)
 		apply: function(container, force){
-			this._getElements(container).each(function(element){
+			var elements = this._getElements(container).each(function(element){
 				var plugins = [];
 				element.getBehaviors().each(function(name){
 					var filter = this.getFilter(name);
@@ -170,6 +170,7 @@ provides: [Behavior]
 					plugin();
 				}, this);
 			}, this);
+			this.fireEvent('apply', [elements]);
 			return this;
 		},
 

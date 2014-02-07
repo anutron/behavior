@@ -26,6 +26,7 @@ Auto-instantiates widgets/classes based on parsed, declarative HTML.
 
 * error - function invoked when an error is caught in a filter. Defaults to console errors if console.error is available.
 * warn - function invoked when a filter calls the warn method no the method api. Defaults to console warnings if console.warn is available.
+* apply - function invoked when the instance of `Behavior` is applied. Passes as argument the array of elements that had filters.
 
 ### Usage
 
