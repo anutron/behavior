@@ -335,8 +335,6 @@ provides: [Delegator]
 			if (!trigger) return; //craps out if the trigger is mal-formed
 			// get the targets specified by that trigger
 			var targets = Behavior.getTargets(element, trigger.selector);
-			// fail if nothing found
-			if (!targets.length) api.fail('Could not apply multi trigger ' + trigger.name + ' because no target elements were found for element', element);
 			// iterate over each target
 			targets.each(function(target){
 				var api;
