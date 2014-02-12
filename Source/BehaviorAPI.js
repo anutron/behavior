@@ -67,6 +67,13 @@ provides: [BehaviorAPI]
 				return this;
 			}
 			name = name.camelCase();
+
+			switch (typeOf(value)){
+				case 'object': value = Object.clone(value); break;
+				case 'array': value = Array.clone(value); break;
+				case 'hash': value = new Hash(value); break;
+			}
+
 			this.defaults[name] = value;
 			if (this._getValue(name) == null){
 				var options = this._getOptions();
