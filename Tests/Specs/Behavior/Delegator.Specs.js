@@ -120,6 +120,57 @@ provides: [Delegator.Specs]
 		// Only run this spec in browsers other than IE6-8 because they can't properly simulate bubbling events
 		if (window.addEventListener){
 
+			it ('should set filter defaults', function(){
+				var fired = false;
+				Delegator.register('click', 'Defaults', {
+					defaults: {
+						foo: 'bar',
+						number: 9
+					},
+					handler: function(event, target, api){
+						expect(api.get('foo')).toBe('baz');
+						expect(api.get('number')).toBe(10);
+						fired = true;
+					}
+				});
+				Delegator.setTriggerDefaults('Defaults', {
+					foo: 'baz',
+					number: 10
+				});
+				target.addTrigger('Defaults');
+				Syn.trigger('click', null, target);
+				expect(fired).toEqual(true);
+				target.removeTrigger('Defaults');
+			});
+
+			it ('should clone a filter', function(){
+				Delegator.register('click', 'Base', {
+					defaults: {
+						foo: 'bar',
+						number: 9
+					},
+					handler: function(event, target, api){
+						if (api.prefix == 'base'){
+							expect(api.get('foo')).toBe('bar');
+							expect(api.get('number')).toBe(9);
+						} else {
+							expect(api.get('foo')).toBe('baz');
+							expect(api.get('number')).toBe(10);
+						}
+						fired = true;
+					}
+				});
+				Delegator.cloneTrigger('Base', 'Clone', {
+					foo: 'baz',
+					number: 10
+				});
+				target.addTrigger('Base').addTrigger('Clone');
+				Syn.trigger('click', null, target);
+				expect(fired).toEqual(true);
+				target.removeTrigger('Base').removeTrigger('Clone');
+			});
+
+
 			it('should capture a click and run a filter only once', function(){
 				var count = 0,
 				    test1current = test1count;

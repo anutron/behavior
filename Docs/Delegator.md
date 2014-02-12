@@ -393,6 +393,36 @@ This is both a static method and an instance method. Using the static method (`D
 		}
 	});
 
+Delegator Method: setTriggerDefaults {#Behavior:setTriggerDefaults}
+--------------------------------------------------
+
+Sets the default values for a trigger, overriding any defaults previously defined.
+
+### Syntax
+
+	myDelegator.setTriggerDefaults(name, defaults);
+
+### Arguments
+
+1. name - (*string*) The registered name of a trigger.
+2. defaults - (*object*) A key/value pair of defaults.
+
+Delegator Method: cloneTrigger {#Behavior:cloneTrigger}
+--------------------------------------------------
+
+Clones a pre-existing trigger and sets new specified defaults. This is a great way
+to pre-package often-reused configurations.
+
+### Syntax
+
+	myDelegator.cloneTrigger(name, newName, defaults);
+
+### Arguments
+
+1. name - (*string*) The registered name of a trigger.
+2. newName - (*string*) The name of the new trigger.
+3. defaults - (*object*) A key/value pair of defaults.
+
 Delegator Method: getTrigger {#Delegator:getTrigger}
 --------------------------------------------------
 

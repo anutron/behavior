@@ -492,6 +492,18 @@ provides: [Delegator]
 		Delegator.debugging.push(name);
 	};
 
+	Delegator.setTriggerDefaults = function(name, defaults){
+		var trigger = this.getTrigger(name);
+		if (!trigger.defaults) trigger.defaults = {};
+		Object.append(trigger.defaults, defaults);
+	};
+
+	Delegator.cloneTrigger = function(name, newName, defaults){
+		var filter = Object.clone(this.getTrigger(name));
+		this.register(filter.types, newName, filter);
+		this.setTriggerDefaults(newName, defaults);
+	}
+
 
 	Delegator.implement('register', Delegator.register);
 
