@@ -75,9 +75,12 @@ provides: [BehaviorAPI]
 			}
 
 			this.defaults[name] = value;
-			if (this._getValue(name) == null){
-				var options = this._getOptions();
+			var setValue = this._getValue(name);
+			var options = this._getOptions();
+			if (setValue == null){
 				options[name] = value;
+			} else if (typeOf(setValue) == 'object' && typeOf(value) == 'object') {
+				options[name] = Object.merge({}, value, setValue);
 			}
 			return this;
 		},
