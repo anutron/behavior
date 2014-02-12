@@ -130,11 +130,10 @@ provides: [Delegator.Specs]
 					count++;
 				});
 				target.addTrigger('ClickTest');
-				simulateEvent('click', [{}, target], function(){
-					expect(count).toBe(1);
-					expect(test1count).toBe(test1current + 1);
-					target.removeTrigger('ClickTest');
-				});
+				Syn.trigger('click', null, target);
+				expect(count).toBe(1);
+				expect(test1count).toBe(test1current + 1);
+				target.removeTrigger('ClickTest');
 			});
 
 
@@ -144,12 +143,11 @@ provides: [Delegator.Specs]
 				instance.register('click', 'Reader', function(event, target, api){
 					readerAPI = api;
 				});
-				simulateEvent('click', [{}, target], function(){
-					expect(readerAPI.get('foo')).toBe('bar');
-					expect(readerAPI.getAs(Number, 'number')).toBe(9);
-					expect(readerAPI.get('nope')).toBe(undefined);
-					target.removeTrigger('Reader');
-				});
+				Syn.trigger('click', null, target);
+				expect(readerAPI.get('foo')).toBe('bar');
+				expect(readerAPI.getAs(Number, 'number')).toBe(9);
+				expect(readerAPI.get('nope')).toBe(undefined);
+				target.removeTrigger('Reader');
 			});
 
 			it('should define a trigger with required and default values', function(){
@@ -167,12 +165,11 @@ provides: [Delegator.Specs]
 						'number': Number
 					}
 				});
-				simulateEvent('click', [{}, target], function(){
-					expect(reqAPI).toBeTruthy();
-					expect(reqAPI.get('foo')).toBe('bar');
-					expect(reqAPI.getAs(Number, 'ten')).toBe(10);
-					target.removeTrigger('Required');
-				});
+				Syn.trigger('click', null, target);
+				expect(reqAPI).toBeTruthy();
+				expect(reqAPI.get('foo')).toBe('bar');
+				expect(reqAPI.getAs(Number, 'ten')).toBe(10);
+				target.removeTrigger('Required');
 			});
 
 			it('should not fail when breakOnErrors is false', function(){
@@ -185,11 +182,10 @@ provides: [Delegator.Specs]
 					handler: function(event, target, api){ success = true; },
 					require: ['missing']
 				}, true);
-				simulateEvent('click', [{}, target], function(){
-					expect(success).toBeFalsy();
-					expect(msg).toBe('Could not apply the trigger Required Could not retrieve required-missing option from element.');
-					target.removeTrigger('Required');
-				});
+				Syn.trigger('click', null, target);
+				expect(success).toBeFalsy();
+				expect(msg).toBe('Could not apply the trigger Required Could not retrieve required-missing option from element.');
+				target.removeTrigger('Required');
 			});
 
 			it('should fail when breakOnErrors is true', function(){
@@ -213,21 +209,18 @@ provides: [Delegator.Specs]
 				instance.register('click', 'Ignored', function(){
 					clicked = true;
 				});
-				simulateEvent('click', [{}, target], function(){
-					expect(clicked).toBe(undefined);
-				});
+				Syn.trigger('click', null, target);
+				expect(clicked).toBe(undefined);
 			});
 
 			it('should detach from a previously attached container and re-attach to it', function(){
 				instance.detach(container);
 				var test1current = test1count;
-				simulateEvent('click', [{}, target], function(){
-					expect(test1count).toBe(test1current);
-					instance.attach(container);
-					simulateEvent('click', [{}, target], function(){
-						expect(test1count).toBe(test1current + 1);
-					});
-				});
+				Syn.trigger('click', null, target);
+				expect(test1count).toBe(test1current);
+				instance.attach(container);
+				Syn.trigger('click', null, target);
+				expect(test1count).toBe(test1current + 1);
 			});
 
 
@@ -285,13 +278,12 @@ provides: [Delegator.Specs]
 							.addTrigger('Test9')
 							.addTrigger('Test10')
 							.addTrigger('Test11');
-				simulateEvent('click', [{}, target], function(){
-					expect(test7count).toEqual(1);
-					expect(test8count).toEqual(0);
-					expect(test9count).toEqual(1);
-					expect(test10count).toEqual(0);
-					expect(test11count).toEqual(1);
-				});
+				Syn.trigger('click', null, target);
+				expect(test7count).toEqual(1);
+				expect(test8count).toEqual(0);
+				expect(test9count).toEqual(1);
+				expect(test10count).toEqual(0);
+				expect(test11count).toEqual(1);
 			});
 
 			it('handle multi-triggers', function(){
@@ -351,12 +343,11 @@ provides: [Delegator.Specs]
 					}
 				});
 
-				simulateEvent('click', [{}, multiTester], function(){
-					expect(multi1).toEqual(1);
-					expect(multi2).toEqual(1);
-					expect(multi3).toEqual(1);
-					expect(multi4).toEqual(0);
-				});
+				Syn.trigger('click', null, multiTester);
+				expect(multi1).toEqual(1);
+				expect(multi2).toEqual(1);
+				expect(multi3).toEqual(1);
+				expect(multi4).toEqual(0);
 
 			});
 
@@ -453,14 +444,13 @@ provides: [Delegator.Specs]
 					}
 				});
 
-				simulateEvent('click', [{}, multiTester], function(){
-					expect(switch1).toEqual(0);
-					expect(switch2).toEqual(1);
-					expect(switch3).toEqual(0);
-					expect(switch4).toEqual(0);
-					expect(switch5).toEqual(1);
-					expect(switch6).toEqual(1);
-				});
+				Syn.trigger('click', null, multiTester);
+				expect(switch1).toEqual(0);
+				expect(switch2).toEqual(1);
+				expect(switch3).toEqual(0);
+				expect(switch4).toEqual(0);
+				expect(switch5).toEqual(1);
+				expect(switch6).toEqual(1);
 
 			});
 
