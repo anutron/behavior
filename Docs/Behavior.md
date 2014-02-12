@@ -354,6 +354,22 @@ Sets the default values for a filter, overriding any defaults previously defined
 1. name - (*string*) The registered name of a filter.
 2. defaults - (*object*) A key/value pair of defaults.
 
+Behavior Method: cloneFilter {#Behavior:cloneFilter}
+--------------------------------------------------
+
+Clones a pre-existing filter and sets new specified defaults. This is a great way
+to pre-package often-reused configurations.
+
+### Syntax
+
+	myBehaviorInstance.cloneFilter(name, newName, defaults);
+
+### Arguments
+
+1. name - (*string*) The registered name of a filter.
+2. newName - (*string*) The name of the new filter.
+3. defaults - (*object*) A key/value pair of defaults.
+
 Behavior Method: setDelegator {#Behavior:setDelegator}
 --------------------------------------------------
 
@@ -500,14 +516,21 @@ Behavior Method: setFilterDefaults {#Behavior:setFilterDefaults}
 
 Sets the default values for a filter, overriding any defaults previously defined.
 
+Behavior Method: cloneFilter {#Behavior:cloneFilter}
+--------------------------------------------------
+
+Clones a pre-existing filter and sets new specified defaults. This is a great way
+to pre-package often-reused configurations.
+
 ### Syntax
 
-	Behavior.setFilterDefaults(name, defaults);
+	myBehaviorInstance.cloneFilter(name, newName, defaults);
 
 ### Arguments
 
 1. name - (*string*) The registered name of a filter.
-2. defaults - (*object*) A key/value pair of defaults.
+2. newName - (*string*) The name of the new filter.
+3. defaults - (*object*) A key/value pair of defaults.
 
 Class: Behavior.Filter {#Behavior.Filter}
 ====================================

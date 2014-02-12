@@ -371,6 +371,12 @@ provides: [Behavior]
 		Object.append(filter.config.defaults, defaults);
 	};
 
+	var cloneFilter = function(name, newName, defaults){
+		var filter = Object.clone(this.getFilter(name));
+		addFilter.apply(this, [newName, filter.config]);
+		this.setFilterDefaults(newName, defaults);
+	};
+
 	//Add methods to the Behavior namespace for global registration.
 	Object.append(Behavior, {
 		_registered: {},
@@ -380,6 +386,7 @@ provides: [Behavior]
 		addGlobalPlugin: addPlugin,
 		addGlobalPlugins: addPlugins,
 		setFilterDefaults: setFilterDefaults,
+		cloneFilter: cloneFilter,
 		getFilter: function(name){
 			return this._registered[name];
 		}
@@ -392,6 +399,7 @@ provides: [Behavior]
 		addFilters: addFilters,
 		addPlugin: addPlugin,
 		addPlugins: addPlugins,
+		cloneFilter: cloneFilter,
 		setFilterDefaults: setFilterDefaults
 	});
 

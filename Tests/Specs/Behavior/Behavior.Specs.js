@@ -176,6 +176,34 @@ if (window.describe){
 				target.removeBehaviorFilter('Defaults');
 			});
 
+			it('should clone a filter', function(){
+				target.addBehaviorFilter('Base').addBehaviorFilter('Clone');
+				Behavior.addGlobalFilter('Base', {
+					defaults: {
+						foo: 'baz',
+						number: 9
+					},
+					setup: function(element, api){
+						if (api.prefix == 'base'){
+							expect(api.get('number')).toEqual(9);
+							expect(api.get('foo')).toEqual('baz');
+						}
+						if (api.prefix == 'clone'){
+							expect(api.get('number')).toEqual(10);
+							expect(api.get('foo')).toEqual('biz');
+						}
+					}
+				});
+
+				Behavior.cloneFilter('Base', 'Clone', {
+					foo: 'biz',
+					number: 10
+				});
+
+				behaviorInstance.apply(container);
+				target.removeBehaviorFilter('Base').removeBehaviorFilter('Clone');
+			});
+
 
 			var makeRequirementTest = function(options){
 				return function(){
