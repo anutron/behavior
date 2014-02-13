@@ -121,7 +121,8 @@ provides: [Delegator]
 			this._eventTypes.each(function(event){
 				target[_method](event + ':relay([data-trigger])', this._bound.eventHandler);
 			}, this);
-			this._attachedTo.push(target);
+			if (_method == 'addEvent') this._attachedTo.push(target);
+			else this._attachedTo.erase(target);
 			return this;
 		},
 
@@ -130,12 +131,8 @@ provides: [Delegator]
 			detaches this instance of delegator from the target
 		*/
 		detach: function(target){
-			if (target){
-				this.attach(target, 'removeEvent');
-				this._attachedTo.erase(target);
-			} else {
-				this._attachedTo.each(this.detach, this);
-			}
+			if (target) this.attach(target, 'removeEvent');
+			else this._attachedTo.each(this.detach, this);
 			return this;
 		},
 
