@@ -340,7 +340,7 @@ provides: [Delegator.Specs]
 				expect(test11count).toEqual(1);
 			});
 
-			it('handle multi-triggers', function(){
+			it('should handle multi-triggers', function(){
 
 				var foo = new Element('div.foo');
 				var bar = new Element('div.bar');
@@ -401,6 +401,12 @@ provides: [Delegator.Specs]
 				expect(multi1).toEqual(1);
 				expect(multi2).toEqual(1);
 				expect(multi3).toEqual(1);
+				expect(multi4).toEqual(0);
+
+				instance.trigger('multi', multiTester);
+				expect(multi1).toEqual(2);
+				expect(multi2).toEqual(2);
+				expect(multi3).toEqual(2);
 				expect(multi4).toEqual(0);
 
 			});
@@ -505,6 +511,15 @@ provides: [Delegator.Specs]
 				expect(switch4).toEqual(0);
 				expect(switch5).toEqual(1);
 				expect(switch6).toEqual(1);
+
+				instance.trigger('first', multiTester);
+				instance.trigger('any', multiTester);
+				expect(switch1).toEqual(0);
+				expect(switch2).toEqual(2);
+				expect(switch3).toEqual(0);
+				expect(switch4).toEqual(0);
+				expect(switch5).toEqual(2);
+				expect(switch6).toEqual(2);
 
 			});
 

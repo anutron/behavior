@@ -146,29 +146,49 @@ provides: [Delegator, Delegator.verifyTargets]
 			if (!e || typeOf(e) == "string") e = new Event.Mock(element, e);
 			if (this.options.verbose) this.fireEvent('log', ['Applying trigger: ', name, element, event]);
 
-			var result,
-					trigger = this.getTrigger(name);
-			// warn if the trigger isn't found and exit quietly
-			if (!trigger){
-				this.fireEvent('warn', 'Could not find a trigger by the name of ' + name);
-			// check that the event type matches the types registered for the filter unless specifically ignoring types
-			} else if (ignoreTypes || checkEvent(trigger, element, e)) {
-				// invoke the trigger
-				if (this.options.breakOnErrors){
-					result = this._trigger(trigger, element, e, _api);
-				} else {
-					try {
-						result = this._trigger(trigger, element, e, _api);
-					} catch(error) {
-						this.fireEvent('error', ['Could not apply the trigger', name, error.message]);
+			// if the trigger is of the special types handled by delegator itself,
+			// run those and remove them from the list of triggers
+			switch(name){
+				case 'Stop':
+					event.stop();
+					return;
+				case 'PreventDefault':
+					event.preventDefault();
+					return;
+				case 'multi':
+					this._handleMultiple(element, event);
+					return;
+				case 'any':
+					this._runSwitch('any', element, event);
+					return;
+				case 'first':
+					this._runSwitch('first', element, event, 'some');
+					return;
+				default:
+					var result,
+							trigger = this.getTrigger(name);
+					// warn if the trigger isn't found and exit quietly
+					if (!trigger){
+						this.fireEvent('warn', 'Could not find a trigger by the name of ' + name);
+					// check that the event type matches the types registered for the filter unless specifically ignoring types
+					} else if (ignoreTypes || checkEvent(trigger, element, e)) {
+						// invoke the trigger
+						if (this.options.breakOnErrors){
+							result = this._trigger(trigger, element, e, _api);
+						} else {
+							try {
+								result = this._trigger(trigger, element, e, _api);
+							} catch(error) {
+								this.fireEvent('error', ['Could not apply the trigger', name, error.message]);
+							}
+						}
 					}
-				}
+					// log the event
+					if (this.options.verbose && result) this.fireEvent('log', ['Successfully applied trigger: ', name, element, event]);
+					else if (this.options.verbose) this.fireEvent('log', ['Trigger applied, but did not return a result: ', name, element, event]);
+					// return the result of the trigger
+					return result;
 			}
-			// log the event
-			if (this.options.verbose && result) this.fireEvent('log', ['Successfully applied trigger: ', name, element, event]);
-			else if (this.options.verbose) this.fireEvent('log', ['Trigger applied, but did not return a result: ', name, element, event]);
-			// return the result of the trigger
-			return result;
 		},
 
 		// returns the trigger object for a given trigger name
@@ -257,7 +277,7 @@ provides: [Delegator, Delegator.verifyTargets]
 
 			// logging
 			if (!result && this.options.verbose){
-				this.fireEvent('log', ['Not executing trigger due to conditional', element, conditionType]);
+				this.fireEvent('log', ['Not executing trigger due to conditional', element, _conditional]);
 			}
 
 			return result;
@@ -267,18 +287,8 @@ provides: [Delegator, Delegator.verifyTargets]
 			event handler for all events we're monitoring on any of our attached DOM elements
 		*/
 		_eventHandler: function(event, target){
-			// get the triggers from the target element
-			var triggers = target.getTriggers();
-			// if the trigger is of the special types handled by delegator itself,
-			// run those and remove them from the list of triggers
-			if (triggers.contains('Stop')) triggers.erase('Stop') && event.stop();
-			if (triggers.contains('PreventDefault')) triggers.erase('PreventDefault') && event.preventDefault();
-			if (triggers.contains('multi')) triggers.erase('multi') && this._handleMultiple(target, event);
-			if (triggers.contains('any')) triggers.erase('any') && this._runSwitch('any', target, event);
-			if (triggers.contains('first')) triggers.erase('first') && this._runSwitch('first', target, event, 'some');
-
 			// execute the triggers
-			triggers.each(function(trigger){
+			target.getTriggers().each(function(trigger){
 				this.trigger(trigger, target, event);
 			}, this);
 		},
@@ -409,7 +419,7 @@ provides: [Delegator, Delegator.verifyTargets]
 
 			switches[method](function(config){
 				if (this._checkConditionals(element, api, config)){
-					this._runMultipleTriggers(element, event, config['triggers'], method);
+					this._runMultipleTriggers(element, event, config.triggers, method);
 					return true;
 				} else {
 					return false;
@@ -549,7 +559,7 @@ provides: [Delegator, Delegator.verifyTargets]
 			if (key.contains('::')){
 				conditional.targets = key.split('::')[0];
 				conditional.method = key.split('::')[1];
-				conditional.arguments = value;
+				conditional['arguments'] = value;
 			}
 		});
 		if (conditional.value === undefined) conditional.value = true;
@@ -567,8 +577,6 @@ provides: [Delegator, Delegator.verifyTargets]
 		* value - (*string*) A value to compare to either the value of the `property` of the target or the result of the `method` invoked upon it.
 	*/
 	Delegator.verifyTargets = function(el, conditional, api){
-		var targets = [];
-
 		conditional = parseConditional(conditional);
 
 		// get the targets
@@ -577,7 +585,7 @@ provides: [Delegator, Delegator.verifyTargets]
 		// check the targets for the conditionals
 		return targets.some(function(target){
 			if (conditional.property) return target.get(conditional.property) === conditional.value;
-			else if (conditional.method) return target[conditional.method].apply(target, Array.from(conditional.arguments)) === conditional.value;
+			else if (conditional.method) return target[conditional.method].apply(target, Array.from(conditional['arguments'])) === conditional.value;
 			else return (!conditional.method && !conditional.property)
 		});
 	};
