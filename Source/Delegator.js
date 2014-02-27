@@ -116,7 +116,7 @@ provides: [Delegator, Delegator.verifyTargets]
 			_method = _method || 'addEvent';
 			target = document.id(target);
 			if ((_method == 'addEvent' && this._attachedTo.contains(target)) ||
-			    (_method == 'removeEvent') && !this._attachedTo.contains(target)) return this;
+					(_method == 'removeEvent') && !this._attachedTo.contains(target)) return this;
 			// iterate over all the event types for registered filters and attach listener for each
 			this._eventTypes.each(function(event){
 				target[_method](event + ':relay([data-trigger])', this._bound.eventHandler);
@@ -206,9 +206,9 @@ provides: [Delegator, Delegator.verifyTargets]
 		 * PRIVATE METHODS
 		 ******************/
 
-		 /*
+		/*
 			invokes a trigger for a specified element
-		 */
+		*/
 		_trigger: function(trigger, element, event, _api){
 			// create an instance of the API if one not already passed in; atypical to specify one,
 			// really only used for the multi trigger functionality to set defaults
@@ -237,18 +237,18 @@ provides: [Delegator, Delegator.verifyTargets]
 			// invoke the foo trigger if this link has the class "foo"
 			// in this example, it will not
 			<a data-trigger="foo" data-foo-options="
-			  'if': {
+				'if': {
 					'self::hasClass': ['foo']
-			  }
+				}
 			">...</a>
 
 			// inverse of above; invoke the foo trigger if the link
 			// does NOT have the class "foo", which it doesn't, so
 			// the trigger will be invoked
 			<a data-trigger="foo" data-foo-options="
-			  'unless': {
+				'unless': {
 					'self::hasClass': ['foo']
-			  }
+				}
 			">...</a>
 
 			this method is passed the element, the api instance, the conditional
@@ -358,8 +358,8 @@ provides: [Delegator, Delegator.verifyTargets]
 		*/
 		_splitTriggerName: function(str){
 			var split = str.split('::'),
-			    selector = split[0],
-			    name = split[1];
+					selector = split[0],
+					name = split[1];
 			if (!name || !selector){
 				this.fireEvent('error', 'could not invoke multi delegator for ' + str +
 					'; could not split on :: to derive selector and trigger name');
@@ -368,7 +368,7 @@ provides: [Delegator, Delegator.verifyTargets]
 			return {
 				name: name,
 				selector: selector
-			}
+			};
 		},
 
 		/*
@@ -410,7 +410,7 @@ provides: [Delegator, Delegator.verifyTargets]
 
 		*/
 		_runSwitch: function(switchName, element, event, method){
-			method = method || 'each'
+			method = method || 'each';
 			// make an api reader for the switch options
 			var api = this._getAPI(element, { name: switchName }),
 					switches = api.getAs(Array, 'switches');
@@ -509,7 +509,7 @@ provides: [Delegator, Delegator.verifyTargets]
 		var filter = Object.clone(this.getTrigger(name));
 		this.register(filter.types, newName, filter);
 		this.setTriggerDefaults(newName, defaults);
-	}
+	};
 
 
 	Delegator.implement('register', Delegator.register);

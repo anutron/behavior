@@ -18,4 +18,5 @@ sources:
   - "Source/Event.Mock.js"
   - "Source/Behavior.js"
   - "Source/BehaviorAPI.js"
+  - "Source/Behavior.Events.js"
   - "Source/Behavior.Startup.js"
