@@ -18,6 +18,11 @@ provides: [Behavior]
 		};
 	};
 
+	var checkOverflow = function(el) {
+	  return (el.offsetHeight < el.scrollHeight || el.offsetWidth < el.scrollWidth) &&
+	  			 (['auto', 'scroll'].contains(el.getStyle('overflow')) || ['auto', 'scroll'].contains(el.getStyle('overflow-y')));
+	};
+
 	var PassMethods = new Class({
 		//pass a method pointer through to a filter
 		//by default the methods for add/remove events are passed to the filter
@@ -126,6 +131,21 @@ provides: [Behavior]
 					this.fireEvent('warn', arguments);
 				}.bind(this)
 			});
+
+			if (window.Fx && Fx.Scroll){
+				this.passMethods({
+					getScroller: function(el){
+						var par = (el || this.element).getParent();
+						while (par != document.body && !checkOverflow(par)){
+							par = par.getParent();
+						}
+						var fx = par.retrieve('behaviorScroller');
+						if (!fx) fx = new Fx.Scroll(par);
+						if (this.get('scrollerOptions')) fx.setOptions(this.get('scrollerOptions'));
+						return fx;
+					}
+				});
+			}
 		},
 
 		getDelegator: function(){

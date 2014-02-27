@@ -91,6 +91,9 @@ By default, Behavior passes the following methods to filters in addition to the 
 * **applyFilter** - the `applyFilter` method of the behavior instance. Allows you to invoke a specific behavior filter.
 * **getContentElement** - returns the "container" element of the Behavior instance. By default this points to `document.body`. Set `options.container` to change it.
 * **getContainerSize** - returns the value of `getContentElement().getSize();` Note that if that element is not in the DOM this will return zeros.
+* **getScroller** - if `Fx.Scroll` is included in your environment, provides an instance of it that
+										controls the parent of the element with the filter, allowing you to, for instance,
+										scroll to the element itself.
 * **getDelegator** - returns the instance of [Delegator][] set with the `setDelegator` method.
 * **error** - fires the behavior instance's `error` event with the arguments passed.
 * **fail** - stops the filter from iterating and passes a message through to the error logger. Takes a string for the message as its only argument.
