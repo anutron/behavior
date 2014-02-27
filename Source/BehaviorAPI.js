@@ -108,7 +108,7 @@ provides: [BehaviorAPI]
 		_getOptions: function(){
 			try {
 				if (!this.options){
-					var options = this.element.getData(this.prefix + '-options', '{}');
+					var options = this.element.getData(this.prefix + '-options', '{}').trim();
 					if (options === "") return this.options = {};
 					if (options && options.substring(0,1) != '{') options = '{' + options + '}';
 					var isSecure = JSON.isSecure(options);
