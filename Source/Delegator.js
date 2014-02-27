@@ -554,7 +554,7 @@ provides: [Delegator, Delegator.verifyTargets]
 			arguments: ['bar']
 		}
 	*/
-	var parseConditional = function(conditional){
+	Delegator.parseConditional = function(conditional){
 		Object.each(conditional, function(value, key){
 			if (key.contains('::')){
 				conditional.targets = key.split('::')[0];
@@ -577,7 +577,7 @@ provides: [Delegator, Delegator.verifyTargets]
 		* value - (*string*) A value to compare to either the value of the `property` of the target or the result of the `method` invoked upon it.
 	*/
 	Delegator.verifyTargets = function(el, conditional, api){
-		conditional = parseConditional(conditional);
+		conditional = Delegator.parseConditional(conditional);
 
 		// get the targets
 		var targets = Behavior.getTargets(el, conditional.targets || conditional.target);
@@ -586,7 +586,7 @@ provides: [Delegator, Delegator.verifyTargets]
 		return targets.some(function(target){
 			if (conditional.property) return target.get(conditional.property) === conditional.value;
 			else if (conditional.method) return target[conditional.method].apply(target, Array.from(conditional['arguments'])) === conditional.value;
-			else return (!conditional.method && !conditional.property)
+			else return !conditional.method && !conditional.property;
 		});
 	};
 
