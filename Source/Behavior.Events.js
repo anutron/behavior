@@ -70,7 +70,7 @@ provides: [Behavior.Events]
 	};
 
 	var parseConditional = function(element, api, conditional, instance, eventArguments){
-		return Object.every(conditional, function(value, key){
+		var result = Object.every(conditional, function(value, key){
 			// key == "eventArguments[1]"
 			if (key.match(reggies.eventArguments)){
 				var index = key.match(reggies.eventArgumentIndex)[1].toInt();
@@ -92,38 +92,50 @@ provides: [Behavior.Events]
 			}
 			return Delegator.verifyTargets(element, conditional, api);
 		});
+		return result;
 	};
 
 	Behavior.addGlobalFilter('addEvent', {
 		setup: function(element, api){
-			var events = api.getAs(Object, 'events');
-			Object.each(events, function(eventsToAdd, key){
-				var selector = key.split('::')[0];
-				var behaviorName = key.split('::')[1];
-				var target = Behavior.getTarget(element, selector);
-				if (!target) return api.warn('Could not find element at ' + selector + ' to add event to ' + behaviorName);
-				var instance = target.getBehaviorResult(behaviorName);
-				if (!instance) return api.warn('Could not find instance of ' + behaviorName + ' for element at ' + selector);
-				Object.each(eventsToAdd, function(triggers, eventName){
-					instance.addEvent(eventName, function(){
-						var eventArgs = arguments;
-						triggers.each(function(trigger){
-							Object.each(trigger, function(options, delegatorTarget){
-								var valid = true;
-								if (options['if'] && !parseConditional(element, api, options['if'], instance, eventArgs)) valid = false;
-								if (options['unless'] && parseConditional(element, api, options['if'], instance, eventArgs)) valid = false;
+			api.addEvent('apply:once', function(){
+				var events = api.getAs(Object, 'events');
+				Object.each(events, function(eventsToAdd, key){
+					var selector = key.split('::')[0];
+					var behaviorName = key.split('::')[1];
+					var target = Behavior.getTarget(element, selector);
+					if (!target) return api.warn('Could not find element at ' + selector + ' to add event to ' + behaviorName);
+					var instance = target.getBehaviorResult(behaviorName);
+					if (!instance) return api.warn('Could not find instance of ' + behaviorName + ' for element at ' + selector);
+					Object.each(eventsToAdd, function(triggers, eventName){
+						instance.addEvent(eventName, function(){
+							var eventArgs = arguments;
+							triggers.each(function(trigger){
+								Object.each(trigger, function(options, delegatorTarget){
+									var valid = true;
+									if (options['if'] && !parseConditional(element, api, options['if'], instance, eventArgs)) valid = false;
+									if (options['unless'] && parseConditional(element, api, options['unless'], instance, eventArgs)) valid = false;
 
-								if (valid){
-									// we've already tested these, so remove
-									delete options['if'];
-									delete options['unless'];
-									api.getDelegator()._invokeMultiTrigger(element, null, delegatorTarget, options);
-								}
+									if (valid){
+										// we've already tested these, so remove
+										options['_if'] = options['if'];
+										options['_unless'] = options['unless'];
+										delete options['if'];
+										delete options['unless'];
+										// invoke the trigger
+										api.getDelegator()._invokeMultiTrigger(element, null, delegatorTarget, options);
+										// put them back
+										options['if'] = options['_if'];
+										options['unless'] = options['_unless'];
+										delete options['_if'];
+										delete options['_unless'];
+									}
+								});
 							});
 						});
 					});
 				});
 			});
+			return element;
 		}
 	});
 })();

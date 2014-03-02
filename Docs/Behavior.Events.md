@@ -3,6 +3,17 @@ Behavior Filter: Behavior.Events {#Behavior.Events}
 
 Provides mechanism to invoke a Delegator trigger when an instance created by a Behavior filter fires an event.
 
+### Note
+
+Behavior executes filters in DOM order. For this reason, the `addEvents` filter always fires after Behavior
+fires it's `apply` event (after it has run through the DOM). This means that a) any filter that has a delay on it
+(and doesn't return an instance on startup) will not work with `addEvent` and b) that any instance that `addEvent`
+references has already been instantiated. So if you are attaching an event to a class that fires, say, a `show`
+event whenever it changes something, but it does so immediately on instantiation, then that first event will have
+already been fired before your listener is attached. In this case, some additional startup logic is required on your
+part - either change your DOM accordingly to have a startup state or use `Behavior.Startup` to invoke the
+proper delegator based on the DOM state.
+
 ### Example
 
 	<div data-behavior="addEvent" data-addevent-options="
