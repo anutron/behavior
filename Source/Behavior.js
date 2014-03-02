@@ -2,7 +2,7 @@
 ---
 name: Behavior
 description: Auto-instantiates widgets/classes based on parsed, declarative HTML.
-requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, More/Table, /Element.Data, /BehaviorAPI]
+requires: [Core/Class.Extras, Core/Element.Event, Core/Selectors, More/Table, More/Events.Pseudos, /Element.Data, /BehaviorAPI]
 provides: [Behavior]
 ...
 */
