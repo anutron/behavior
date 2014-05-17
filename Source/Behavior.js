@@ -36,7 +36,7 @@ provides: [Behavior]
 		},
 
 		passMethods: function(methods){
-			for (method in methods) this.passMethod(method, methods[method]);
+			for (var method in methods) this.passMethod(method, methods[method]);
 			return this;
 		}
 
