@@ -74,7 +74,7 @@ Gets a value for a given data property, parsing it from JSON.
 ### Arguments
 
 1. name - (*string*) the data property to get; this is prepended with "data-".
-2. strict - (*boolean*) if *true*, will set the *JSON.decode*'s secure flag to *true*; otherwise the value is still tested but allows single quoted attributes.
+2. strict - (*boolean*) if *true* (default), will set the *JSON.decode*'s secure flag to *true*; otherwise the value is still tested but allows single quoted attributes.
 3. defaultValue - (*string, number*) the value to assign if none is set.
 
 ### Example
