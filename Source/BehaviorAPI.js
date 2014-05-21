@@ -113,7 +113,7 @@ provides: [BehaviorAPI]
 					if (options && options.substring(0,1) != '{') options = '{' + options + '}';
 					var isSecure = JSON.isSecure(options);
 					if (!isSecure) throw new Error('warning, options value for element is not parsable, check your JSON format for quotes, etc.');
-					this.options = isSecure ? JSON.decode(options) : {};
+					this.options = isSecure ? JSON.decode(options, false) : {};
 					for (option in this.options) {
 						this.options[option.camelCase()] = this.options[option];
 					}
@@ -153,7 +153,7 @@ provides: [BehaviorAPI]
 		//attempts to run a value through the JSON parser. If the result is not of that type returns null.
 		_coerceFromString: function(toType, value){
 			if (typeOf(value) == 'string' && toType != String){
-				if (JSON.isSecure(value)) value = JSON.decode(value);
+				if (JSON.isSecure(value)) value = JSON.decode(value, false);
 			}
 			if (instanceOf(value, toType)) return value;
 			return null;
