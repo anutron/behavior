@@ -56,6 +56,7 @@ script: Element.Data.js
 				defaultValue - (string, array, or object) the value to set if no value is found (see storeData above)
 		*/
 		getJSONData: function(name, strict, defaultValue){
+			strict = strict === undefined ? true : strict;
 			var value = this.get('data-' + name);
 			if (value != undefined){
 				if (value && JSON.isSecure(value)) {
