@@ -146,6 +146,17 @@ provides: [Behavior]
 					}
 				});
 			}
+
+			this.addEvents({
+				destroyDom: function(elements){
+					Array.from(elements).each(function(element){
+						this.cleanup(element);
+					}, this);
+				}.bind(this),
+				ammendDom: function(container){
+					this.apply(container);
+				}.bind(this)
+			});
 		},
 
 		getDelegator: function(){

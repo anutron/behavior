@@ -83,13 +83,9 @@ provides: [Delegator, Delegator.verifyTargets]
 				var self = this;
 				this._behaviorEvents = {
 					destroyDom: function(elements){
-						Array.from(elements).each(function(element){
-							self._behavior.cleanup(element);
-							self._behavior.fireEvent('destroyDom', element);
-						});
+						self._behavior.fireEvent('destroyDom', elements);
 					},
 					ammendDom: function(container){
-						self._behavior.apply(container);
 						self._behavior.fireEvent('ammendDom', container);
 					}
 				};
