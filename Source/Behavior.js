@@ -73,7 +73,7 @@ provides: [Behavior]
 			var set,
 			    values = {};
 			Object.each(deprecated, function(prop, key){
-				var value = this.element[ asJSON ? 'getJSONData' : 'getData'](prop);
+				var value = this.element[ asJSON ? 'getJSONData' : 'getData'](prop, false);
 				if (value !== undefined){
 					set = true;
 					values[key] = value;
