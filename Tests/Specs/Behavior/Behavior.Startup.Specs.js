@@ -71,8 +71,8 @@ if (window.describe){
 				})
 			})
 			.adopt(new Element('input#foo', {name: 'foo', value: 'bar'}))
-		  .adopt(new Element('span.yo.oy'))
-	);
+			.adopt(new Element('span.yo.oy'))
+		);
 
 		b.apply(dom);
 

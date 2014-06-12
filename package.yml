@@ -20,3 +20,4 @@ sources:
   - "Source/BehaviorAPI.js"
   - "Source/Behavior.Events.js"
   - "Source/Behavior.Startup.js"
+  - "Source/Behavior.Trigger.js"

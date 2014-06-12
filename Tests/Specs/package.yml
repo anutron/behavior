@@ -15,6 +15,7 @@ sources:
   - "Behavior/Behavior.Benchmarks.js"
   - "Behavior/Behavior.Specs.js"
   - "Behavior/Behavior.SpecsHelpers.js"
+  - "Behavior/Behavior.Trigger.Specs.js"
   - "Behavior/Delegator.Specs.js"
   - "Behavior/Element.Data.Specs.js"
   - "Behavior/Behavior.Events.Specs.js"
