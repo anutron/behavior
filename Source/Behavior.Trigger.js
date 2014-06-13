@@ -62,7 +62,6 @@ Behavior.addGlobalFilter('Trigger', {
         // get the selector for the elements to monitor
         var eventTargets = Behavior.getTargets(element, selector);
         // loop over the elements that match
-        console.log('targets:', eventTargets);
         eventTargets.each(function(eventTarget){
           // add our mouse event on each target
 
