@@ -2,7 +2,7 @@ name: "Behavior"
 
 web: "[clientcide.com](http://clientcide.com)"
 
-description: "Behavior filters for MooTools More"
+description: "Auto-instantiat widgets/classes based on parsed, declarative HTML with MooTools."
 
 license: "MIT License"
 
@@ -10,7 +10,7 @@ copyright: "&copy; [Aaron Newton](http://clientcide.com)"
 
 authors: "[Aaron Newton](http://clientcide.com)"
 
-version: "1.3.0"
+version: "1.4.0"
 
 sources:
   - "Source/Delegator.js"

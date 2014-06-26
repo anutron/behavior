@@ -1,0 +1,30 @@
+{
+  "name": "behavior",
+  "version": "1.4.0",
+  "description": "Auto-instantiat widgets/classes based on parsed, declarative HTML with MooTools.",
+  "main": "behavior.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anutron/behavior.git"
+  },
+  "keywords": [
+    "mootools",
+    "behavior",
+    "ui"
+  ],
+  "author": "Aaron Newton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anutron/behavior/issues"
+  },
+  "homepage": "https://github.com/anutron/behavior",
+  "devDependencies": {
+    "mootools-core": "https://github.com/mootools/mootools-core/tarball/master",
+    "mootools-more": "https://github.com/mootools/mootools-more/tarball/master",
+    "grunt": "~0.4.2",
+    "grunt-cli": "~0.1.13",
+    "grunt-mootools-packager": "https://github.com/SergioCrisostomo/grunt-packager/tarball/master",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-connect": "~0.7.0"
+  }
+}
