@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 			}
 		},
 		'clean': {
-			all: {src: 'Behavior-*.js'}
+			all: {src: 'behavior*.js'}
 		}
 	});
 
