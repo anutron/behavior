@@ -28,7 +28,11 @@ if (window.describe){
 				}
 			});
 
-			var d = new Delegator();
+			var d = new Delegator({
+				onLog: function(){},
+				onError: function(){},
+				onWarn: function(){}
+			});
 			behaviorInstance.setDelegator(d);
 
 			var container = new Element('div.container');

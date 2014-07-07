@@ -26,11 +26,15 @@ var ClassAdder = new Class({
 });
 
 //a vanilla behavior instance
-var behaviorInstance = new Behavior();
+var behaviorInstance = new Behavior({
+	onLog: function(){},
+	onError: function(){},
+	onWarn: function(){}
+});
 //returns a Behavior.Filter setup function that creates a ClassAdder instance (see above)
 //for a specified CSS className
 ClassAdder.makeAdder = function(className){
-	return function(el, API){ 
+	return function(el, API){
 		var adder = new ClassAdder(el, className);
 		API.markForCleanup(el, function(){
 			adder.destroy();
@@ -65,7 +69,7 @@ ClassAdder.makeAdder = function(className){
 			  desc - the name of the test as displayed on the screen
 			  content - an HTML string or a DOM tree to run behaviorInstance.apply against (will be injected into a common container DIV)
 			*/
-	
+
 		MooBench.addBehaviorTest = function(options){
 			var name = options.desc,
 			    content = options.content;
@@ -159,7 +163,11 @@ ClassAdder.makeAdder = function(className){
 		describe(options.desc, function(){
 			it('should run the ' + options.filterName + ' filter and return a result', function(){
 				//new instance of behavior for each specs test
-				var behaviorInstance = new Behavior();
+				var behaviorInstance = new Behavior({
+					onLog: function(){},
+					onError: function(){},
+					onWarn: function(){}
+				});
 				var tester,
 				    container = new Element('div').inject(document.body);
 				//content wrapper

@@ -10,7 +10,11 @@ if (window.describe){
 
 	describe('Behavior.Startup', function(){
 
-		var b = new Behavior();
+		var b = new Behavior({
+			onLog: function(){},
+			onError: function(){},
+			onWarn: function(){}
+		});
 		var d = new Delegator({
 			getBehavior: function(){return b;}
 		});

@@ -23,7 +23,11 @@ provides: [Delegator.Specs]
 		Test1: function(){ test1count++; },
 		Test2: function(){}
 	});
-	var instance = new Delegator().attach(container);
+	var instance = new Delegator({
+		onLog: function(){},
+		onError: function(){},
+		onWarn: function(){}
+	}).attach(container);
 
 	describe('Delegator', function(){
 
@@ -87,12 +91,23 @@ provides: [Delegator.Specs]
 		});
 
 		it('should bind to a behavior instance', function(){
-			var b = new Behavior();
+			var b = new Behavior({
+				onLog: function(){},
+				onError: function(){},
+				onWarn: function(){}
+			});
 			var d = new Delegator({
+				onLog: function(){},
+				onError: function(){},
+				onWarn: function(){},
 				getBehavior: function(){ return b; }
 			});
 			expect(d.getBehavior()).toBe(b);
-			var b2 = new Behavior();
+			var b2 = new Behavior({
+				onLog: function(){},
+				onError: function(){},
+				onWarn: function(){}
+			});
 			d.bindToBehavior(b2);
 			expect(d.getBehavior()).toBe(b2);
 			d.unbindFromBehavior(b2);

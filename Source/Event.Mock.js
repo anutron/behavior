@@ -1,18 +1,12 @@
 /*
 ---
 name: Event.Mock
-
 description: Supplies a Mock Event object for use on fireEvent
-
 license: MIT-style
-
 authors:
-- Arieh Glazer
-
-requires: Core/Event
-
+ - Arieh Glazer
+requires: [Core/Event]
 provides: [Event.Mock]
-
 ...
 */
 

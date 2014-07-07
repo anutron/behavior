@@ -25,7 +25,11 @@ if (window.describe){
 		describe('Behavior', function(){
 
 			it('should register a delegator', function(){
-				var d = new Delegator();
+				var d = new Delegator({
+					onLog: function(){},
+					onError: function(){},
+					onWarn: function(){}
+				});
 				behaviorInstance.setDelegator(d);
 				expect(behaviorInstance.getDelegator()).toBe(d);
 				var error;

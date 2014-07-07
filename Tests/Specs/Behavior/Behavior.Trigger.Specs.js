@@ -11,9 +11,14 @@ if (window.describe){
   describe('Behavior.Trigger', function(){
 
     var b = new Behavior({
-      verbose: true
+      onLog: function(){},
+      onError: function(){},
+      onWarn: function(){}
     });
     var d = new Delegator({
+      onLog: function(){},
+      onError: function(){},
+      onWarn: function(){},
       getBehavior: function(){return b;}
     });
     b.setDelegator(d);
