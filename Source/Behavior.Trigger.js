@@ -1,18 +1,11 @@
 /*
 ---
-
 name: Behavior.Trigger
-
 description: Because Delegator is inefficient for mouse over/out events, this behavior
              allows you to invoke delegator triggers on elements when they occur using
              normal event monitoring.
-
-requires:
- - Behavior
- - Delegator
-
+requires: [/Behavior, /Delegator]
 provides: [Behavior.Trigger]
-
 ...
 */
 

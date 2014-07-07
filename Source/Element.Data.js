@@ -2,10 +2,9 @@
 ---
 name: Element.Data
 description: Stores data in HTML5 data properties
-provides: [Element.Data]
 requires: [Core/Element, Core/JSON]
+provides: [Element.Data]
 script: Element.Data.js
-
 ...
 */
 (function(){
