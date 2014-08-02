@@ -1,6 +1,6 @@
 {
   "name": "behavior",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Auto-instantiat widgets/classes based on parsed, declarative HTML with MooTools.",
   "main": "behavior.js",
   "repository": {
@@ -27,9 +27,9 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-connect": "~0.7.0",
     "load-grunt-tasks": "~0.4.0",
-	"grunt-karma": "~0.8.0",
-	"karma": "~0.12.0",
-	"karma-jasmine": "~0.1.5",
-	"karma-phantomjs-launcher": "~0.1.2"
+    "grunt-karma": "~0.8.0",
+    "karma": "~0.12.0",
+    "karma-jasmine": "~0.1.5",
+    "karma-phantomjs-launcher": "~0.1.2"
   }
 }
