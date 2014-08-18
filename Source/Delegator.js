@@ -132,6 +132,16 @@ provides: [Delegator, Delegator.verifyTargets]
 			return this;
 		},
 
+		fireEventForElement: function(element, eventType, force){
+			var e = new Event.Mock(element, eventType);
+			element.getTriggers().each(function(triggerName){
+			  var trigger = this.getTrigger(triggerName);
+			  if (force || trigger.types.contains(eventType)){
+			    this.trigger(triggerName, element, e);
+			  }
+			}, this);
+			element.fireEvent(eventType, [e]);
+		},
 
 		/*
 			invokes a specific trigger upon an element
