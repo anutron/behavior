@@ -202,6 +202,18 @@ provides: [Delegator.Specs]
 				target.removeTrigger('ClickTest');
 			});
 
+			it('should fire event for element', function(){
+				var testElement = new Element('a.some-class', {
+					'data-trigger': 'ElementTest'
+				});
+				Delegator.register('madeUpEvent', {
+					ElementTest: function(){ testElement.setData('success', true) }
+				});
+
+				instance.fireEventForElement(testElement, 'madeUpEvent');
+				expect(testElement.getData('success')).toEqual('true');
+			});
+
 
 			it('should use BehaviorAPI to read element properties', function(){
 				var readerAPI;

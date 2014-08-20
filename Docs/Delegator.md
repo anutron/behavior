@@ -543,6 +543,19 @@ Detaches the appropriate event listeners from the provided container or, if none
 
 * (*object*) this instance of Delegator
 
+Delegator Method: fireEventForElement {#Delegator:fireEventForElement}
+----------------------------------------------------------------------
+Fires the provided element's triggers that match the provided event type.
+
+### Syntax
+  myDelegator.fireEventForElement(element, eventType, [force])
+
+### Arguments
+
+1. element - (*element*) A DOM element which has triggers that respond to the given event
+2. eventType - (*string*) the name of an event to fire
+3. force - (*boolean*; optional) force the element to fire its triggers, even if they  don't respond to the given event.
+
 Delegator Method: trigger {#Delegator:trigger}
 --------------------------------------------------
 
