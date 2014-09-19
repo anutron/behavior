@@ -1,6 +1,6 @@
 {
   "name": "behavior",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Auto-instantiat widgets/classes based on parsed, declarative HTML with MooTools.",
   "main": "behavior.js",
   "repository": {
