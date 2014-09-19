@@ -58,10 +58,11 @@ It's possible to declare more than one data filter property for a single element
 
 ### Using Your Behavior Instance as an Event Arbiter
 
-When a filter performs an action that other filters might find useful to know about, the preferred usage is to fire an event on your Behavior instance via the `behaviorAPI` object passed to your filter. This provides a non-brittle way for filters to react to each other. For example, a Delegator that fetches new content via AJAX should fire the 'ammendDom' event. This event is also fired on the Behavior instances it's bound to (if it is). These two events are prescribed here, but you can use any you find useful. This allows filters to avoid referencing themselves.
+When a filter performs an action that other filters might find useful to know about, the preferred usage is to fire an event on your Behavior instance via the `behaviorAPI` object passed to your filter. This provides a non-brittle way for filters to react to each other. For example, a Delegator that fetches new content via AJAX should fire the `ammendDom` event. This event is also fired on the Behavior instances it's bound to (if it is). These two events are prescribed here, but you can use any you find useful. This allows filters to avoid referencing themselves.
 
-* destroyDom - function invoked when a trigger destroys a portion of the DOM. Automatically integrated w/ Behavior's `cleanup` method if you set one in the options. Passed the element destroyed as an argument.
-* ammendDom - function invoked when a trigger ammends a portion of the DOM. Automatically integrated w/ Behavior's `apply` method if you set one in the options. Passed two arguments: the parent node that contains all the updated elements and an array of those elements updated.
+* destroyDom - function invoked when a behavior destroys a portion of the DOM. Automatically integrated w/ Behavior's `cleanup` method if you set one in the options. Passed the element destroyed as an argument.
+* ammendDom - function invoked when a behavior ammends a portion of the DOM. Automatically integrated w/ Behavior's `apply` method if you set one in the options. Passed two arguments: the parent node that contains all the updated elements and an array of those elements updated.
+* updateHistory - function invoked when a behavior changes the state of the page and wishes to change the url to match it using `history.pushState`. Passed a single argument, the new url (e.g. `api.fireEvent('updateHistory', someURL)`).
 
 Other events the author has used is to denote layout changes, `layout:changed`, `layout:display`, `layout:size`, etc.
 

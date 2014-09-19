@@ -64,7 +64,8 @@ provides: [Delegator, Delegator.verifyTargets]
 				}.bind(this),
 				getBehavior: function(){
 					return this.options.getBehavior();
-				}.bind(this)
+				}.bind(this),
+				getDelegator: Function.from(this)
 			});
 
 			this.bindToBehavior(this.options.getBehavior());
@@ -87,6 +88,9 @@ provides: [Delegator, Delegator.verifyTargets]
 					},
 					ammendDom: function(container){
 						self._behavior.fireEvent('ammendDom', container);
+					},
+					updateHistory: function(url){
+						self._behavior.fireEvent('updateHistory', url);
 					}
 				};
 			}
