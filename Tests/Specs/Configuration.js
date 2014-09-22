@@ -10,19 +10,19 @@ Configuration.name = 'Behavior';
 
 // Presets - combine the sets and the source to a preset to easily run a test
 Configuration.presets = {
-	
-	'Behavior': {
-		sets: ['Behavior'],
-		source: ['Behavior']
-	}
-	
+
+  'Behavior': {
+    sets: ['Behavior'],
+    source: ['Behavior']
+  }
+
 };
 
 // An object with default presets
 Configuration.defaultPresets = {
-	browser: 'Behavior',
-	nodejs: 'Behavior',
-	jstd: 'Behavior'
+  browser: 'Behavior',
+  nodejs: 'Behavior',
+  jstd: 'Behavior'
 };
 
 
@@ -33,15 +33,15 @@ Configuration.defaultPresets = {
  */
 Configuration.sets = {
 
-	'Behavior': {
-		path: 'Behavior/',
-		files: [
-			'Behavior.SpecsHelpers',
-			'Behavior.Specs',
-			'Element.Data.Specs',
-			'BehaviorAPI.Specs'
-		]
-	}
+  'Behavior': {
+    path: 'Behavior/',
+    files: [
+      'Behavior.SpecsHelpers',
+      'Behavior.Specs',
+      'Element.Data.Specs',
+      'BehaviorAPI.Specs'
+    ]
+  }
 
 };
 
@@ -54,31 +54,31 @@ Configuration.sets = {
 
 Configuration.source = {
 
-	'Behavior': {
-		path: '',
-		files: [
-			'mootools-core/Source/Core/Core',
-			'mootools-core/Source/Types/Array',
-			'mootools-core/Source/Types/String',
-			'mootools-core/Source/Types/Function',
-			'mootools-core/Source/Types/Number',
-			'mootools-core/Source/Types/Object',
-			'mootools-core/Source/Class/Class',
-			'mootools-core/Source/Class/Class.Extras',
-			'mootools-core/Source/Browser/Browser',
-			'mootools-core/Source/Slick/Slick.Parser',
-			'mootools-core/Source/Slick/Slick.Finder',
-			'mootools-core/Source/Element/Element',
-			'mootools-core/Source/Element/Element.Event',
-			'mootools-core/Source/Element/Element.Dimensions',
-			'mootools-core/Source/Utilities/JSON',
-			'mootools-more/Source/Core/More',
-			'mootools-more/Source/Utilities/Table',
-			'../Source/Behavior',
-			'../Source/Element.Data',
-			'../Source/BehaviorAPI'
-		]
-	}
+  'Behavior': {
+    path: '',
+    files: [
+      'mootools-core/Source/Core/Core',
+      'mootools-core/Source/Types/Array',
+      'mootools-core/Source/Types/String',
+      'mootools-core/Source/Types/Function',
+      'mootools-core/Source/Types/Number',
+      'mootools-core/Source/Types/Object',
+      'mootools-core/Source/Class/Class',
+      'mootools-core/Source/Class/Class.Extras',
+      'mootools-core/Source/Browser/Browser',
+      'mootools-core/Source/Slick/Slick.Parser',
+      'mootools-core/Source/Slick/Slick.Finder',
+      'mootools-core/Source/Element/Element',
+      'mootools-core/Source/Element/Element.Event',
+      'mootools-core/Source/Element/Element.Dimensions',
+      'mootools-core/Source/Utilities/JSON',
+      'mootools-more/Source/Core/More',
+      'mootools-more/Source/Utilities/Table',
+      '../Source/Behavior',
+      '../Source/Element.Data',
+      '../Source/BehaviorAPI'
+    ]
+  }
 
 };
 

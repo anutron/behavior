@@ -8,25 +8,25 @@ normal event monitoring.
 
 ### Example
 
-	<div data-behavior="Trigger"
-	    data-trigger-options="
-	      'triggers': [
-	        {
-	          'events': ['mouseover', 'focus'], //which events to monitor
-	          'targets': {
-	            'div.monitorMouseOver': { //elements whose events we monitor
-	              'div.foo::addClass': { //selector for elements to invoke trigger :: trigger name
-	                'class': 'foo', //api options for trigger
-	                'if': {
-	                  'div.bar::hasClass': ['boo']
-	                }
-	              }
-	            }
-	          }
-	        }
-	      ]
-	    "
-	>...</div>
+  <div data-behavior="Trigger"
+      data-trigger-options="
+        'triggers': [
+          {
+            'events': ['mouseover', 'focus'], //which events to monitor
+            'targets': {
+              'div.monitorMouseOver': { //elements whose events we monitor
+                'div.foo::addClass': { //selector for elements to invoke trigger :: trigger name
+                  'class': 'foo', //api options for trigger
+                  'if': {
+                    'div.bar::hasClass': ['boo']
+                  }
+                }
+              }
+            }
+          }
+        ]
+      "
+  >...</div>
 
 
 ### Options

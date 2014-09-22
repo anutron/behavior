@@ -20,27 +20,27 @@ window.Event = window.Event || window.DOMEvent; //for 1.4 nocompat
  *
  */
 Event.Mock = function(target,type){
-	type = type || 'click';
+  type = type || 'click';
 
-	var e = {
-		type: type,
-		target: target
-	};
+  var e = {
+    type: type,
+    target: target
+  };
 
-	if (document.createEvent){
-		e = document.createEvent('HTMLEvents');
-		e.initEvent(
-			type //event type
-			, false //bubbles - set to false because the event should like normal fireEvent
-			, true //cancelable
-		);
-	}
+  if (document.createEvent){
+    e = document.createEvent('HTMLEvents');
+    e.initEvent(
+      type //event type
+      , false //bubbles - set to false because the event should like normal fireEvent
+      , true //cancelable
+    );
+  }
 
-	e = new Event(e);
+  e = new Event(e);
 
-	e.target = target;
+  e.target = target;
 
-	return e;
+  return e;
 };
 
 })(window);

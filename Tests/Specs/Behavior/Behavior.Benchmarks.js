@@ -8,13 +8,13 @@ provides: [Behavior.Benchmarks]
 */
 (function(){
 
-	// Behavior.addGlobalFilter('BenchmarkFilter', function(){});
+  // Behavior.addGlobalFilter('BenchmarkFilter', function(){});
 
-	// Behavior.addFilterTest({
-	// 	filterName: 'BenchmarkFilter',
-	// 	desc: 'Applies an empty filter',
-	// 	content: '<div data-behavior="BenchmarkFilter"></div>',
-	// 	specs: false
-	// });
+  // Behavior.addFilterTest({
+  //   filterName: 'BenchmarkFilter',
+  //   desc: 'Applies an empty filter',
+  //   content: '<div data-behavior="BenchmarkFilter"></div>',
+  //   specs: false
+  // });
 
 })();

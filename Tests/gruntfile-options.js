@@ -28,12 +28,12 @@ var karmaOptions = {
     singleRun: true,
     frameworks: ['jasmine'/*, 'sinon'*/],
     files: [
-		'behavior.js', 
-		'Tests/Specs/Behavior/Behavior.SpecsHelpers.js',
-		'Tests/Specs/Behavior/Behavior.Benchmarks.js',
-		'Tests/Specs/Syn.js',
-		'behavior-specs.js'
-	], 
+    'behavior.js',
+    'Tests/Specs/Behavior/Behavior.SpecsHelpers.js',
+    'Tests/Specs/Behavior/Behavior.Benchmarks.js',
+    'Tests/Specs/Syn.js',
+    'behavior-specs.js'
+  ],
     reporters: ['progress'],
 }
 
