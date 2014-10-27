@@ -34,17 +34,17 @@ Behavior is applied to an element whenever you want to parse that element's DOM 
 
 ### Example Usage
 
-  var myBehavior = new Behavior();
-  myBehavior.apply(myContainerElement);
+    var myBehavior = new Behavior();
+    myBehavior.apply(myContainerElement);
 
 ### Example HTML
 
-  <div data-behavior="Accordion">
-    <div class="toggle">Toggle 1</div>
-    <div class="target">This area is controlled by Toggle 1.</div>
-    <div class="toggle">Toggle 2</div>
-    <div class="target">This area is controlled by Toggle 2.</div>
-  </div>
+    <div data-behavior="Accordion">
+      <div class="toggle">Toggle 1</div>
+      <div class="target">This area is controlled by Toggle 1.</div>
+      <div class="toggle">Toggle 2</div>
+      <div class="target">This area is controlled by Toggle 2.</div>
+    </div>
 
 The above example will invoke the registered "Accordion" filter. See the section on [Behavior.Filter][] below.
 
@@ -73,7 +73,7 @@ Defines a method that will be passed to filters. Behavior allows you to create a
 
 ### Syntax
 
-  myBehaviorInstance.passMethod(name, function);
+    myBehaviorInstance.passMethod(name, function);
 
 ### Returns
 
@@ -114,40 +114,40 @@ By default, these methods will throw an error (quietly, in the console, unless t
 
 #### Examples
 
-  <a data-behavior="addClass" data-addclass-options="
-    'target': 'span.foo',
-    'className': 'bar'
-  "><span class="foo">some stuff</span></a>
+    <a data-behavior="addClass" data-addclass-options="
+      'target': 'span.foo',
+      'className': 'bar'
+    "><span class="foo">some stuff</span></a>
 
-  <script>
-    Behavior.addGlobalFilter('addClass', {
-      setup: function(element, api){
-        // get the first element using whatever the 'target' option is set to
-        // as a selector; in this case, "span.foo" and call `.addClass()` on it
-        api.getElement('target').addClass(api.get('className'));
-      }
-    });
-  </script>
+    <script>
+      Behavior.addGlobalFilter('addClass', {
+        setup: function(element, api){
+          // get the first element using whatever the 'target' option is set to
+          // as a selector; in this case, "span.foo" and call `.addClass()` on it
+          api.getElement('target').addClass(api.get('className'));
+        }
+      });
+    </script>
 
 If the user did not configure a target in the options or if the selector specified in that option were to fail to find a result, execution would be stopped and an error logged to console (or thrown if `breakOnErrors` is true).
 
-  <a data-behavior="addClass" data-addclass-options="
-    'target': 'span.foo',
-    'className': 'bar'
-  "><span class="foo">some stuff</span></a>
+    <a data-behavior="addClass" data-addclass-options="
+      'target': 'span.foo',
+      'className': 'bar'
+    "><span class="foo">some stuff</span></a>
 
-  <script>
-    Behavior.addGlobalFilter('addClass', {
-      setup: function(element, api){
-        // here we tell the api not to stop execution and only warn in the console
-        var target = api.getElement('target', 'warn');
-        // if the target wasn't found, we alter the element (just an example)
-        if (!target) element.addClass(api.get('className'));
-        // otherwise alter the target
-        else target.addClass(api.get('className'));
-      }
-    });
-  </script>
+    <script>
+      Behavior.addGlobalFilter('addClass', {
+        setup: function(element, api){
+          // here we tell the api not to stop execution and only warn in the console
+          var target = api.getElement('target', 'warn');
+          // if the target wasn't found, we alter the element (just an example)
+          if (!target) element.addClass(api.get('className'));
+          // otherwise alter the target
+          else target.addClass(api.get('className'));
+        }
+      });
+    </script>
 
 `getElements` works the same way, but instead returns an array-like `Elements` object with all elements that match the selector.
 
@@ -162,7 +162,7 @@ Iterates over an object of key/values passing them to the [passMethod](#Behavior
 
 ### Syntax
 
-  myBehaviorInstance.passMethods(obj);
+    myBehaviorInstance.passMethods(obj);
 
 ### Arguments
 
@@ -179,7 +179,7 @@ Applies all the behavior filters for an element and its children.
 
 ### Syntax
 
-  myBehaviorInstance.apply(container[, force]);
+    myBehaviorInstance.apply(container[, force]);
 
 ### Arguments
 
@@ -197,7 +197,7 @@ Applies a specific behavior filter to a specific element (but not its children).
 
 ### Syntax
 
-  myBehaviorInstance.applyFilter(element, filter, [, force]);
+    myBehaviorInstance.applyFilter(element, filter, [, force]);
 
 ### Arguments
 
@@ -216,7 +216,7 @@ Given a name, return the registered filter.
 
 ### Syntax
 
-  myBehaviorInstance.getFilter(name);
+    myBehaviorInstance.getFilter(name);
 
 ### Arguments
 
@@ -233,7 +233,7 @@ Given a name, return the plugins registered for a filter by that name. See the s
 
 ### Syntax
 
-  myBehaviorInstance.getPlugins(name);
+   myBehaviorInstance.getPlugins(name);
 
 ### Arguments
 
@@ -250,7 +250,7 @@ Garbage collects the specified element, cleaning up all the filters applied to i
 
 ### Syntax
 
-  myBehaviorInstance.cleanup(element);
+    myBehaviorInstance.cleanup(element);
 
 ### Arguments
 
@@ -276,7 +276,7 @@ Add a new filter.
 
 ### Syntax
 
-  myBehaviorInstance.addFilter(name, filter[, overwrite]);
+    myBehaviorInstance.addFilter(name, filter[, overwrite]);
 
 ### Arguments
 
@@ -295,7 +295,7 @@ Adds a group of filters.
 
 ### Syntax
 
-  myBehaviorInstance.addFilters(obj[, overwrite]);
+    myBehaviorInstance.addFilters(obj[, overwrite]);
 
 ### Arguments
 
@@ -313,7 +313,7 @@ Add a new plugin for a specified filter.
 
 ### Syntax
 
-  myBehaviorInstance.addPlugin(filterName, pluginName, fn[, overwrite]);
+    myBehaviorInstance.addPlugin(filterName, pluginName, fn[, overwrite]);
 
 ### Arguments
 
@@ -333,7 +333,7 @@ Adds a group of plugins.
 
 ### Syntax
 
-  myBehaviorInstance.addPlugins(obj[, overwrite]);
+    myBehaviorInstance.addPlugins(obj[, overwrite]);
 
 ### Arguments
 
@@ -351,7 +351,7 @@ Sets the default values for a filter, overriding any defaults previously defined
 
 ### Syntax
 
-  myBehaviorInstance.setFilterDefaults(name, defaults);
+    myBehaviorInstance.setFilterDefaults(name, defaults);
 
 ### Arguments
 
@@ -366,7 +366,7 @@ to pre-package often-reused configurations.
 
 ### Syntax
 
-  myBehaviorInstance.cloneFilter(name, newName, defaults);
+    myBehaviorInstance.cloneFilter(name, newName, defaults);
 
 ### Arguments
 
@@ -381,7 +381,7 @@ Stores a reference to a [Delegator][] instance that is returned by `api.getDeleg
 
 ### Syntax
 
-  myBehavior.setDelegator(myDelegator);
+    myBehavior.setDelegator(myDelegator);
 
 ### Arguments
 
@@ -398,7 +398,7 @@ Returns a reference to the [Delegator][] instance that was set with `setDelegato
 
 ### Syntax
 
-  myBehavior.getDelegator();
+    myBehavior.getDelegator();
 
 ### Returns
 
@@ -417,7 +417,7 @@ alone, otherwise they are ignored.
 
 ### Syntax
 
-  Behavior.getTarget(element, selector);
+    Behavior.getTarget(element, selector);
 
 ### Arguments
 
@@ -436,7 +436,7 @@ selectors `self` or `window` it returns an `Elements` instance that contains onl
 
 ### Syntax
 
-  Behavior.getTargets(element, selector);
+    Behavior.getTargets(element, selector);
 
 ### Arguments
 
@@ -454,7 +454,7 @@ Will invoke `debugger` before executing any filter that matches that name, allow
 
 ### Syntax
 
-  Behavior.debug(pluginName);
+    Behavior.debug(pluginName);
 
 ### Arguments
 
@@ -468,7 +468,7 @@ Add a new filter to the global Behavior namespace.
 
 ### Syntax
 
-  myBehaviorInstance.addGlobalFilter(name, fn[, overwrite]);
+    myBehaviorInstance.addGlobalFilter(name, fn[, overwrite]);
 
 Behavior Method: addGlobalFilters {#Behavior:addGlobalFilters}
 --------------------------------------------------
@@ -477,7 +477,7 @@ Adds a group of filters to the global Behavior namespace.
 
 ### Syntax
 
-  myBehaviorInstance.addGlobalFilters(obj[, overwrite]);
+    myBehaviorInstance.addGlobalFilters(obj[, overwrite]);
 
 Behavior Method: addGlobalPlugin {#Behavior:addGlobalPlugin}
 --------------------------------------------------
@@ -486,7 +486,7 @@ Add a new global plugin for a specified filter.
 
 ### Syntax
 
-  myBehaviorInstance.addGlobalPlugin(filterName, pluginName, fn[, overwrite]);
+    myBehaviorInstance.addGlobalPlugin(filterName, pluginName, fn[, overwrite]);
 
 
 Behavior Method: addGlobalPlugins {#Behavior:addGlobalPlugins}
@@ -496,7 +496,7 @@ Adds a group of plugins to the global Behavior namespace.
 
 ### Syntax
 
-  myBehaviorInstance.addGlobalPlugins(obj[, overwrite]);
+    myBehaviorInstance.addGlobalPlugins(obj[, overwrite]);
 
 Behavior Method: getFilter {#Behavior:getFilter}
 --------------------------------------------------
@@ -505,7 +505,7 @@ Given a name, return the registered *global* filter.
 
 ### Syntax
 
-  Behavior.getFilter(name);
+    Behavior.getFilter(name);
 
 ### Arguments
 
@@ -528,7 +528,7 @@ to pre-package often-reused configurations.
 
 ### Syntax
 
-  myBehaviorInstance.cloneFilter(name, newName, defaults);
+    myBehaviorInstance.cloneFilter(name, newName, defaults);
 
 ### Arguments
 
@@ -551,25 +551,25 @@ Filters nearly always return instances of classes (this is essentially their pur
 
 ### Example
 
-  Behavior.addGlobalFilters({
-    Accordion: function(element, api) {
-      var togglers = element.getElements(api.get('togglers'));
-      var sections = element.getElements(api.get('sections'));
-      if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
-      if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
-      var accordion = new Fx.Accordion(togglers, sections);
-      api.onCleanup(function() {
-        accordion.detach();
-      });
-      return accorion; //note that the instance is always returned!
-    }
-  });
+    Behavior.addGlobalFilters({
+      Accordion: function(element, api) {
+        var togglers = element.getElements(api.get('togglers'));
+        var sections = element.getElements(api.get('sections'));
+        if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
+        if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
+        var accordion = new Fx.Accordion(togglers, sections);
+        api.onCleanup(function() {
+          accordion.detach();
+        });
+        return accorion; //note that the instance is always returned!
+      }
+    });
 
-  /* the matching HTML
-  <div data-behavior="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
-    <div class="toggle">Toggle 1</div>
-  <div class="target">This area is controlled by Toggle 1.</div>
-  </div> */
+    /* the matching HTML
+    <div data-behavior="Accordion" data-Accordion-togglers=".toggle" data-Accordion-sections=".section">
+      <div class="toggle">Toggle 1</div>
+    <div class="target">This area is controlled by Toggle 1.</div>
+    </div> */
 
 In the example above our filter finds the sections and togglers and validates that there is at least one of each. If there aren't it calls `api.fail` - this stops the filter's execution and Behavior.js catches it and calls its `onError` event (which defaults to `console.error`). It also checks if the number of togglers and the number of sections are equal and calls `api.warn` if they are off. This does *not* top execution; it only fires the `onWarn` event on Behavior (which defaults to `console.warn`).
 
@@ -577,71 +577,71 @@ In the example above our filter finds the sections and togglers and validates th
 
 A simple filter is just a function and a name ("Accordion") and the function that creates accordions given an element and the api object. This is fine, but it's possible to express more complex configurations. Example:
 
-  Behavior.addGlobalFilters({
-    Accordion: {
-      //if your filter does not return an instance of this value Behavior will throw an error
-      //which is caught and logged by default
-      returns: Accordion,
-      require: ['togglers', 'togglers'],
-      //or
-      requireAs: {
-        togglers: String,
-        someNumericalValue: Number,
-        someArrayValue: Array
-      },
-      //you wouldn't define defaults for required values, but this is just an example
-      defaults: {
-        togglers: '.toggler',
-        sections: '.sections',
-        initialDisplayFx: false
-      },
-      //simple example:
-      setup: function(element, API){
-        var togglers = element.getElements(api.get('togglers'));
-        var sections = element.getElements(api.get('sections'));
-        if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
-        if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
-        var accordion = new Fx.Accordion(togglers, sections,
-          api.getAs({
-            fixedHeight: Number,
-            fixedWidth: Number,
-            display: Number,
-            show: Number,
-            height: Boolean,
-            width: Boolean,
-            opacity: Boolean,
-            alwaysHide: Boolean,
-            trigger: String,
-            initialDisplayFx: Boolean,
-            returnHeightToAuto: Boolean
-          })
-        );
-        api.onCleanup(function() {
-          accordion.detach();
+    Behavior.addGlobalFilters({
+      Accordion: {
+        //if your filter does not return an instance of this value Behavior will throw an error
+        //which is caught and logged by default
+        returns: Accordion,
+        require: ['togglers', 'togglers'],
+        //or
+        requireAs: {
+          togglers: String,
+          someNumericalValue: Number,
+          someArrayValue: Array
+        },
+        //you wouldn't define defaults for required values, but this is just an example
+        defaults: {
+          togglers: '.toggler',
+          sections: '.sections',
+          initialDisplayFx: false
+        },
+        //simple example:
+        setup: function(element, API){
+          var togglers = element.getElements(api.get('togglers'));
+          var sections = element.getElements(api.get('sections'));
+          if (togglers.length == 0 || sections.length == 0) api.fail('There are no togglers or sections for this accordion.');
+          if (togglers.length != sections.length) api.warn('There is a mismatch in the number of togglers and sections for this accordion.')
+          var accordion = new Fx.Accordion(togglers, sections,
+            api.getAs({
+              fixedHeight: Number,
+              fixedWidth: Number,
+              display: Number,
+              show: Number,
+              height: Boolean,
+              width: Boolean,
+              opacity: Boolean,
+              alwaysHide: Boolean,
+              trigger: String,
+              initialDisplayFx: Boolean,
+              returnHeightToAuto: Boolean
+            })
+          );
+          api.onCleanup(function() {
+            accordion.detach();
+          });
+          return accorion; //note that the instance is always returned!
+        },
+        //don't instantiate this value until the user mouses over the target element
+        delayUntil: 'mouseover,focus',
+        //OR delay for a specific period
+        delay: 100,
+        //OR let me initialize the function manually
+        initializer: function(element, API){
+          element.addEvent('mouseover', API.runSetup); //same as specifying event
+          //or
+          API.runSetup.delay(100); //same as specifying delay
+          //or something completely esoteric
+          var timer = (function(){
+            if (element.hasClass('foo')){
+              clearInterval(timer);
+              API.runSetup();
+            }
+          }).periodical(100);
+          //or
+          API.addEvent('someBehaviorEvent', API.runSetup);
         });
-        return accorion; //note that the instance is always returned!
-      },
-      //don't instantiate this value until the user mouses over the target element
-      delayUntil: 'mouseover,focus',
-      //OR delay for a specific period
-      delay: 100,
-      //OR let me initialize the function manually
-      initializer: function(element, API){
-        element.addEvent('mouseover', API.runSetup); //same as specifying event
-        //or
-        API.runSetup.delay(100); //same as specifying delay
-        //or something completely esoteric
-        var timer = (function(){
-          if (element.hasClass('foo')){
-            clearInterval(timer);
-            API.runSetup();
-          }
-        }).periodical(100);
-        //or
-        API.addEvent('someBehaviorEvent', API.runSetup);
-      });
-    }
-  });
+      }
+    });
 
 In the long-form example above, we see that filters can be passed as objects that map to the config option in the Behavior.Filter constructor arguments. (see [Behavior.Filter's constructor](#Behavior.Filter:constructor)) below.
 
@@ -649,18 +649,18 @@ In the long-form example above, we see that filters can be passed as objects tha
 
 Behavior has a way to [define API methods passed to filters for their use](#Behavior:passMethod). To use these methods, access them in the second argument passed to your filter function:
 
-  Behavior.addGlobalPlugins({
-    MeasureOnResize: function(element, api) {
-      api.addEvent('resize', updater);
-      api.onCleanup(function(){
-        api.removeEvent('resize', updater);
-      });
-    }
-  });
-  var myBehaviorInstance = new Behavior();
-  myBehaviorInstance.apply(document.body); //applies all filters named in your content
-  //let's assume there's an element with the data-behavior property set to MeasureOnResize
-  myBehaviorInstance.fireEvent('resize');
+    Behavior.addGlobalPlugins({
+      MeasureOnResize: function(element, api) {
+        api.addEvent('resize', updater);
+        api.onCleanup(function(){
+          api.removeEvent('resize', updater);
+        });
+      }
+    });
+    var myBehaviorInstance = new Behavior();
+    myBehaviorInstance.apply(document.body); //applies all filters named in your content
+    //let's assume there's an element with the data-behavior property set to MeasureOnResize
+    myBehaviorInstance.fireEvent('resize');
 
 As you can see in the example above, we add an event whenever the Behavior instance fires a "resize" method. We also clean up that event with the [markForCleanup](#Behavior.Filter:markForCleanup) method which is passed through the api object as "onCleanup".
 
@@ -671,7 +671,7 @@ While is common (and recommended) for filters to be declared using Behavior's [a
 
 ### Syntax
 
-  new Behavior.Filter(name, filter);
+    new Behavior.Filter(name, filter);
 
 ### Arguments
 
@@ -701,10 +701,10 @@ Adds a function to invoke when the element referenced is cleaned up by the Behav
 
 ### Syntax
 
-  myBehaviorFilter.markForCleanup(element, fn);
+    myBehaviorFilter.markForCleanup(element, fn);
 
-  //more commonly inside a filter:
-  api.onCleanup(fn); //element is not specified on the api object
+    //more commonly inside a filter:
+    api.onCleanup(fn); //element is not specified on the api object
 
 ### Arguments
 
@@ -719,12 +719,12 @@ Garbage collects the specific filter instance for a given element. This is typic
 
 ### Syntax
 
-  myBehaviorFilter.cleanup(element);
+    myBehaviorFilter.cleanup(element);
 
-  //more commonly
-  myBehaviorInstance.cleanup(container);
-  //here the container can be any element that is being removed from the DOM
-  //all its children that have had filters applied will have their cleanup method run
+    //more commonly
+    myBehaviorInstance.cleanup(container);
+    //here the container can be any element that is being removed from the DOM
+    //all its children that have had filters applied will have their cleanup method run
 
 ### Arguments
 
@@ -738,28 +738,28 @@ Filter Plugins are identical to regular filters with the exception that they are
 
 ### Example
 
-  Behavior.addFilter('Mask', function(element, api){
-    var maskInstance = new Mask(element);
-    //this is silly
-    var events = {
-      mouseover: maskInstance.show.bind(maskInstance),
-      mouseout: maskInstance.hide.bind(maskInstance)
-    };
-    element.addEvents(events);
-    api.onCleanup(function(){
-      element.removeEvents(events);
+    Behavior.addFilter('Mask', function(element, api){
+      var maskInstance = new Mask(element);
+      //this is silly
+      var events = {
+        mouseover: maskInstance.show.bind(maskInstance),
+        mouseout: maskInstance.hide.bind(maskInstance)
+      };
+      element.addEvents(events);
+      api.onCleanup(function(){
+        element.removeEvents(events);
+      });
+      return maskInstance; //note that we return the instance!
     });
-    return maskInstance; //note that we return the instance!
-  });
 
-  Behavior.defineGlobalPlugin('Mask', 'AlertOnMask', function(element, api, maskInstance){
-    //also silly
-    var aleter = function(){ alert('the mask is visible!'); };
-    maskInstance.addEvent('show', alerter);
-    api.onCleanup(function(){
-      maskInstance.removeEvent('show', alerter);
+    Behavior.defineGlobalPlugin('Mask', 'AlertOnMask', function(element, api, maskInstance){
+      //also silly
+      var aleter = function(){ alert('the mask is visible!'); };
+      maskInstance.addEvent('show', alerter);
+      api.onCleanup(function(){
+        maskInstance.removeEvent('show', alerter);
+      });
     });
-  });
 
 The above example is guaranteed to always run after the "Mask" filter. You can define a plugin for a plugin just as well; simply name the plugin as the first argument (you could create a plugin for the above example by making a plugin for "AlertOnMask"). Plugin setup functions are passed not only the target element and the api object but also the instance returned by the filter they augment.
 
@@ -775,7 +775,7 @@ Adds a data filter to the element.
 
 ### Syntax
 
-  myElement.addBehaviorFilter(name);
+    myElement.addBehaviorFilter(name);
 
 ### Arguments
 
@@ -792,7 +792,7 @@ Removes a data filter to the element.
 
 ### Syntax
 
-  myElement.removeBehaviorFilter(name);
+    myElement.removeBehaviorFilter(name);
 
 ### Arguments
 
@@ -810,7 +810,7 @@ Gets an array of data filters specified on an element.
 
 ### Syntax
 
-  myElement.getBehaviors();
+    myElement.getBehaviors();
 
 ### Returns
 
@@ -823,7 +823,7 @@ Returns `true` if the element has the specified data filter.
 
 ### Syntax
 
-  myElement.hasBehavior(name);
+    myElement.hasBehavior(name);
 
 ### Arguments
 
@@ -840,7 +840,7 @@ Filters generally return the instance of the widget they instantiate. This metho
 
 ### Syntax
 
-  myElement.getBehaviorResult(name);
+    myElement.getBehaviorResult(name);
 
 ### Arguments
 

@@ -8,7 +8,7 @@ normal event monitoring.
 
 ### Example
 
-  <div data-behavior="Trigger"
+    <div data-behavior="Trigger"
       data-trigger-options="
         'triggers': [
           {
@@ -26,7 +26,7 @@ normal event monitoring.
           }
         ]
       "
-  >...</div>
+    >...</div>
 
 
 ### Options

@@ -5,7 +5,7 @@ Provides methods to read values from annotated HTML configured for the [Behavior
 
 ### Syntax
 
-  new BehaviorAPI(element[, prefix]);
+    new BehaviorAPI(element[, prefix]);
 
 ### Arguments
 
@@ -16,10 +16,10 @@ Provides methods to read values from annotated HTML configured for the [Behavior
 
 Examples of the HTML expressions evaluated are as follows (all of the following produce the same output*):
 
-  <tag data-behavior="Filter1 Filter2" data-filter1-options="{'opt1': 'foo', 'opt2': 'bar', 'selector': '.selector'}"> //prefered
-  <tag data-behavior="Filter1 Filter2" data-filter1-options="'opt1': 'foo', 'opt2': 'bar', 'selector': '.selector'"> //no braces on JSON
-  <tag data-behavior="Filter1 Filter2" data-filter1-options="{'opt1': 'foo', 'opt2': 'bar'}" data-filter1-selector=".selector">
-  <tag data-behavior="Filter1 Filter2" data-filter1-opt1='foo' data-filter1-opt2='false' data-filter1-selector=".selector">
+    <tag data-behavior="Filter1 Filter2" data-filter1-options="{'opt1': 'foo', 'opt2': 'bar', 'selector': '.selector'}"> //prefered
+    <tag data-behavior="Filter1 Filter2" data-filter1-options="'opt1': 'foo', 'opt2': 'bar', 'selector': '.selector'"> //no braces on JSON
+    <tag data-behavior="Filter1 Filter2" data-filter1-options="{'opt1': 'foo', 'opt2': 'bar'}" data-filter1-selector=".selector">
+    <tag data-behavior="Filter1 Filter2" data-filter1-opt1='foo' data-filter1-opt2='false' data-filter1-selector=".selector">
 
 The `-options` value is parsed as JSON first (it's slightly more permissive in that you don't have to wrap it in `{}` just for convenience). Values defined here are read as defined allowing you to express arrays, numbers, booleans, etc. Functions / callbacks are generally not used by [Behavior][].
 
@@ -27,9 +27,9 @@ If you attempt to read a value that isn't defined in this options object, the pr
 
 Note that filter names that contain characters other than A-Z, 0-9, or dash are stripped and what remains is case insensitive. Dots are turned to dashes. Further, camelCase properties are hyphenated to camel-case. So, for example, you would express the following:
 
-  <tag data-behavior="Foo.Bar" data-foo-bar-options="'someThing': true">
-  //and - note the hyphenation
-  <tag data-behavior="Foo.Bar" data-foo-bar-some-thing="true">
+    <tag data-behavior="Foo.Bar" data-foo-bar-options="'someThing': true">
+    //and - note the hyphenation
+    <tag data-behavior="Foo.Bar" data-foo-bar-some-thing="true">
 
 BehaviorAPI Method: get {#BehaviorAPI:get}
 ------------------------------------------
@@ -38,7 +38,7 @@ Gets a value for the specified name.
 
 ### Syntax
 
-  api.get(name[, name, name, name])
+    api.get(name[, name, name, name])
 
 ### Arguments
 
@@ -46,9 +46,9 @@ Gets a value for the specified name.
 
 ### Example
 
-  var api = new BehaviorAPI(target, 'foo');
-  api.get('bar'); //returns the value of data-foo-bar or null
-  api.get('bar', 'baz'); //returns {bar: 'value', baz: 'value'}
+    var api = new BehaviorAPI(target, 'foo');
+    api.get('bar'); //returns the value of data-foo-bar or null
+    api.get('bar', 'baz'); //returns {bar: 'value', baz: 'value'}
 
 ### Returns
 
@@ -63,7 +63,7 @@ Gets a value for the specified name and runs it through [JSON.decode][] and veri
 
 ### Syntax
 
-  api.getAs(Type, name[, defaultValue]);
+    api.getAs(Type, name[, defaultValue]);
 
 ### Arguments
 
@@ -73,8 +73,8 @@ Gets a value for the specified name and runs it through [JSON.decode][] and veri
 
 ### Example
 
-  var api = new BehaviorAPI(target, 'foo');
-  api.getAs(Number, 'some-number');
+    var api = new BehaviorAPI(target, 'foo');
+    api.getAs(Number, 'some-number');
 
 ### Returns
 
@@ -87,7 +87,7 @@ Validates that an element has a value set for a given name. Throws an error if t
 
 ### Syntax
 
-  api.require(name[, name, name]);
+    api.require(name[, name, name]);
 
 ### Arguments
 
@@ -95,9 +95,9 @@ Validates that an element has a value set for a given name. Throws an error if t
 
 ### Example
 
-  var api = new BehaviorAPI(target, 'foo');
-  api.require('foo'); //throws an error if data-foo-foo is not set
-  api.require('foo', 'bar'); //throws an error if data-foo-foo or data-foo-bar are not set
+    var api = new BehaviorAPI(target, 'foo');
+    api.require('foo'); //throws an error if data-foo-foo is not set
+    api.require('foo', 'bar'); //throws an error if data-foo-foo or data-foo-bar are not set
 
 ### Returns
 
@@ -110,7 +110,7 @@ Requires that an element has a value set for a given name that can be parsed int
 
 ### Syntax
 
-  api.requireAs(obj);
+   api.requireAs(obj);
 
 ### Arguments
 
@@ -118,10 +118,10 @@ Requires that an element has a value set for a given name that can be parsed int
 
 ### Example
 
-  api.requireAs({
-    option1: Number,
-    option2: Boolean
-  });
+    api.requireAs({
+      option1: Number,
+      option2: Boolean
+    });
 
 ### Returns
 
@@ -134,8 +134,8 @@ Sets the default values. Note that setting defaults for required properties is n
 
 ### Syntax
 
-  api.setDefault(name, value);
-  api.setDefault(obj);
+    api.setDefault(name, value);
+    api.setDefault(obj);
 
 ### Arguments
 
@@ -148,11 +148,11 @@ OR
 
 ### Example
 
-  api.setDefault('duration', 1000);
-  api.setDefault({
-    duration: 1000,
-    link: 'chain'
-  });
+    api.setDefault('duration', 1000);
+    api.setDefault({
+      duration: 1000,
+      link: 'chain'
+    });
 
 ### Returns
 
@@ -165,7 +165,7 @@ The API class caches values read from the element to avoid the cost of DOM inter
 
 ### Syntax
 
-  api.refreshAPI();
+    api.refreshAPI();
 
 ### Returns
 

@@ -9,7 +9,7 @@ Manager for generic (DOM) event handlers.
 
 ### Syntax
 
-  new Delegator([options]);
+   new Delegator([options]);
 
 ### Arguments
 
@@ -38,17 +38,17 @@ This should not be confused with deferred Behavior filters (which can be run at 
 
 ### Example Usage
 
-  var myDelegator = new Delegator();
-  Delegator.attach(myContainerElement);
-  Delegator.register('click', 'hide', function(event, element, api){
-    event.preventDefault();
-    api.getElement('target').hide();
-  });
+    var myDelegator = new Delegator();
+    Delegator.attach(myContainerElement);
+    Delegator.register('click', 'hide', function(event, element, api){
+      event.preventDefault();
+      api.getElement('target').hide();
+    });
 
 ### Example HTML
 
-  <a data-trigger="hide" data-hide-target="!body #foo">click me to hide foo</a>
-  <div id="foo">I hide when you click the link above me!</div>
+    <a data-trigger="hide" data-hide-target="!body #foo">click me to hide foo</a>
+    <div id="foo">I hide when you click the link above me!</div>
 
 ### HTML properties
 
@@ -62,11 +62,11 @@ It's possible to declare more than one data trigger property for a single elemen
 
 If you're using [Behavior](Behavior.md) you should connect the two so that links that Delegator uses to update the DOM can have their response run through your Behavior instance's `apply` method. Example:
 
-  var myBehavior = new Behavior().apply(document.body);
-  var myDelegator = new Delegator({
-    getBehavior: function(){ return myBehavior; }
-  }).attach(document.body);
-  myBehavior.setDelegator(myDelegator);
+    var myBehavior = new Behavior().apply(document.body);
+    var myDelegator = new Delegator({
+      getBehavior: function(){ return myBehavior; }
+    }).attach(document.body);
+    myBehavior.setDelegator(myDelegator);
 
 ### Conventions
 
@@ -79,30 +79,30 @@ Delegator also allows any trigger's options to include conditionals that will pr
 
 #### Examples
 
-  <a data-trigger="foo" data-foo-options="
-    'if': {
-      'self::hasClass': ['foo'] //could also just be 'foo'; use an array for multiple arguments
-    }
-  ">...</a>
+    <a data-trigger="foo" data-foo-options="
+      'if': {
+        'self::hasClass': ['foo'] //could also just be 'foo'; use an array for multiple arguments
+      }
+    ">...</a>
 
-  <a data-trigger="foo" data-foo-options="
-    'unless': {
-      'self::hasClass': ['foo']
-    }
-  ">...</a>
+    <a data-trigger="foo" data-foo-options="
+      'unless': {
+        'self::hasClass': ['foo']
+      }
+    ">...</a>
 
 Both the examples above reference the `foo` trigger and specify conditionals. The first one uses the special `if` conditional and requires that the element itself has the class "foo" (which it doesn't), and thus the trigger will not fire. The second one is nearly identical but uses the special `unless` conditional, which does the same check but verifies that it's NOT true, so that one will.
 
 There's a more verbose version of these conditionals that looks like this:
 
-  <a data-trigger="foo" data-foo-options="
-    'if': {
-      'target': 'self',
-      'method': 'hasClass',
-      'arguments': ['foo'],
-      'value': true
-    }
-  ">...</a>
+    <a data-trigger="foo" data-foo-options="
+      'if': {
+        'target': 'self',
+        'method': 'hasClass',
+        'arguments': ['foo'],
+        'value': true
+      }
+    ">...</a>
 
 Here we explicitly name the target (`self`), the method invoked on that element (`hasClass`) - this can be any element method, the arguments passed to that method, and the value we expect it to return. The previous examples are just shorthands that are parsed into this more verbose format.
 
@@ -112,25 +112,25 @@ Delegator also provides a custom trigger called "multi" which allows a single el
 
 #### Example
 
-  <a data-trigger="multi" data-multi-triggers="
-    [
-      {
-        '.foo::someTrigger': {
-          'arg':'blah'
-        }
-      },
+    <a data-trigger="multi" data-multi-triggers="
+      [
+        {
+          '.foo::someTrigger': {
+            'arg':'blah'
+          }
+        },
 
-      '.bar::someOtherTrigger',
+        '.bar::someOtherTrigger',
 
-      {
-        '.baz::yetAnotherTrigger': {
-          'if':{
-            'self::hasClass': 'foo'
+        {
+          '.baz::yetAnotherTrigger': {
+            'if':{
+              'self::hasClass': 'foo'
+            }
           }
         }
-      }
-    ]
-  "></a>
+      ]
+    "></a>
 
 Here we have 3 different Delegator triggers we are invoking when the user clicks our link.
 
@@ -171,64 +171,7 @@ There are two types of switches: `first` and `any`. The `first` switch iterates 
 
 #### Examples
 
-  <a data-trigger="first" data-first-switches="[
-    {
-      'if': {
-        'div.foo::hasClass':['baz']
-      },
-      triggers: [
-        '.foo::trigger1'
-      ]
-    },
-    {
-      'unless': {
-        'div.foo::hasClass':['baz']
-      },
-      triggers: [
-        '.foo::trigger2'
-      ]
-    },
-    {
-      triggers: [
-        '.foo::trigger3'
-      ]
-    }
-  ]">...</a>
-
-In the above example, Delegator iterates over the array of trigger groups defined in the `first` switches. When it finds one that is valid, it runs the triggers defined within it. The last group in the example has no condition and is essentially treated as the default case in the eventuality that none of the previous are `true`. (Note that in this example, because the first two in the group are the same condition with one an `if` and the other an `unless`, one of them *has* to be true.)
-
-  <a data-trigger="any" data-any-switches="[
-    {
-      'if': {
-        'div.foo::hasClass':['baz']
-      },
-      triggers: [
-        '.foo::trigger1'
-      ]
-    },
-    {
-      'unless': {
-        'div.foo::hasClass':['baz']
-      },
-      triggers: [
-        '.foo::trigger2'
-      ]
-    },
-    {
-      triggers: [
-        '.foo::trigger3'
-      ]
-    }
-  ]">...</a>
-
-In this example, which is nearly identical to the first one except the switch type is `any` instead of `first`, Delegator iterates over all of the trigger groups and executes each if their conditional is `true`. While the `first` example would execute one of the first two in the group (because they are opposites in the example) and stop, the `any` example will execute one of the first two (whichever is `true`) AND the last one.
-
-#### Conditionals with Switches
-
-Note that, as with any trigger, you can have a conditional for the switch itself:
-
-  <a data-trigger="any" data-any-options="
-    'switches': [
+    <a data-trigger="first" data-first-switches="[
       {
         'if': {
           'div.foo::hasClass':['baz']
@@ -238,15 +181,72 @@ Note that, as with any trigger, you can have a conditional for the switch itself
         ]
       },
       {
+        'unless': {
+          'div.foo::hasClass':['baz']
+        },
+        triggers: [
+          '.foo::trigger2'
+        ]
+      },
+      {
         triggers: [
           '.foo::trigger3'
         ]
       }
-    ],
-    'unless': {
-      '.foo::hasClass': ['bazoo']
-    }
-  ">...</a>
+    ]">...</a>
+
+In the above example, Delegator iterates over the array of trigger groups defined in the `first` switches. When it finds one that is valid, it runs the triggers defined within it. The last group in the example has no condition and is essentially treated as the default case in the eventuality that none of the previous are `true`. (Note that in this example, because the first two in the group are the same condition with one an `if` and the other an `unless`, one of them *has* to be true.)
+
+    <a data-trigger="any" data-any-switches="[
+      {
+        'if': {
+          'div.foo::hasClass':['baz']
+        },
+        triggers: [
+          '.foo::trigger1'
+        ]
+      },
+      {
+        'unless': {
+          'div.foo::hasClass':['baz']
+        },
+        triggers: [
+          '.foo::trigger2'
+        ]
+      },
+      {
+        triggers: [
+          '.foo::trigger3'
+        ]
+      }
+    ]">...</a>
+
+In this example, which is nearly identical to the first one except the switch type is `any` instead of `first`, Delegator iterates over all of the trigger groups and executes each if their conditional is `true`. While the `first` example would execute one of the first two in the group (because they are opposites in the example) and stop, the `any` example will execute one of the first two (whichever is `true`) AND the last one.
+
+#### Conditionals with Switches
+
+Note that, as with any trigger, you can have a conditional for the switch itself:
+
+    <a data-trigger="any" data-any-options="
+      'switches': [
+        {
+          'if': {
+            'div.foo::hasClass':['baz']
+          },
+          triggers: [
+            '.foo::trigger1'
+          ]
+        },
+        {
+          triggers: [
+            '.foo::trigger3'
+          ]
+        }
+      ],
+      'unless': {
+        '.foo::hasClass': ['bazoo']
+      }
+    ">...</a>
 
 
 Delegator Method: passMethod {#Delegator:passMethod}
@@ -256,7 +256,7 @@ Defines a method that will be passed to triggers. Delegator allows you to create
 
 ### Syntax
 
-  myDelegatorInstance.passMethod(name, function);
+    myDelegatorInstance.passMethod(name, function);
 
 ### Returns
 
@@ -290,38 +290,38 @@ By default, these methods will throw an error (quietly, in the console, unless t
 
 #### Examples
 
-  <a data-trigger="hide" data-hide-options="
-    'target': 'span.foo'
-  "><span class="foo">some stuff</span></a>
+    <a data-trigger="hide" data-hide-options="
+      'target': 'span.foo'
+    "><span class="foo">some stuff</span></a>
 
-  <script>
-    Delegator.register('click', 'foo', {
-      handler: function(element, api){
-        // get the first element using whatever the 'target' option is set to
-        // as a selector; in this case, "span.foo" and call `.hide()` on it
-        api.getElement('target').hide();
-      }
-    });
-  </script>
+    <script>
+      Delegator.register('click', 'foo', {
+        handler: function(element, api){
+          // get the first element using whatever the 'target' option is set to
+          // as a selector; in this case, "span.foo" and call `.hide()` on it
+          api.getElement('target').hide();
+        }
+      });
+    </script>
 
 If the user did not configure a target in the options or if the selector specified in that option were to fail to find a result, execution would be stopped and an error logged to console (or thrown if `breakOnErrors` is true).
 
-  <a data-trigger="hide" data-hide-options="
-    'target': 'span.foo'
-  "><span class="foo">some stuff</span></a>
+    <a data-trigger="hide" data-hide-options="
+      'target': 'span.foo'
+    "><span class="foo">some stuff</span></a>
 
-  <script>
-    Delegator.register('click', 'foo', {
-      handler: function(element, api){
-        // here we tell the api not to stop execution and only warn in the console
-        var target = api.getElement('target', 'warn');
-        // if the target wasn't found, we hide the element (just an example)
-        if (!target) element.hide();
-        // otherwise hide the target
-        else target.hide();
-      }
-    });
-  </script>
+    <script>
+      Delegator.register('click', 'foo', {
+        handler: function(element, api){
+          // here we tell the api not to stop execution and only warn in the console
+          var target = api.getElement('target', 'warn');
+          // if the target wasn't found, we hide the element (just an example)
+          if (!target) element.hide();
+          // otherwise hide the target
+          else target.hide();
+        }
+      });
+    </script>
 
 `getElements` works the same way, but instead returns an array-like `Elements` object with all elements that match the selector.
 
@@ -337,7 +337,7 @@ Iterates over an object of key/values passing them to the [passMethod](#Delegato
 
 ### Syntax
 
-  myDelegatorInstance.passMethods(obj);
+    myDelegatorInstance.passMethods(obj);
 
 ### Arguments
 
@@ -354,11 +354,11 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Syntax
 
-  Delegator.register(eventTypes, name, handler, overwrite);
-  myDelegator.register(eventTypes, name, handler, overwrite);
-  //also
-  Delegator.register(eventTypes, object, overwrite);
-  myDelegator.register(eventTypes, object, overwrite);
+    Delegator.register(eventTypes, name, handler, overwrite);
+    myDelegator.register(eventTypes, name, handler, overwrite);
+    //also
+    Delegator.register(eventTypes, object, overwrite);
+    myDelegator.register(eventTypes, object, overwrite);
 
 ### Arguments
 
@@ -375,24 +375,24 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Examples
 
-  //this is the same example as the one at the top of the page
-  var myDelegator = new Delegator();
-  myDelegator.attach(myContainerElement);
-  //this adds a global trigger
-  Delegator.register('click', 'hide', function(event, element, api){
-    event.preventDefault();
-    var target = element.getElement(api.get('target'));
-    if (target) target.hide();
-  });
+    //this is the same example as the one at the top of the page
+    var myDelegator = new Delegator();
+    myDelegator.attach(myContainerElement);
+    //this adds a global trigger
+    Delegator.register('click', 'hide', function(event, element, api){
+      event.preventDefault();
+      var target = element.getElement(api.get('target'));
+      if (target) target.hide();
+    });
 
-  //also
-  Delegator.register(['click', 'submit'], {
-    Foo: function(){...},
-    Bar: {
-      handler: function(){...},
-      requires: [...]
-    }
-  });
+    //also
+    Delegator.register(['click', 'submit'], {
+      Foo: function(){...},
+      Bar: {
+        handler: function(){...},
+        requires: [...]
+      }
+    });
 
 Delegator Method: setTriggerDefaults {#Behavior:setTriggerDefaults}
 --------------------------------------------------
@@ -401,7 +401,7 @@ Sets the default values for a trigger, overriding any defaults previously define
 
 ### Syntax
 
-  myDelegator.setTriggerDefaults(name, defaults);
+    myDelegator.setTriggerDefaults(name, defaults);
 
 ### Arguments
 
@@ -416,7 +416,7 @@ to pre-package often-reused configurations.
 
 ### Syntax
 
-  myDelegator.cloneTrigger(name, newName, defaults);
+    myDelegator.cloneTrigger(name, newName, defaults);
 
 ### Arguments
 
@@ -431,8 +431,8 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Syntax
 
-  Delegator.getTrigger(name);
-  myDelegator.getTrigger(name);
+    Delegator.getTrigger(name);
+    myDelegator.getTrigger(name);
 
 ### Arguments
 
@@ -444,40 +444,40 @@ This is both a static method and an instance method. Using the static method (`D
 
 ### Examples
 
-  //this is the same example as the one at the top of the page
-  var myDelegator = new Delegator();
-  myDelegator.attach(myContainerElement);
-  //this adds a global trigger
-  Delegator.register('click', 'hide', function(event, element, api){
-    //...
-  });
+    //this is the same example as the one at the top of the page
+    var myDelegator = new Delegator();
+    myDelegator.attach(myContainerElement);
+    //this adds a global trigger
+    Delegator.register('click', 'hide', function(event, element, api){
+      //...
+    });
 
-  Delegator.getTrigger('hide'); //returns the GLOBAL trigger instance
-  myDelegator.getTrigger('hide'); //returns the GLOBAL trigger instance
+    Delegator.getTrigger('hide'); //returns the GLOBAL trigger instance
+    myDelegator.getTrigger('hide'); //returns the GLOBAL trigger instance
 
-  //but if we add a local one
-  myDelegator.register('click', 'hide', function(event, element, api){
-    //... local version by the same name
-  });
+    //but if we add a local one
+    myDelegator.register('click', 'hide', function(event, element, api){
+      //... local version by the same name
+    });
 
-  Delegator.getTrigger('hide'); //returns the GLOBAL trigger instance
-  myDelegator.getTrigger('hide'); //returns the LOCAL trigger instance
+    Delegator.getTrigger('hide'); //returns the GLOBAL trigger instance
+    myDelegator.getTrigger('hide'); //returns the LOCAL trigger instance
 
 ### Extended handlers
 
 Handlers, much like Behavior's filter declaration, are passed an instance of [BehaviorAPI][] as they often have additional configuration properties (for example, a selector to find *which* form to submit or hide or what-have-you). You can declare a handler in object notation with values for defaults and required properties. Example:
 
-  myDelegator.register('click', 'hide', {
-    require: ['target'],
-    requireAs: {
-      count: Number,
-      whatever: Array
-    },
-    defaults: {
-      someSelector: '#foo'
-    },
-    handler: function(event, element, api){...}
-  });
+    myDelegator.register('click', 'hide', {
+      require: ['target'],
+      requireAs: {
+        count: Number,
+        whatever: Array
+      },
+      defaults: {
+        someSelector: '#foo'
+      },
+      handler: function(event, element, api){...}
+    });
 
 Elements that fail to provide the required attributes will have these filters ignored. These triggers throw errors but by default these are caught unless you set `options.breakOnErrors` to `true`.
 
@@ -503,7 +503,7 @@ Adds event types to a registered trigger.
 
 ### Syntax
 
-  myDelegator.addEventTypes(triggerName, types);
+    myDelegator.addEventTypes(triggerName, types);
 
 ### Arguments
 
@@ -517,7 +517,7 @@ Attaches the appropriate event listeners to the provided container.
 
 ### Syntax
 
-  myDelegator.attach(container);
+    myDelegator.attach(container);
 
 ### Returns
 
@@ -534,7 +534,7 @@ Detaches the appropriate event listeners from the provided container or, if none
 
 ### Syntax
 
-  myDelegator.detach([container]);
+    myDelegator.detach([container]);
 
 ### Arguments
 
@@ -549,7 +549,7 @@ Delegator Method: fireEventForElement {#Delegator:fireEventForElement}
 Fires the provided element's triggers that match the provided event type.
 
 ### Syntax
-  myDelegator.fireEventForElement(element, eventType, [force])
+    myDelegator.fireEventForElement(element, eventType, [force])
 
 ### Arguments
 
@@ -564,11 +564,11 @@ Invokes a specific trigger manually.
 
 ### Syntax
 
-  myDelegator.trigger(trigger, element[, event, ignoreTypes]);
+    myDelegator.trigger(trigger, element[, event, ignoreTypes]);
 
 ### Example
 
-  myDelegator.trigger('UpdateOnSubmit', myForm, 'submit'); //creates a mock "submit" event
+    myDelegator.trigger('UpdateOnSubmit', myForm, 'submit'); //creates a mock "submit" event
 
 ### Arguments
 
@@ -593,7 +593,7 @@ Will invoke `debugger` before executing any trigger that matches that name, allo
 
 ### Syntax
 
-  Delegator.debug(pluginName);
+    Delegator.debug(pluginName);
 
 ### Arguments
 
@@ -612,7 +612,7 @@ Adds a trigger to the element.
 
 ### Syntax
 
-  myElement.addTrigger(name);
+    myElement.addTrigger(name);
 
 ### Arguments
 
@@ -629,7 +629,7 @@ Removes a trigger to the element.
 
 ### Syntax
 
-  myElement.removeTrigger(name);
+    myElement.removeTrigger(name);
 
 ### Arguments
 
@@ -647,7 +647,7 @@ Gets an array of triggers specified on an element.
 
 ### Syntax
 
-  myElement.getTriggers();
+    myElement.getTriggers();
 
 ### Returns
 
@@ -660,7 +660,7 @@ Returns `true` if the element has the specified trigger.
 
 ### Syntax
 
-  myElement.hasTrigger(name);
+    myElement.hasTrigger(name);
 
 ### Arguments
 

@@ -10,12 +10,12 @@ Sets a value for a given data property.
 
 ### Syntax
 
-  myDiv.setData(name, value)
+    myDiv.setData(name, value)
 
 ### Example
 
-  myDiv.setData('foo-bar', 'baz');
-  //result: <div data-foo-bar="baz"></div>
+    myDiv.setData('foo-bar', 'baz');
+    //result: <div data-foo-bar="baz"></div>
 
 ### Returns
 
@@ -28,7 +28,7 @@ Gets a value for a given data property.
 
 ### Syntax
 
-  myDiv.getData(name, defaultValue)
+    myDiv.getData(name, defaultValue)
 
 ### Arguments
 
@@ -37,8 +37,8 @@ Gets a value for a given data property.
 
 ### Example
 
-  myDiv.getData('foo-bar');
-  //returns "baz" from: <div data-foo-bar="baz"></div>
+    myDiv.getData('foo-bar');
+    //returns "baz" from: <div data-foo-bar="baz"></div>
 
 ### Returns
 
@@ -51,12 +51,12 @@ Sets a value for a given data property, encoding it into JSON.
 
 ### Syntax
 
-  myDiv.setJSONData(name, object)
+    myDiv.setJSONData(name, object)
 
 ### Example
 
-  myDiv.setJSONData('foo-bar', [1, 2, 'foo','bar']);
-  //result: <div data-foo-bar='"[1, 2, \'foo\', \'bar\']"'></div>
+    myDiv.setJSONData('foo-bar', [1, 2, 'foo','bar']);
+    //result: <div data-foo-bar='"[1, 2, \'foo\', \'bar\']"'></div>
 
 ### Returns
 
@@ -69,7 +69,7 @@ Gets a value for a given data property, parsing it from JSON.
 
 ### Syntax
 
-  myDiv.getJSONData(name, strict, defaultValue)
+    myDiv.getJSONData(name, strict, defaultValue)
 
 ### Arguments
 
@@ -79,8 +79,8 @@ Gets a value for a given data property, parsing it from JSON.
 
 ### Example
 
-  myDiv.getData('foo-bar');
-  //returns [1, 2, 'foo','bar'] from: <div data-foo-bar='"[1, 2, \'foo\', \'bar\']"'></div>
+    myDiv.getData('foo-bar');
+    //returns [1, 2, 'foo','bar'] from: <div data-foo-bar='"[1, 2, \'foo\', \'bar\']"'></div>
 
 ### Returns
 

@@ -5,23 +5,23 @@ Invokes delegators on startup when specified conditions are met. This allows you
 
 ### Example
 
-  <input type="checkbox" data-trigger="toggleReveal" data-togglereveal-options="
-    'target': '.foo'
-  " data-behavior="Startup" data-startup-options="
-    'delegators': {
-      'reveal': {
-        'target': 'self',
-        'property': 'checked'
-        'value': true
-      },
-      'dissolve': {
-        'targets': '.severalThings',
-        'method': 'hasClass',
-        'arguments': ['.someClass'],
-        'value': true
+    <input type="checkbox" data-trigger="toggleReveal" data-togglereveal-options="
+      'target': '.foo'
+    " data-behavior="Startup" data-startup-options="
+      'delegators': {
+        'reveal': {
+          'target': 'self',
+          'property': 'checked'
+          'value': true
+        },
+        'dissolve': {
+          'targets': '.severalThings',
+          'method': 'hasClass',
+          'arguments': ['.someClass'],
+          'value': true
+        }
       }
-    }
-  "/> enable
+    "/> enable
 
 ### Options
 
