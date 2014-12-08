@@ -26,21 +26,21 @@ The nutshell is that instead of having a domready function that finds the stuff 
 
 Instead of this:
 
-  $$('form').each(function(form){
-    new FormValidator(form, someOptions);
-    new Form.Request(form, someOptions);
-  });
-  new Tips($$('.tip'));
-  $$('.accordion').each(function(container){
-    new Accordion(container.getElements('.toggler'), container.getElements('.section'), someOptions);
-  });
-  etc
+    $$('form').each(function(form){
+      new FormValidator(form, someOptions);
+      new Form.Request(form, someOptions);
+    });
+    new Tips($$('.tip'));
+    $$('.accordion').each(function(container){
+      new Accordion(container.getElements('.toggler'), container.getElements('.section'), someOptions);
+    });
+    etc
 
 You do this:
 
-  <form data-behavior="FormValidator FormRequest" data-formvalidator-options="{someOptions}">...</form>
-  <a data-behavior="Tip" title="I'm a tip!">blah</a>
-  <div data-behavior="Accordion" data-accordion-options="{someOptions}">...</div>
+    <form data-behavior="FormValidator FormRequest" data-formvalidator-options="{someOptions}">...</form>
+    <a data-behavior="Tip" title="I'm a tip!">blah</a>
+    <div data-behavior="Accordion" data-accordion-options="{someOptions}">...</div>
 
 Think of it as delegation (as in event delegation) for class invocation. If you use domready to do your setup and you want to swap out some HTML with XHR, you need to reapply that startup selectively to only your components that you're updating, which is often painful. Not with Behavior, you just apply the filters to the response and call it a day.
 
@@ -54,12 +54,12 @@ Behavior is designed for apps that are constantly updating the UI with new data 
 
 There are some other nifty things you get out of it; you get essentially free specs tests and benchmarks because the code to create both of them is in the Behavior filter. Here's an example of what it takes to write a spec for a widget and ALSO the benchmark for it's instantiation (this uses [Behavior.SpecsHelpers.js](https://github.com/anutron/behavior/blob/master/Tests/Specs/Behavior/Behavior.SpecsHelpers.js)).
 
-  Behavior.addFilterTest({
-    filterName: 'OverText',
-    desc: 'Creates an instance of OverText',
-    content:  '<input data-behavior="OverText" title="test"/>',
-    returns: OverText
-  });
+    Behavior.addFilterTest({
+      filterName: 'OverText',
+      desc: 'Creates an instance of OverText',
+      content:  '<input data-behavior="OverText" title="test"/>',
+      returns: OverText
+    });
 
 This code above can be used to validate that the HTML fragment passed in does, in fact, create an OverText instance and it can also be used with [Benchmark.js](http://benchmarkjs.com/) to see which of your filters are the most expensive. More on this stuff in a minute.
 
@@ -67,14 +67,14 @@ This code above can be used to validate that the HTML fragment passed in does, i
 
 Included in the library is also a file called Delegator which is essentially the same thing except for events. For example, let's say you have a predictable UI pattern of having a link that, when clicked, it hides a parent element. Rather than writing that code each time:
 
-  document.body.addEvent("click:a.hideParent", function(e, link){
-    e.preventDefault();
-    link.getParent().hide();
-  });
+    document.body.addEvent("click:a.hideParent", function(e, link){
+      e.preventDefault();
+      link.getParent().hide();
+    });
 
 You register this pattern with Delegator and now you just do:
 
-  <a data-trigger="hideParent" data-hideparent-options ="{'target': '.someSelector'}">Hide Me!</a>
+    <a data-trigger="hideParent" data-hideparent-options ="{'target': '.someSelector'}">Hide Me!</a>
 
 It provides essentially the same value as Behavior, but at event time. The above example is pretty straight forward so, you know, why bother, right? But consider how many of these little things you write to make a web app function. If you can create them once and configure them inline, you save yourself a lot of code.
 
