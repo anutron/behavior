@@ -1,8 +1,8 @@
 {
   "name": "behavior",
   "dependencies": {
-    "mootools-core": "https://github.com/mootools/mootools-core.git#1.5.1",
-    "mootools-more": "https://github.com/mootools/mootools-more.git#1.5.1"
+    "mootools-core": "https://github.com/mootools/mootools-core.git#1.5.2",
+    "mootools-more": "https://github.com/mootools/mootools-more.git#1.5.2"
   },
   "ignore": [
     "Tests/*"
