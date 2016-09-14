@@ -95,6 +95,7 @@ provides: [Behavior]
       // container: document.body,
       // onApply: function(elements){},
       //default error behavior when a filter cannot be applied
+      // reloadOnPopState: false,
       onLog: getLog('info'),
       onError: getLog('error'),
       onWarn: getLog('warn'),
@@ -161,6 +162,9 @@ provides: [Behavior]
         this.addEvent('updateHistory', function(url){
           history.pushState(null, null, url);
         });
+        window.addEvent('popstate', function(){
+          if (this.options.reloadOnPopState) window.location.href = window.location.href;
+        }.bind(this));
       }
     },
 
