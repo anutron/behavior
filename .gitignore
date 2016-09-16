@@ -2,3 +2,4 @@ art.js
 node_modules
 behavior-specs.js
 behavior.js
+.bower.json
