@@ -163,7 +163,11 @@ provides: [Behavior]
           history.pushState(null, null, url);
         });
         window.addEvent('popstate', function(){
-          if (this.options.reloadOnPopState) window.location.href = window.location.href;
+          if (this.options.reloadOnPopState && ! window.popping){
+            window.popping = true;
+            window.location.href = window.location.href;
+            window.popping = false;
+          }
         }.bind(this));
       }
     },
